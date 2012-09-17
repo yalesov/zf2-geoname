@@ -1,0 +1,29 @@
+Geoname\Entity\AltName:
+    type: entity
+    table: geoname_alt_name
+    repositoryClass: Geoname\Repository\AltName
+    fields:
+        id:
+            id: true
+            type: integer
+        name:
+            type: string
+        isPreferred:
+            type: boolean
+        isShort:
+            type: boolean
+        isColloquial:
+            type: boolean
+        isHistoric:
+            type: boolean
+        languageOther:
+            type: string
+            nullable: true
+            # 4-characters 'post' for postal codes and 'iata','icao' and faac for airport codes, fr_1793 for French Revolution names,  abbr for abbreviation, link for a website
+
+    manyToOne:
+        place:
+            targetEntity: Geoname\Entity\Place
+            inversedBy: altNames
+        language:
+            targetEntity: Geoname\Entity\Language

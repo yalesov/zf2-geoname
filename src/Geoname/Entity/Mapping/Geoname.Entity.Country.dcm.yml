@@ -1,0 +1,85 @@
+Geoname\Entity\Country:
+    type: entity
+    table: geoname_country
+    repositoryClass: Geoname\Repository\Country
+    fields:
+        id:
+            id: true
+            type: integer
+            generator:
+                strategy: AUTO
+        iso3:
+            type: string
+            nullable: true
+        iso2:
+            type: string
+            nullable: true
+        isoNum:
+            type: string
+            nullable: true
+        capital:
+            type: string
+            nullable: true
+        area:
+            type: integer
+            nullable: true
+            # sq km
+        population:
+            type: integer
+            nullable: true
+        tld:
+            type: string
+            nullable: true
+        phone:
+            type: string
+            nullable: true
+        postalCode:
+            type: string
+            nullable: true
+        postalCodeRegex:
+            type: string
+            nullable: true
+        currencyCode:
+            type: string
+            nullable: true
+
+    oneToOne:
+        place:
+            targetEntity: Geoname\Entity\Place
+            inversedBy: country
+    oneToMany:
+        timezones:
+            targetEntity: Geoname\Entity\Timezone
+            mappedBy: country
+    manyToOne:
+        currency:
+            targetEntity: Geoname\Entity\Currency
+            inversedBy: countries
+        continent:
+            targetEntity: Geoname\Entity\Place
+            inversedBy: countries
+    manyToMany:
+        locales:
+            targetEntity: Geoname\Entity\Locale
+            joinTable:
+                name: countries_locales
+                joinColumns:
+                    -
+                        name: country_id
+                        referencedColumnName: id
+                inverseJoinColumns:
+                    -
+                        name: locale_id
+                        referencedColumnName: id
+        neighbours:
+            targetEntity: Geoname\Entity\Country
+            joinTable:
+                name: countries_neighbours
+                joinColumns:
+                    -
+                        name: country_id
+                        referencedColumnName: id
+                inverseJoinColumns:
+                    -
+                        name: neighbour_id
+                        referencedColumnName: id

@@ -1,0 +1,34 @@
+di:
+    instance:
+        alias:
+            geoname: Geoname\Service\Geoname
+            geoname-cli: Heartsentwined\Cli\Cli
+            browser: Heartsentwined\Browser\Factory
+        geoname:
+            parameters:
+                #em: doctrine.entitymanager.orm_default
+                cli: geoname-cli
+                tmpDir: data/geoname
+                cron: '*/15 * * * *'
+        geoname-cli:
+            parameters:
+                templates:
+                    section:
+                        template: ## %s ##
+                        color: YELLOW
+                    task:
+                        template: - %s -
+                        color: BLUE
+                    module:
+                        template: '[ %s ]'
+                        color: GREEN
+doctrine:
+    driver:
+        geoname_driver:
+            class: Doctrine\ORM\Mapping\Driver\YamlDriver
+            cache: array
+            paths:
+                - __DIR__/../src/Geoname/Entity/Mapping
+        orm_default:
+            drivers:
+                Geoname\Entity: geoname_driver

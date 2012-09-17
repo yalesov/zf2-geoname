@@ -1,0 +1,60 @@
+Geoname\Entity\Place:
+    type: entity
+    table: geoname_place
+    repositoryClass: Geoname\Repository\Place
+    fields:
+        id:
+            id: true
+            type: integer
+        name:
+            type: string
+            nullable: true
+        latitude:
+            type: decimal
+            nullable: true
+        longitude:
+            type: decimal
+            nullable: true
+        population:
+            type: bigint
+            nullable: true
+        countryCode:
+            type: string
+            nullable: true
+        admin1Code:
+            type: string
+            nullable: true
+        admin2Code:
+            type: string
+            nullable: true
+        admin3Code:
+            type: string
+            nullable: true
+        admin4Code:
+            type: string
+            nullable: true
+
+    oneToOne:
+        country:
+            targetEntity: Geoname\Entity\Country
+            mappedBy: place
+    oneToMany:
+        children:
+            targetEntity: Geoname\Entity\Place
+            mappedBy: parent
+        altNames:
+            targetEntity: Geoname\Entity\AltName
+            mappedBy: place
+        countries:
+            targetEntity: Geoname\Entity\Country
+            mappedBy: continent
+    manyToOne:
+        parent:
+            targetEntity: Geoname\Entity\Place
+            inversedBy: children
+        feature:
+            targetEntity: Geoname\Entity\Feature
+            inversedBy: places
+        timezone:
+            targetEntity: Geoname\Entity\Timezone
+            inversedBy: places

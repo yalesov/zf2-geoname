@@ -1,0 +1,24 @@
+<?php
+return array(
+    'di' => array(
+        'instance' => array(
+            'geoname' => array(
+                'parameters' => array(
+                    /**
+                     * tmp dir for storing geoname data source files
+                     *
+                     * @var string
+                     */
+                    'tmpDir'    => 'data/geoname',
+                    /**
+                     * cron expression: how frequently Geoname module should be run
+                     * for both auto-install and auto-update
+                     *
+                     * @var mixed
+                     */
+                    'cron'      => '*/15 * * * *',
+                ),
+            ),
+        ),
+    ),
+);

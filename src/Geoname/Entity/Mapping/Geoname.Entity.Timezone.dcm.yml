@@ -1,0 +1,21 @@
+Geoname\Entity\Timezone:
+    type: entity
+    table: geoname_timezone
+    repositoryClass: Geoname\Repository\Timezone
+    fields:
+        id:
+            id: true
+            type: integer
+            generator:
+                strategy: AUTO
+        code:
+            type: string
+
+    oneToMany:
+        places:
+            targetEntity: Geoname\Entity\Place
+            mappedBy: timezone
+    manyToOne:
+        country:
+            targetEntity: Geoname\Entity\Country
+            inversedBy: timezones
