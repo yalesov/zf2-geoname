@@ -1,8 +1,8 @@
 # zf2-geoname
 
-[![Build Status](https://secure.travis-ci.org/heartsentwined/zf2-geoname.png)](http://travis-ci.org/heartsentwined/zf2-geoname)
-
 Maintain a local copy of the [Geonames](http://geonames.org) (places) database.
+
+This module will install a self-updating local copy of the Geonames (places) database. It covers the full location information, as available from [the official database dump](http://download.geonames.org/export/dump/). It does not cover the "add-ons", e.g. earthquake, weather data, etc, as available from their webservices.
 
 **Attention**: the Geonames database is around 1.5GiB - 2GiB in size, when installed in a MySQL database. Are you sure you need a local copy, instead of the official [webservices](http://www.geonames.org/export/ws-overview.html)?
 
