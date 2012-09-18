@@ -37,7 +37,11 @@ Copy `config/geoname.local.php.dist` to `(app root)/config/autoload/geoname.loca
 - `tmpDir`: temporary directory for storing geonames database source files.
 - `cron`: (cron expression) how frequently Geoname should be run.
 
-How frequent should `cron` be? The recommended setup is every 15 minutes, which is also the default.
+How frequent should `cron` be? The recommended setup is every 15 minutes, which is also the default. However, you can make your own adjustments:
+
+At present (18 Sep 2012), it will take 820 cron jobs to install the database. At 15-minute intervals, that would take ~8.5 days to install the database. As for the updates, only 1 cron job per day is needed. However, setting more than one per day is highly recommended to provide redundancy - just in case the geonames server is temporarily unreachable, for example.
+
+You can also adjust to a less frequent cron after install. The `status` field of the `Meta` entity, or the `geoname_meta` table, will be `install` during installation, and `update` afterwards.
 
 # Usage
 
