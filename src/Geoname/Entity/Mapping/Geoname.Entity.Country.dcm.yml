@@ -62,7 +62,7 @@ Geoname\Entity\Country:
         locales:
             targetEntity: Geoname\Entity\Locale
             joinTable:
-                name: countries_locales
+                name: geoname_countries_locales
                 joinColumns:
                     -
                         name: country_id
@@ -74,7 +74,7 @@ Geoname\Entity\Country:
         neighbours:
             targetEntity: Geoname\Entity\Country
             joinTable:
-                name: countries_neighbours
+                name: geoname_countries_neighbours
                 joinColumns:
                     -
                         name: country_id

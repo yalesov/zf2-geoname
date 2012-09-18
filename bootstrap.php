@@ -9,9 +9,6 @@ return Application::init(array(
         'Geoname',
     ),
     'module_listener_options' => array(
-        'config_glob_paths' => array(
-            'config/autoload/{,*.}{global,local}.php',
-        ),
         'module_paths' => array(
             'Geoname' => __DIR__,
             'vendor',

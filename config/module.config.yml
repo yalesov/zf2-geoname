@@ -14,10 +14,10 @@ di:
             parameters:
                 templates:
                     section:
-                        template: ## %s ##
+                        template: '## %s ##'
                         color: YELLOW
                     task:
-                        template: - %s -
+                        template: '- %s -'
                         color: BLUE
                     module:
                         template: '[ %s ]'
