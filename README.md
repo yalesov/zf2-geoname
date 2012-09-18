@@ -24,6 +24,12 @@ Geoname module will also hook onto your application's database, through [`Doctri
 
 Geoname module makes use of the [Cron module](https://github.com/heartsentwined/zf2-cron), so make sure you follow its settings, and have set up your cron job properly.
 
+Finally, you need to update your database schema. The recommended way is through Doctrine's CLI:
+
+```sh
+$ vendor/bin/doctrine-module orm:schema-tool:update --force
+```
+
 # Config
 
 Copy `config/geoname.local.php.dist` to `(app root)/config/autoload/geoname.local.php`, and modify the settings.
