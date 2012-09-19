@@ -1,7 +1,7 @@
-Geoname\Entity\Meta:
+Heartsentwined\Geoname\Entity\Meta:
     type: entity
-    table: geoname_meta
-    repositoryClass: Geoname\Repository\Meta
+    table: he_geoname_meta
+    repositoryClass: Heartsentwined\Geoname\Repository\Meta
     fields:
         id:
             id: true

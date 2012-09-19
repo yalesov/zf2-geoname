@@ -1,7 +1,7 @@
-Geoname\Entity\Country:
+Heartsentwined\Geoname\Entity\Country:
     type: entity
-    table: geoname_country
-    repositoryClass: Geoname\Repository\Country
+    table: he_geoname_country
+    repositoryClass: Heartsentwined\Geoname\Repository\Country
     fields:
         id:
             id: true
@@ -45,24 +45,24 @@ Geoname\Entity\Country:
 
     oneToOne:
         place:
-            targetEntity: Geoname\Entity\Place
+            targetEntity: Heartsentwined\Geoname\Entity\Place
             inversedBy: country
     oneToMany:
         timezones:
-            targetEntity: Geoname\Entity\Timezone
+            targetEntity: Heartsentwined\Geoname\Entity\Timezone
             mappedBy: country
     manyToOne:
         currency:
-            targetEntity: Geoname\Entity\Currency
+            targetEntity: Heartsentwined\Geoname\Entity\Currency
             inversedBy: countries
         continent:
-            targetEntity: Geoname\Entity\Place
+            targetEntity: Heartsentwined\Geoname\Entity\Place
             inversedBy: countries
     manyToMany:
         locales:
-            targetEntity: Geoname\Entity\Locale
+            targetEntity: Heartsentwined\Geoname\Entity\Locale
             joinTable:
-                name: geoname_countries_locales
+                name: he_geoname_countries_locales
                 joinColumns:
                     -
                         name: country_id
@@ -72,9 +72,9 @@ Geoname\Entity\Country:
                         name: locale_id
                         referencedColumnName: id
         neighbours:
-            targetEntity: Geoname\Entity\Country
+            targetEntity: Heartsentwined\Geoname\Entity\Country
             joinTable:
-                name: geoname_countries_neighbours
+                name: he_geoname_countries_neighbours
                 joinColumns:
                     -
                         name: country_id

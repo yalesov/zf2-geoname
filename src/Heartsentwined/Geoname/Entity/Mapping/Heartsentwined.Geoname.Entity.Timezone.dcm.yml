@@ -1,7 +1,7 @@
-Geoname\Entity\Timezone:
+Heartsentwined\Geoname\Entity\Timezone:
     type: entity
-    table: geoname_timezone
-    repositoryClass: Geoname\Repository\Timezone
+    table: he_geoname_timezone
+    repositoryClass: Heartsentwined\Geoname\Repository\Timezone
     fields:
         id:
             id: true
@@ -13,9 +13,9 @@ Geoname\Entity\Timezone:
 
     oneToMany:
         places:
-            targetEntity: Geoname\Entity\Place
+            targetEntity: Heartsentwined\Geoname\Entity\Place
             mappedBy: timezone
     manyToOne:
         country:
-            targetEntity: Geoname\Entity\Country
+            targetEntity: Heartsentwined\Geoname\Entity\Country
             inversedBy: timezones

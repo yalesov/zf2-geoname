@@ -6,11 +6,11 @@ return Application::init(array(
     'modules'   => array(
         'DoctrineModule',
         'DoctrineORMModule',
-        'Geoname',
+        'Heartsentwined\\Geoname',
     ),
     'module_listener_options' => array(
         'module_paths' => array(
-            'Geoname' => __DIR__,
+            'Heartsentwined\\Geoname' => __DIR__,
             'vendor',
         ),
     ),

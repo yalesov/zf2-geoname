@@ -13,7 +13,7 @@
     ],
     "autoload": {
         "psr-0": {
-            "Geoname": "src/"
+            "Heartsentwined\\Geoname": "src/"
         }
     },
     "minimum-stability": "dev",
@@ -23,7 +23,7 @@
         "zendframework/zendframework": "2.0.*",
         "heartsentwined/arg-validator": "1.*",
         "heartsentwined/zf2-doctrine": "1.*",
-        "heartsentwined/zf2-cron": "1.*",
+        "heartsentwined/zf2-cron": "2.*",
         "heartsentwined/zf2-cli": "1.*",
 
         "heartsentwined/zf2-phing-task": "1.*"

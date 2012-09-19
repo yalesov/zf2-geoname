@@ -1,7 +1,7 @@
-Geoname\Entity\Locale:
+Heartsentwined\Geoname\Entity\Locale:
     type: entity
-    table: geoname_locale
-    repositoryClass: Geoname\Repository\Locale
+    table: he_geoname_locale
+    repositoryClass: Heartsentwined\Geoname\Repository\Locale
     fields:
         id:
             id: true
@@ -15,5 +15,5 @@ Geoname\Entity\Locale:
 
     manyToOne:
         language:
-            targetEntity: Geoname\Entity\Language
+            targetEntity: Heartsentwined\Geoname\Entity\Language
             inversedBy: locales

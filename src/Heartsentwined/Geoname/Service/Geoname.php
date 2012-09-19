@@ -1,13 +1,13 @@
 <?php
-namespace Geoname\Service;
+namespace Heartsentwined\Geoname\Service;
 
 use Heartsentwined\ArgValidator\ArgValidator;
 use Heartsentwined\Cli\Cli;
 use Heartsentwined\FileSystemManager\FileSystemManager;
-use Cron\Service\Cron;
+use Heartsentwined\Cron\Service\Cron;
 use Doctrine\ORM\EntityManager;
-use Geoname\Entity;
-use Geoname\Repository;
+use Heartsentwined\Geoname\Entity;
+use Heartsentwined\Geoname\Repository;
 
 /**
  * Geoname module that syncs local database with geonames source
@@ -118,7 +118,7 @@ class Geoname
     public function getMeta()
     {
         $em = $this->getEm();
-        $repo = $em->getRepository('Geoname\Entity\Meta');
+        $repo = $em->getRepository('Heartsentwined\Geoname\Entity\Meta');
         $meta = $repo->findOneBy(array());
         if (!$meta) {
             $meta = new Entity\Meta;
@@ -199,11 +199,11 @@ class Geoname
         $cli = $this->getCli();
         $tmpDir = $this->getTmpDir();
         $em = $this->getEm();
-        $countryRepo = $em->getRepository('Geoname\Entity\Country');
-        $featureRepo = $em->getRepository('Geoname\Entity\Feature');
-        $languageRepo = $em->getRepository('Geoname\Entity\Language');
-        $placeRepo = $em->getRepository('Geoname\Entity\Place');
-        $timezoneRepo = $em->getRepository('Geoname\Entity\Timezone');
+        $countryRepo = $em->getRepository('Heartsentwined\Geoname\Entity\Country');
+        $featureRepo = $em->getRepository('Heartsentwined\Geoname\Entity\Feature');
+        $languageRepo = $em->getRepository('Heartsentwined\Geoname\Entity\Language');
+        $placeRepo = $em->getRepository('Heartsentwined\Geoname\Entity\Place');
+        $timezoneRepo = $em->getRepository('Heartsentwined\Geoname\Entity\Timezone');
 
         # block 1
 
@@ -725,12 +725,12 @@ class Geoname
         $cli = $this->getCli();
         $tmpDir = $this->getTmpDir();
         $em = $this->getEm();
-        $placeRepo = $em->getRepository('Geoname\Entity\Place');
-        $featureRepo = $em->getRepository('Geoname\Entity\Feature');
-        $altNameRepo = $em->getRepository('Geoname\Entity\AltName');
-        $languageRepo = $em->getRepository('Geoname\Entity\Language');
-        $timezoneRepo = $em->getRepository('Geoname\Entity\Timezone');
-        $countryRepo = $em->getRepository('Geoname\Entity\Country');
+        $placeRepo = $em->getRepository('Heartsentwined\Geoname\Entity\Place');
+        $featureRepo = $em->getRepository('Heartsentwined\Geoname\Entity\Feature');
+        $altNameRepo = $em->getRepository('Heartsentwined\Geoname\Entity\AltName');
+        $languageRepo = $em->getRepository('Heartsentwined\Geoname\Entity\Language');
+        $timezoneRepo = $em->getRepository('Heartsentwined\Geoname\Entity\Timezone');
+        $countryRepo = $em->getRepository('Heartsentwined\Geoname\Entity\Country');
 
         $files = array();
 

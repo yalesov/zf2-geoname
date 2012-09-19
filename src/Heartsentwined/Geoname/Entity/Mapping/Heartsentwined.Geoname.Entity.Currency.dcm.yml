@@ -1,7 +1,7 @@
-Geoname\Entity\Currency:
+Heartsentwined\Geoname\Entity\Currency:
     type: entity
-    table: geoname_currency
-    repositoryClass: Geoname\Repository\Currency
+    table: he_geoname_currency
+    repositoryClass: Heartsentwined\Geoname\Repository\Currency
     fields:
         id:
             id: true
@@ -17,5 +17,5 @@ Geoname\Entity\Currency:
 
     oneToMany:
         countries:
-            targetEntity: Geoname\Entity\Country
+            targetEntity: Heartsentwined\Geoname\Entity\Country
             mappedBy: currency

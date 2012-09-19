@@ -1,7 +1,7 @@
-Geoname\Entity\Place:
+Heartsentwined\Geoname\Entity\Place:
     type: entity
-    table: geoname_place
-    repositoryClass: Geoname\Repository\Place
+    table: he_geoname_place
+    repositoryClass: Heartsentwined\Geoname\Repository\Place
     fields:
         id:
             id: true
@@ -36,25 +36,25 @@ Geoname\Entity\Place:
 
     oneToOne:
         country:
-            targetEntity: Geoname\Entity\Country
+            targetEntity: Heartsentwined\Geoname\Entity\Country
             mappedBy: place
     oneToMany:
         children:
-            targetEntity: Geoname\Entity\Place
+            targetEntity: Heartsentwined\Geoname\Entity\Place
             mappedBy: parent
         altNames:
-            targetEntity: Geoname\Entity\AltName
+            targetEntity: Heartsentwined\Geoname\Entity\AltName
             mappedBy: place
         countries:
-            targetEntity: Geoname\Entity\Country
+            targetEntity: Heartsentwined\Geoname\Entity\Country
             mappedBy: continent
     manyToOne:
         parent:
-            targetEntity: Geoname\Entity\Place
+            targetEntity: Heartsentwined\Geoname\Entity\Place
             inversedBy: children
         feature:
-            targetEntity: Geoname\Entity\Feature
+            targetEntity: Heartsentwined\Geoname\Entity\Feature
             inversedBy: places
         timezone:
-            targetEntity: Geoname\Entity\Timezone
+            targetEntity: Heartsentwined\Geoname\Entity\Timezone
             inversedBy: places

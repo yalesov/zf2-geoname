@@ -1,7 +1,7 @@
-Geoname\Entity\Feature:
+Heartsentwined\Geoname\Entity\Feature:
     type: entity
-    table: geoname_feature
-    repositoryClass: Geoname\Repository\Feature
+    table: he_geoname_feature
+    repositoryClass: Heartsentwined\Geoname\Repository\Feature
     fields:
         id:
             id: true
@@ -19,12 +19,12 @@ Geoname\Entity\Feature:
 
     oneToMany:
         children:
-            targetEntity: Geoname\Entity\Feature
+            targetEntity: Heartsentwined\Geoname\Entity\Feature
             mappedBy: parent
         places:
-            targetEntity: Geoname\Entity\Place
+            targetEntity: Heartsentwined\Geoname\Entity\Place
             mappedBy: feature
     manyToOne:
         parent:
-            targetEntity: Geoname\Entity\Feature
+            targetEntity: Heartsentwined\Geoname\Entity\Feature
             inversedBy: children

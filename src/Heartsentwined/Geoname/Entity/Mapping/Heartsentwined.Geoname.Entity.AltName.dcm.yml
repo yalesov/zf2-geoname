@@ -1,7 +1,7 @@
-Geoname\Entity\AltName:
+Heartsentwined\Geoname\Entity\AltName:
     type: entity
-    table: geoname_alt_name
-    repositoryClass: Geoname\Repository\AltName
+    table: he_geoname_alt_name
+    repositoryClass: Heartsentwined\Geoname\Repository\AltName
     fields:
         id:
             id: true
@@ -23,7 +23,7 @@ Geoname\Entity\AltName:
 
     manyToOne:
         place:
-            targetEntity: Geoname\Entity\Place
+            targetEntity: Heartsentwined\Geoname\Entity\Place
             inversedBy: altNames
         language:
-            targetEntity: Geoname\Entity\Language
+            targetEntity: Heartsentwined\Geoname\Entity\Language

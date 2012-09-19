@@ -1,7 +1,7 @@
 di:
     instance:
         alias:
-            geoname: Geoname\Service\Geoname
+            geoname: Heartsentwined\Geoname\Service\Geoname
             geoname-cli: Heartsentwined\Cli\Cli
             browser: Heartsentwined\Browser\Factory
         geoname:
@@ -28,7 +28,7 @@ doctrine:
             class: Doctrine\ORM\Mapping\Driver\YamlDriver
             cache: array
             paths:
-                - __DIR__/../src/Geoname/Entity/Mapping
+                - __DIR__/../src/Heartsentwined/Geoname/Entity/Mapping
         orm_default:
             drivers:
-                Geoname\Entity: geoname_driver
+                Heartsentwined\Geoname\Entity: geoname_driver
