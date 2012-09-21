@@ -1,5 +1,5 @@
 <?php
-namespace Geoname\Repository;
+namespace Heartsentwined\Geoname\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
@@ -12,5 +12,6 @@ use Doctrine\ORM\EntityRepository;
 class Meta extends EntityRepository
 {
     const STATUS_INSTALL    = 'install';
+    const STATUS_INSTALL_DOWNLOAD   = 'install_download';
     const STATUS_UPDATE     = 'update';
 }

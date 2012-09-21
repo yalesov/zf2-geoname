@@ -1,5 +1,5 @@
 <?php
-namespace Geoname\Repository;
+namespace Heartsentwined\Geoname\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
