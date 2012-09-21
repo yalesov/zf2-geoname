@@ -26,9 +26,40 @@ class GeonameTest extends DoctrineTestcase
         parent::tearDown();
     }
 
-    public function testInstance()
+    public function testGetMeta()
     {
-        $this->assertInstanceOf('Heartsentwined\Geoname\Service\Geoname',
-            $this->geoname);
+        $metaRepo = $this->em
+            ->getRepository('Heartsentwined\Geoname\Entity\Meta');
+
+        // no meta in the beginning
+        $this->assertCount(0, $metaRepo->findAll());
+
+        // no meta -> create one, with 'install_download' status
+        $meta = $this->geoname->getMeta();
+        $this->assertSame(Repository\Meta::STATUS_INSTALL_DOWNLOAD,
+            $meta->getStatus());
+        $this->assertCount(1, $metaRepo->findAll());
+
+        // get again -> retrieve same meta
+        $meta = $this->geoname->getMeta();
+        $this->assertSame(Repository\Meta::STATUS_INSTALL_DOWNLOAD,
+            $meta->getStatus());
+        $this->assertCount(1, $metaRepo->findAll());
+
+        // clean the meta -> get = create another one
+        $this->em->remove($meta);
+        $this->em->flush();
+        $meta = $this->geoname->getMeta();
+        $this->assertSame(Repository\Meta::STATUS_INSTALL_DOWNLOAD,
+            $meta->getStatus());
+        $this->assertCount(1, $metaRepo->findAll());
+
+        // change meta status -> get meta -> don't update it
+        $meta->setStatus(Repository\Meta::STATUS_UPDATE);
+        $this->em->flush();
+        $meta = $this->geoname->getMeta();
+        $this->assertSame(Repository\Meta::STATUS_UPDATE,
+            $meta->getStatus());
+        $this->assertCount(1, $metaRepo->findAll());
     }
 }

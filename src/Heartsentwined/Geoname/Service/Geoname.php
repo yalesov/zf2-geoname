@@ -100,6 +100,7 @@ class Geoname
         $meta = $this->getMeta();
         switch ($meta->getStatus()) {
             case Repository\Meta::STATUS_INSTALL:
+            case Repository\Meta::STATUS_INSTALL_DOWNLOAD:
                 $this->install();
                 break;
             case Repository\Meta::STATUS_UPDATE:
@@ -123,7 +124,7 @@ class Geoname
         if (!$meta) {
             $meta = new Entity\Meta;
             $em->persist($meta);
-            $meta->setStatus(Repository\Meta::STATUS_INSTALL);
+            $meta->setStatus(Repository\Meta::STATUS_INSTALL_DOWNLOAD);
             $em->flush();
         }
         return $meta;
