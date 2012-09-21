@@ -1,11 +1,11 @@
 <?php
 
-namespace Geoname\Entity;
+namespace Heartsentwined\Geoname\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Geoname\Entity\AltName
+ * Heartsentwined\Geoname\Entity\AltName
  */
 class AltName
 {
@@ -45,12 +45,12 @@ class AltName
     private $languageOther;
 
     /**
-     * @var Geoname\Entity\Place
+     * @var Heartsentwined\Geoname\Entity\Place
      */
     private $place;
 
     /**
-     * @var Geoname\Entity\Language
+     * @var Heartsentwined\Geoname\Entity\Language
      */
     private $language;
 
@@ -219,10 +219,10 @@ class AltName
     /**
      * Set place
      *
-     * @param Geoname\Entity\Place $place
+     * @param Heartsentwined\Geoname\Entity\Place $place
      * @return AltName
      */
-    public function setPlace(\Geoname\Entity\Place $place = null)
+    public function setPlace(\Heartsentwined\Geoname\Entity\Place $place = null)
     {
         $this->place = $place;
     
@@ -232,7 +232,7 @@ class AltName
     /**
      * Get place
      *
-     * @return Geoname\Entity\Place 
+     * @return Heartsentwined\Geoname\Entity\Place 
      */
     public function getPlace()
     {
@@ -242,10 +242,10 @@ class AltName
     /**
      * Set language
      *
-     * @param Geoname\Entity\Language $language
+     * @param Heartsentwined\Geoname\Entity\Language $language
      * @return AltName
      */
-    public function setLanguage(\Geoname\Entity\Language $language = null)
+    public function setLanguage(\Heartsentwined\Geoname\Entity\Language $language = null)
     {
         $this->language = $language;
     
@@ -255,7 +255,7 @@ class AltName
     /**
      * Get language
      *
-     * @return Geoname\Entity\Language 
+     * @return Heartsentwined\Geoname\Entity\Language 
      */
     public function getLanguage()
     {

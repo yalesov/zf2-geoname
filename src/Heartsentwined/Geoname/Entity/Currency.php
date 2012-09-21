@@ -1,11 +1,11 @@
 <?php
 
-namespace Geoname\Entity;
+namespace Heartsentwined\Geoname\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Geoname\Entity\Currency
+ * Heartsentwined\Geoname\Entity\Currency
  */
 class Currency
 {
@@ -96,10 +96,10 @@ class Currency
     /**
      * Add countries
      *
-     * @param Geoname\Entity\Country $countries
+     * @param Heartsentwined\Geoname\Entity\Country $countries
      * @return Currency
      */
-    public function addCountrie(\Geoname\Entity\Country $countries)
+    public function addCountrie(\Heartsentwined\Geoname\Entity\Country $countries)
     {
         $this->countries[] = $countries;
     
@@ -109,9 +109,9 @@ class Currency
     /**
      * Remove countries
      *
-     * @param Geoname\Entity\Country $countries
+     * @param Heartsentwined\Geoname\Entity\Country $countries
      */
-    public function removeCountrie(\Geoname\Entity\Country $countries)
+    public function removeCountrie(\Heartsentwined\Geoname\Entity\Country $countries)
     {
         $this->countries->removeElement($countries);
     }

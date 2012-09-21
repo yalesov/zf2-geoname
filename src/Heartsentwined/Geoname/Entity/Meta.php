@@ -1,11 +1,11 @@
 <?php
 
-namespace Geoname\Entity;
+namespace Heartsentwined\Geoname\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Geoname\Entity\Meta
+ * Heartsentwined\Geoname\Entity\Meta
  */
 class Meta
 {

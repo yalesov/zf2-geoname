@@ -1,11 +1,11 @@
 <?php
 
-namespace Geoname\Entity;
+namespace Heartsentwined\Geoname\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Geoname\Entity\Country
+ * Heartsentwined\Geoname\Entity\Country
  */
 class Country
 {
@@ -70,7 +70,7 @@ class Country
     private $currencyCode;
 
     /**
-     * @var Geoname\Entity\Place
+     * @var Heartsentwined\Geoname\Entity\Place
      */
     private $place;
 
@@ -80,12 +80,12 @@ class Country
     private $timezones;
 
     /**
-     * @var Geoname\Entity\Currency
+     * @var Heartsentwined\Geoname\Entity\Currency
      */
     private $currency;
 
     /**
-     * @var Geoname\Entity\Place
+     * @var Heartsentwined\Geoname\Entity\Place
      */
     private $continent;
 
@@ -375,10 +375,10 @@ class Country
     /**
      * Set place
      *
-     * @param Geoname\Entity\Place $place
+     * @param Heartsentwined\Geoname\Entity\Place $place
      * @return Country
      */
-    public function setPlace(\Geoname\Entity\Place $place = null)
+    public function setPlace(\Heartsentwined\Geoname\Entity\Place $place = null)
     {
         $this->place = $place;
     
@@ -388,7 +388,7 @@ class Country
     /**
      * Get place
      *
-     * @return Geoname\Entity\Place 
+     * @return Heartsentwined\Geoname\Entity\Place 
      */
     public function getPlace()
     {
@@ -398,10 +398,10 @@ class Country
     /**
      * Add timezones
      *
-     * @param Geoname\Entity\Timezone $timezones
+     * @param Heartsentwined\Geoname\Entity\Timezone $timezones
      * @return Country
      */
-    public function addTimezone(\Geoname\Entity\Timezone $timezones)
+    public function addTimezone(\Heartsentwined\Geoname\Entity\Timezone $timezones)
     {
         $this->timezones[] = $timezones;
     
@@ -411,9 +411,9 @@ class Country
     /**
      * Remove timezones
      *
-     * @param Geoname\Entity\Timezone $timezones
+     * @param Heartsentwined\Geoname\Entity\Timezone $timezones
      */
-    public function removeTimezone(\Geoname\Entity\Timezone $timezones)
+    public function removeTimezone(\Heartsentwined\Geoname\Entity\Timezone $timezones)
     {
         $this->timezones->removeElement($timezones);
     }
@@ -431,10 +431,10 @@ class Country
     /**
      * Set currency
      *
-     * @param Geoname\Entity\Currency $currency
+     * @param Heartsentwined\Geoname\Entity\Currency $currency
      * @return Country
      */
-    public function setCurrency(\Geoname\Entity\Currency $currency = null)
+    public function setCurrency(\Heartsentwined\Geoname\Entity\Currency $currency = null)
     {
         $this->currency = $currency;
     
@@ -444,7 +444,7 @@ class Country
     /**
      * Get currency
      *
-     * @return Geoname\Entity\Currency 
+     * @return Heartsentwined\Geoname\Entity\Currency 
      */
     public function getCurrency()
     {
@@ -454,10 +454,10 @@ class Country
     /**
      * Set continent
      *
-     * @param Geoname\Entity\Place $continent
+     * @param Heartsentwined\Geoname\Entity\Place $continent
      * @return Country
      */
-    public function setContinent(\Geoname\Entity\Place $continent = null)
+    public function setContinent(\Heartsentwined\Geoname\Entity\Place $continent = null)
     {
         $this->continent = $continent;
     
@@ -467,7 +467,7 @@ class Country
     /**
      * Get continent
      *
-     * @return Geoname\Entity\Place 
+     * @return Heartsentwined\Geoname\Entity\Place 
      */
     public function getContinent()
     {
@@ -477,10 +477,10 @@ class Country
     /**
      * Add locales
      *
-     * @param Geoname\Entity\Locale $locales
+     * @param Heartsentwined\Geoname\Entity\Locale $locales
      * @return Country
      */
-    public function addLocale(\Geoname\Entity\Locale $locales)
+    public function addLocale(\Heartsentwined\Geoname\Entity\Locale $locales)
     {
         $this->locales[] = $locales;
     
@@ -490,9 +490,9 @@ class Country
     /**
      * Remove locales
      *
-     * @param Geoname\Entity\Locale $locales
+     * @param Heartsentwined\Geoname\Entity\Locale $locales
      */
-    public function removeLocale(\Geoname\Entity\Locale $locales)
+    public function removeLocale(\Heartsentwined\Geoname\Entity\Locale $locales)
     {
         $this->locales->removeElement($locales);
     }
@@ -510,10 +510,10 @@ class Country
     /**
      * Add neighbours
      *
-     * @param Geoname\Entity\Country $neighbours
+     * @param Heartsentwined\Geoname\Entity\Country $neighbours
      * @return Country
      */
-    public function addNeighbour(\Geoname\Entity\Country $neighbours)
+    public function addNeighbour(\Heartsentwined\Geoname\Entity\Country $neighbours)
     {
         $this->neighbours[] = $neighbours;
     
@@ -523,9 +523,9 @@ class Country
     /**
      * Remove neighbours
      *
-     * @param Geoname\Entity\Country $neighbours
+     * @param Heartsentwined\Geoname\Entity\Country $neighbours
      */
-    public function removeNeighbour(\Geoname\Entity\Country $neighbours)
+    public function removeNeighbour(\Heartsentwined\Geoname\Entity\Country $neighbours)
     {
         $this->neighbours->removeElement($neighbours);
     }

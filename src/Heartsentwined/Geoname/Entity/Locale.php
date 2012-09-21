@@ -1,11 +1,11 @@
 <?php
 
-namespace Geoname\Entity;
+namespace Heartsentwined\Geoname\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Geoname\Entity\Locale
+ * Heartsentwined\Geoname\Entity\Locale
  */
 class Locale
 {
@@ -25,7 +25,7 @@ class Locale
     private $isMain;
 
     /**
-     * @var Geoname\Entity\Language
+     * @var Heartsentwined\Geoname\Entity\Language
      */
     private $language;
 
@@ -89,10 +89,10 @@ class Locale
     /**
      * Set language
      *
-     * @param Geoname\Entity\Language $language
+     * @param Heartsentwined\Geoname\Entity\Language $language
      * @return Locale
      */
-    public function setLanguage(\Geoname\Entity\Language $language = null)
+    public function setLanguage(\Heartsentwined\Geoname\Entity\Language $language = null)
     {
         $this->language = $language;
     
@@ -102,7 +102,7 @@ class Locale
     /**
      * Get language
      *
-     * @return Geoname\Entity\Language 
+     * @return Heartsentwined\Geoname\Entity\Language 
      */
     public function getLanguage()
     {

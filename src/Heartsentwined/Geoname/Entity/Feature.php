@@ -1,11 +1,11 @@
 <?php
 
-namespace Geoname\Entity;
+namespace Heartsentwined\Geoname\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Geoname\Entity\Feature
+ * Heartsentwined\Geoname\Entity\Feature
  */
 class Feature
 {
@@ -40,7 +40,7 @@ class Feature
     private $places;
 
     /**
-     * @var Geoname\Entity\Feature
+     * @var Heartsentwined\Geoname\Entity\Feature
      */
     private $parent;
 
@@ -135,10 +135,10 @@ class Feature
     /**
      * Add children
      *
-     * @param Geoname\Entity\Feature $children
+     * @param Heartsentwined\Geoname\Entity\Feature $children
      * @return Feature
      */
-    public function addChildren(\Geoname\Entity\Feature $children)
+    public function addChildren(\Heartsentwined\Geoname\Entity\Feature $children)
     {
         $this->children[] = $children;
     
@@ -148,9 +148,9 @@ class Feature
     /**
      * Remove children
      *
-     * @param Geoname\Entity\Feature $children
+     * @param Heartsentwined\Geoname\Entity\Feature $children
      */
-    public function removeChildren(\Geoname\Entity\Feature $children)
+    public function removeChildren(\Heartsentwined\Geoname\Entity\Feature $children)
     {
         $this->children->removeElement($children);
     }
@@ -168,10 +168,10 @@ class Feature
     /**
      * Add places
      *
-     * @param Geoname\Entity\Place $places
+     * @param Heartsentwined\Geoname\Entity\Place $places
      * @return Feature
      */
-    public function addPlace(\Geoname\Entity\Place $places)
+    public function addPlace(\Heartsentwined\Geoname\Entity\Place $places)
     {
         $this->places[] = $places;
     
@@ -181,9 +181,9 @@ class Feature
     /**
      * Remove places
      *
-     * @param Geoname\Entity\Place $places
+     * @param Heartsentwined\Geoname\Entity\Place $places
      */
-    public function removePlace(\Geoname\Entity\Place $places)
+    public function removePlace(\Heartsentwined\Geoname\Entity\Place $places)
     {
         $this->places->removeElement($places);
     }
@@ -201,10 +201,10 @@ class Feature
     /**
      * Set parent
      *
-     * @param Geoname\Entity\Feature $parent
+     * @param Heartsentwined\Geoname\Entity\Feature $parent
      * @return Feature
      */
-    public function setParent(\Geoname\Entity\Feature $parent = null)
+    public function setParent(\Heartsentwined\Geoname\Entity\Feature $parent = null)
     {
         $this->parent = $parent;
     
@@ -214,7 +214,7 @@ class Feature
     /**
      * Get parent
      *
-     * @return Geoname\Entity\Feature 
+     * @return Heartsentwined\Geoname\Entity\Feature 
      */
     public function getParent()
     {

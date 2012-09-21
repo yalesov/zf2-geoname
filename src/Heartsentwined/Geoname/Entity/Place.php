@@ -1,11 +1,11 @@
 <?php
 
-namespace Geoname\Entity;
+namespace Heartsentwined\Geoname\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Geoname\Entity\Place
+ * Heartsentwined\Geoname\Entity\Place
  */
 class Place
 {
@@ -60,7 +60,7 @@ class Place
     private $admin4Code;
 
     /**
-     * @var Geoname\Entity\Country
+     * @var Heartsentwined\Geoname\Entity\Country
      */
     private $country;
 
@@ -80,17 +80,17 @@ class Place
     private $countries;
 
     /**
-     * @var Geoname\Entity\Place
+     * @var Heartsentwined\Geoname\Entity\Place
      */
     private $parent;
 
     /**
-     * @var Geoname\Entity\Feature
+     * @var Heartsentwined\Geoname\Entity\Feature
      */
     private $feature;
 
     /**
-     * @var Geoname\Entity\Timezone
+     * @var Heartsentwined\Geoname\Entity\Timezone
      */
     private $timezone;
 
@@ -337,10 +337,10 @@ class Place
     /**
      * Set country
      *
-     * @param Geoname\Entity\Country $country
+     * @param Heartsentwined\Geoname\Entity\Country $country
      * @return Place
      */
-    public function setCountry(\Geoname\Entity\Country $country = null)
+    public function setCountry(\Heartsentwined\Geoname\Entity\Country $country = null)
     {
         $this->country = $country;
     
@@ -350,7 +350,7 @@ class Place
     /**
      * Get country
      *
-     * @return Geoname\Entity\Country 
+     * @return Heartsentwined\Geoname\Entity\Country 
      */
     public function getCountry()
     {
@@ -360,10 +360,10 @@ class Place
     /**
      * Add children
      *
-     * @param Geoname\Entity\Place $children
+     * @param Heartsentwined\Geoname\Entity\Place $children
      * @return Place
      */
-    public function addChildren(\Geoname\Entity\Place $children)
+    public function addChildren(\Heartsentwined\Geoname\Entity\Place $children)
     {
         $this->children[] = $children;
     
@@ -373,9 +373,9 @@ class Place
     /**
      * Remove children
      *
-     * @param Geoname\Entity\Place $children
+     * @param Heartsentwined\Geoname\Entity\Place $children
      */
-    public function removeChildren(\Geoname\Entity\Place $children)
+    public function removeChildren(\Heartsentwined\Geoname\Entity\Place $children)
     {
         $this->children->removeElement($children);
     }
@@ -393,10 +393,10 @@ class Place
     /**
      * Add altNames
      *
-     * @param Geoname\Entity\AltName $altNames
+     * @param Heartsentwined\Geoname\Entity\AltName $altNames
      * @return Place
      */
-    public function addAltName(\Geoname\Entity\AltName $altNames)
+    public function addAltName(\Heartsentwined\Geoname\Entity\AltName $altNames)
     {
         $this->altNames[] = $altNames;
     
@@ -406,9 +406,9 @@ class Place
     /**
      * Remove altNames
      *
-     * @param Geoname\Entity\AltName $altNames
+     * @param Heartsentwined\Geoname\Entity\AltName $altNames
      */
-    public function removeAltName(\Geoname\Entity\AltName $altNames)
+    public function removeAltName(\Heartsentwined\Geoname\Entity\AltName $altNames)
     {
         $this->altNames->removeElement($altNames);
     }
@@ -426,10 +426,10 @@ class Place
     /**
      * Add countries
      *
-     * @param Geoname\Entity\Country $countries
+     * @param Heartsentwined\Geoname\Entity\Country $countries
      * @return Place
      */
-    public function addCountrie(\Geoname\Entity\Country $countries)
+    public function addCountrie(\Heartsentwined\Geoname\Entity\Country $countries)
     {
         $this->countries[] = $countries;
     
@@ -439,9 +439,9 @@ class Place
     /**
      * Remove countries
      *
-     * @param Geoname\Entity\Country $countries
+     * @param Heartsentwined\Geoname\Entity\Country $countries
      */
-    public function removeCountrie(\Geoname\Entity\Country $countries)
+    public function removeCountrie(\Heartsentwined\Geoname\Entity\Country $countries)
     {
         $this->countries->removeElement($countries);
     }
@@ -459,10 +459,10 @@ class Place
     /**
      * Set parent
      *
-     * @param Geoname\Entity\Place $parent
+     * @param Heartsentwined\Geoname\Entity\Place $parent
      * @return Place
      */
-    public function setParent(\Geoname\Entity\Place $parent = null)
+    public function setParent(\Heartsentwined\Geoname\Entity\Place $parent = null)
     {
         $this->parent = $parent;
     
@@ -472,7 +472,7 @@ class Place
     /**
      * Get parent
      *
-     * @return Geoname\Entity\Place 
+     * @return Heartsentwined\Geoname\Entity\Place 
      */
     public function getParent()
     {
@@ -482,10 +482,10 @@ class Place
     /**
      * Set feature
      *
-     * @param Geoname\Entity\Feature $feature
+     * @param Heartsentwined\Geoname\Entity\Feature $feature
      * @return Place
      */
-    public function setFeature(\Geoname\Entity\Feature $feature = null)
+    public function setFeature(\Heartsentwined\Geoname\Entity\Feature $feature = null)
     {
         $this->feature = $feature;
     
@@ -495,7 +495,7 @@ class Place
     /**
      * Get feature
      *
-     * @return Geoname\Entity\Feature 
+     * @return Heartsentwined\Geoname\Entity\Feature 
      */
     public function getFeature()
     {
@@ -505,10 +505,10 @@ class Place
     /**
      * Set timezone
      *
-     * @param Geoname\Entity\Timezone $timezone
+     * @param Heartsentwined\Geoname\Entity\Timezone $timezone
      * @return Place
      */
-    public function setTimezone(\Geoname\Entity\Timezone $timezone = null)
+    public function setTimezone(\Heartsentwined\Geoname\Entity\Timezone $timezone = null)
     {
         $this->timezone = $timezone;
     
@@ -518,7 +518,7 @@ class Place
     /**
      * Get timezone
      *
-     * @return Geoname\Entity\Timezone 
+     * @return Heartsentwined\Geoname\Entity\Timezone 
      */
     public function getTimezone()
     {

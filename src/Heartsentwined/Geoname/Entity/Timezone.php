@@ -1,11 +1,11 @@
 <?php
 
-namespace Geoname\Entity;
+namespace Heartsentwined\Geoname\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Geoname\Entity\Timezone
+ * Heartsentwined\Geoname\Entity\Timezone
  */
 class Timezone
 {
@@ -25,7 +25,7 @@ class Timezone
     private $places;
 
     /**
-     * @var Geoname\Entity\Country
+     * @var Heartsentwined\Geoname\Entity\Country
      */
     private $country;
 
@@ -73,10 +73,10 @@ class Timezone
     /**
      * Add places
      *
-     * @param Geoname\Entity\Place $places
+     * @param Heartsentwined\Geoname\Entity\Place $places
      * @return Timezone
      */
-    public function addPlace(\Geoname\Entity\Place $places)
+    public function addPlace(\Heartsentwined\Geoname\Entity\Place $places)
     {
         $this->places[] = $places;
     
@@ -86,9 +86,9 @@ class Timezone
     /**
      * Remove places
      *
-     * @param Geoname\Entity\Place $places
+     * @param Heartsentwined\Geoname\Entity\Place $places
      */
-    public function removePlace(\Geoname\Entity\Place $places)
+    public function removePlace(\Heartsentwined\Geoname\Entity\Place $places)
     {
         $this->places->removeElement($places);
     }
@@ -106,10 +106,10 @@ class Timezone
     /**
      * Set country
      *
-     * @param Geoname\Entity\Country $country
+     * @param Heartsentwined\Geoname\Entity\Country $country
      * @return Timezone
      */
-    public function setCountry(\Geoname\Entity\Country $country = null)
+    public function setCountry(\Heartsentwined\Geoname\Entity\Country $country = null)
     {
         $this->country = $country;
     
@@ -119,7 +119,7 @@ class Timezone
     /**
      * Get country
      *
-     * @return Geoname\Entity\Country 
+     * @return Heartsentwined\Geoname\Entity\Country 
      */
     public function getCountry()
     {
