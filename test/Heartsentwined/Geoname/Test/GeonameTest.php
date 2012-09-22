@@ -1,6 +1,7 @@
 <?php
 namespace Heartsentwined\Geoname\Test;
 
+use Heartsentwined\FileSystemManager\FileSystemManager;
 use Heartsentwined\Geoname\Entity;
 use Heartsentwined\Geoname\Repository;
 use Heartsentwined\Geoname\Service\Geoname;
@@ -16,13 +17,16 @@ class GeonameTest extends DoctrineTestcase
             ->setTmpDir('tmp');
         parent::setUp();
 
+        mkdir('tmp/geoname', 0755, true);
         $this->geoname = $this->sm->get('geoname')
-            ->setEm($this->em);
+            ->setEm($this->em)
+            ->setTmpDir('tmp/geoname');
     }
 
     public function tearDown()
     {
         unset($this->geoname);
+        FileSystemManager::rrmdir('tmp/goename');
         parent::tearDown();
     }
 
@@ -61,5 +65,54 @@ class GeonameTest extends DoctrineTestcase
         $this->assertSame(Repository\Meta::STATUS_UPDATE,
             $meta->getStatus());
         $this->assertCount(1, $metaRepo->findAll());
+    }
+    public function testdownloadFile()
+    {
+        // download file and save to tmp/foo
+        $this->geoname->downloadFile('http://www.google.com', 'tmp/foo');
+        $this->assertFileExists('tmp/foo');
+        $this->assertFalse(file_exists('tmp/foo.lock'));
+        $this->assertFalse(file_exists('tmp/foo.done'));
+
+        // don't download again
+        $mtime = filemtime('tmp/foo');
+        $this->geoname->downloadFile('http://www.google.com', 'tmp/foo');
+        $this->assertFileExists('tmp/foo');
+        $this->assertFalse(file_exists('tmp/foo.lock'));
+        $this->assertFalse(file_exists('tmp/foo.done'));
+        $this->assertSame($mtime, filemtime('tmp/foo'));
+
+        // don't download if .lock
+        rename('tmp/foo', 'tmp/foo.lock');
+        $this->geoname->downloadFile('http://www.google.com', 'tmp/foo');
+        $this->assertFalse(file_exists('tmp/foo'));
+        $this->assertFileExists('tmp/foo.lock');
+        $this->assertFalse(file_exists('tmp/foo.done'));
+
+        // don't download if .done
+        rename('tmp/foo.lock', 'tmp/foo.done');
+        $this->geoname->downloadFile('http://www.google.com', 'tmp/foo');
+        $this->assertFalse(file_exists('tmp/foo'));
+        $this->assertFalse(file_exists('tmp/foo.lock'));
+        $this->assertFileExists('tmp/foo.done');
+
+        // don't download if 404
+        $this->geoname->downloadFile('http://example.test', 'tmp/bar');
+        $this->assertFalse(file_exists('tmp/bar'));
+    }
+
+    public function testDownloadUpdate()
+    {
+        $now = \DateTime::createFromFormat('U', strtotime('-1 day'));
+        $date = $now->format('Y-m-d');
+        foreach(array(
+            "http://download.geonames.org/export/dump/modifications-$date.txt",
+            "http://download.geonames.org/export/dump/deletes-$date.txt",
+            "http://download.geonames.org/export/dump/alternateNamesModifications-$date.txt",
+            "http://download.geonames.org/export/dump/alternateNamesDeletes-$date.txt",
+        ) as $dir => $url) {
+            $headers = get_headers($url);
+            $this->assertSame(0, preg_match('/40\d/', $headers[0]));
+        }
     }
 }
