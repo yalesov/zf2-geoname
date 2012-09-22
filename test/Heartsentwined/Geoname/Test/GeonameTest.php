@@ -173,9 +173,6 @@ class GeonameTest extends DoctrineTestcase
             ->setEm($this->em)
             ->setTmpDir('tmp/geoname')
             ->installDownload();
-
-        $this->assertSame(Repository\Meta::STATUS_INSTALL_PREPARE,
-            $geoname->getMeta()->getStatus());
     }
 
     public function testInstallPrepare()
@@ -235,9 +232,6 @@ class GeonameTest extends DoctrineTestcase
         }
         fclose($fh);
         $this->assertSame(1, $lineCount);
-
-        $this->assertSame(Repository\Meta::STATUS_INSTALL_LANGUAGE,
-            $this->geoname->getMeta()->getStatus());
     }
 
     public function testInstallLanguage()
@@ -258,8 +252,5 @@ class GeonameTest extends DoctrineTestcase
         $this->assertSame('fo', $foo->getIso2());
         $this->assertSame('f', $foo->getIso1());
         $this->assertSame('Foo language', $foo->getName());
-
-        $this->assertSame(Repository\Meta::STATUS_INSTALL_FEATURE,
-            $this->geoname->getMeta()->getStatus());
     }
 }

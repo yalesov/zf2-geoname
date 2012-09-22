@@ -231,8 +231,6 @@ class Geoname
             $file = $tmpDir . '/' . basename($url);
             $this->downloadFile($url, $file);
         }
-        $this->getMeta()->setStatus(
-            Repository\Meta::STATUS_INSTALL_PREPARE);
         return $this;
     }
 
@@ -274,8 +272,6 @@ class Geoname
             }
         }
 
-        $this->getMeta()->setStatus(
-            Repository\Meta::STATUS_INSTALL_LANGUAGE);
         return $this;
     }
 
@@ -288,11 +284,9 @@ class Geoname
         $cli->write('Language', 'section');
         $source = "$tmpDir/iso-languagecodes.txt";
         if ($fh = fopen($source, 'r')) {
-            rename($source, "$source.lock");
             fgets($fh); // skip first line
-            while ($line = trim(fgets($fh))) {
-                list($iso3, $iso2, $iso1, $name) =
-                    explode("\t", $line);
+            while ($data = fgetcsv($fh, 0, "\t", "\0")) {
+                list($iso3, $iso2, $iso1, $name) = $data;
                 $language = new Entity\Language;
                 $em->persist($language);
                 $language
@@ -303,13 +297,8 @@ class Geoname
             }
             fclose($fh);
         }
-
         $em->flush();
-        rename("$tmpDir/iso-languagecodes.txt.lock",
-            "$tmpDir/iso-languagecodes.txt.done");
 
-        $this->getMeta()->setStatus(
-            Repository\Meta::STATUS_INSTALL_FEATURE);
         return $this;
     }
 
