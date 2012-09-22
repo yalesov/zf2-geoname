@@ -105,6 +105,8 @@ class Geoname
             case Repository\Meta::STATUS_INSTALL:
             case Repository\Meta::STATUS_INSTALL_DOWNLOAD:
             case Repository\Meta::STATUS_INSTALL_PREPARE:
+            case Repository\Meta::STATUS_INSTALL_LANGUAGE:
+            case Repository\Meta::STATUS_INSTALL_FEATURE:
                 $this->install();
                 break;
             case Repository\Meta::STATUS_UPDATE:
