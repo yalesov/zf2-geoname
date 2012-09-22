@@ -203,6 +203,27 @@ class Geoname
         return $this;
     }
 
+    public function installDownload()
+    {
+        $cli->write('Download files', 'section');
+        $files = array(
+            'http://download.geonames.org/export/dump/countryInfo.txt',
+            'http://download.geonames.org/export/dump/featureCodes_en.txt',
+            //'http://download.geonames.org/export/dump/iso-languagecodes.txt',
+            // contained in alternateNames.zip
+            'http://download.geonames.org/export/dump/timeZones.txt',
+            'http://download.geonames.org/export/dump/hierarchy.zip',
+            'http://download.geonames.org/export/dump/alternateNames.zip',
+            'http://download.geonames.org/export/dump/allCountries.zip',
+        );
+        foreach ($files as $url) {
+            $cli->write($url, 'module');
+            $this->downloadFile($url, $file);
+        }
+        $this->getMeta()->setStatus(Repository\Job::STATUS_INSTALL_PREPARE);
+        return $this;
+    }
+
     /**
      * auto-install geoname database
      *

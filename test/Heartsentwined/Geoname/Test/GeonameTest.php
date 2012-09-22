@@ -115,4 +115,19 @@ class GeonameTest extends DoctrineTestcase
             $this->assertSame(0, preg_match('/40\d/', $headers[0]));
         }
     }
+
+    public function testInstallDownload()
+    {
+        foreach(array(
+            'http://download.geonames.org/export/dump/countryInfo.txt',
+            'http://download.geonames.org/export/dump/featureCodes_en.txt',
+            'http://download.geonames.org/export/dump/timeZones.txt',
+            'http://download.geonames.org/export/dump/hierarchy.zip',
+            'http://download.geonames.org/export/dump/alternateNames.zip',
+            'http://download.geonames.org/export/dump/allCountries.zip',
+        ) as $dir => $url) {
+            $headers = get_headers($url);
+            $this->assertSame(0, preg_match('/40\d/', $headers[0]));
+        }
+    }
 }
