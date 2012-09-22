@@ -131,6 +131,39 @@ class Geoname
     }
 
     /**
+     * download a file from source
+     *
+     * will implement a simple lock mechanism to prevent parallel downloading
+     * will also ignore a file if it is marked as *.done
+     *
+     * @param string $src   source URL
+     * @param string $dest  destination save path
+     * @return bool
+     */
+    public function downloadFile($src, $dest)
+    {
+        if (file_exists($dest)
+            || file_exists("$dest.lock")
+            || file_exists("$dest.done")) {
+            return false;
+        }
+        try {
+            $headers = get_headers($src);
+            if (preg_match('/40\d/', $headers[0])) {
+                return false;
+            }
+        } catch (\Exception $e) {
+            return false;
+        }
+        $dest = "$dest.lock";
+        $fh = fopen($dest, 'w');
+        fwrite($fh, file_get_contents($src));
+        fclose($fh);
+        rename($dest, substr($dest, 0, -5));
+        return true;
+    }
+
+    /**
      * fetch the latest modification files from geoname, if needed
      *
      * @return self
@@ -141,8 +174,7 @@ class Geoname
         $em = $this->getEm();
         $tmpDir = $this->getTmpDir();
 
-        $now = new \DateTime;
-        $now->setTimestamp(strtotime('-1 day'));
+        $now = \DateTime::createFromFormat('U', strtotime('-1 day'));
         $date = $now->format('Y-m-d');
 
         foreach (array(
@@ -164,22 +196,9 @@ class Geoname
             'altName/delete' => "http://download.geonames.org/export/dump/alternateNamesDeletes-$date.txt",
         );
         foreach ($files as $dir => $url) {
-            $file = "$tmpDir/update/$dir/" . basename($url);
-            if (file_exists($file)
-                || file_exists("$file.lock")
-                || file_exists("$file.done")) {
-                continue;
-            }
             $cli->write($url, 'module');
-            $headers = get_headers($url);
-            if (preg_match('/40\d/', $headers[0])) {
-                continue;
-            }
-            $file = "$file.lock";
-            $fh = fopen($file, 'w');
-            fwrite($fh, file_get_contents($url));
-            fclose($fh);
-            rename($file, substr($file, 0, -5));
+            $file = "$tmpDir/update/$dir/" . basename($url);
+            $this->downloadFile($url, $file);
         }
         return $this;
     }
@@ -225,15 +244,7 @@ class Geoname
             );
             foreach ($files as $url) {
                 $cli->write($url, 'module');
-                $headers = get_headers($url);
-                if (preg_match('/40\d/', $headers[0])) {
-                    continue;
-                }
-                $file = $tmpDir . '/' . basename($url) . '.lock';
-                $fh = fopen($file, 'w');
-                fwrite($fh, file_get_contents($url));
-                fclose($fh);
-                rename($file, substr($file, 0, -5));
+                $this->downloadFile($url, $file);
             }
             return $this;
         }
