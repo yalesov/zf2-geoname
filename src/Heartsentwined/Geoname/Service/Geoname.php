@@ -278,11 +278,8 @@ class Geoname
     public function installLanguage()
     {
         $em = $this->getEm();
-        $tmpDir = $this->getTmpDir();
-        $cli = $this->getCli();
 
-        $cli->write('Language', 'section');
-        $source = "$tmpDir/iso-languagecodes.txt";
+        $source = $this->getTmpDir() . '/iso-languagecodes.txt';
         if ($fh = fopen($source, 'r')) {
             fgets($fh); // skip first line
             while ($data = fgetcsv($fh, 0, "\t", "\0")) {
@@ -294,6 +291,58 @@ class Geoname
                     ->setIso3($iso3)
                     ->setIso2($iso2)
                     ->setIso1($iso1);
+            }
+            fclose($fh);
+        }
+        $em->flush();
+
+        return $this;
+    }
+
+    public function installFeature()
+    {
+        $em = $this->getEm();
+
+        $source = $this->getTmpDir() . '/featureCodes_en.txt';
+        if ($fh = fopen($source, 'r')) {
+            $parentMap = array();
+            $parentDesc = array(
+                'A' => 'country, state, region',
+                'H' => 'stream, lake',
+                'L' => 'parks, area',
+                'P' => 'city, village',
+                'R' => 'road, railroad',
+                'S' => 'spot, building, farm',
+                'T' => 'mountain, hill, rock',
+                'U' => 'undersea',
+                'V' => 'forest, heath',
+            );
+            while ($data = fgetcsv($fh, 0, "\t", "\0")) {
+                list($rawCode, $description, $comment) = $data;
+
+                if ($rawCode == 'null') continue;
+
+                list($parentCode, $code) = explode('.', $rawCode);
+
+                if (isset($parentMap[$parentCode])) {
+                    $parent = $parentMap[$parentCode];
+                } else {
+                    $parent = new Entity\Feature;
+                    $em->persist($parent);
+                    $parent->setCode($parentCode);
+                    if (isset($parentDesc[$parentCode])) {
+                        $parent->setDescription($parentDesc[$parentCode]);
+                    }
+                    $parentMap[$parentCode] = $parent;
+                }
+
+                $feature = new Entity\Feature;
+                $em->persist($feature);
+                $feature
+                    ->setCode($code)
+                    ->setDescription($description)
+                    ->setComment($comment)
+                    ->setParent($parent);
             }
             fclose($fh);
         }

@@ -253,4 +253,38 @@ class GeonameTest extends DoctrineTestcase
         $this->assertSame('f', $foo->getIso1());
         $this->assertSame('Foo language', $foo->getName());
     }
+
+    public function testInstallFeature()
+    {
+        $featureRepo =
+            $this->em->getRepository('Heartsentwined\Geoname\Entity\Feature');
+        $fh = fopen('tmp/geoname/featureCodes_en.txt', 'a+');
+        fwrite($fh, "A.FOO\tadmin foo\tadmin foo comment\n");
+        fwrite($fh, "V.FOO\tforest foo\t\n");
+        fwrite($fh, "null\t\t\n");
+        fclose($fh);
+
+        $this->geoname->installFeature();
+
+        $this->assertCount(4, $featureRepo->findAll());
+        $admin = $featureRepo->findOneBy(array('code' => 'A'));
+        $this->assertSame('A', $admin->getCode());
+        $this->assertSame('country, state, region', $admin->getDescription());
+        $this->assertEmpty($admin->getComment());
+        $this->assertEmpty($admin->getParent());
+
+        $fooAdmin = $featureRepo->findOneBy(array('description' => 'admin foo'));
+        $this->assertSame('FOO', $fooAdmin->getCode());
+        $this->assertSame('admin foo', $fooAdmin->getDescription());
+        $this->assertSame('admin foo comment', $fooAdmin->getComment());
+        $this->assertSame($admin, $fooAdmin->getParent());
+
+        $fooForest = $featureRepo->findOneBy(array('description' => 'forest foo'));
+        $this->assertSame('FOO', $fooForest->getCode());
+        $this->assertSame('forest foo', $fooForest->getDescription());
+        $this->assertEmpty($fooForest->getComment());
+        $this->assertSame(
+            $featureRepo->findOneBy(array('code' => 'V')),
+            $fooForest->getParent());
+    }
 }
