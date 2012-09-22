@@ -101,6 +101,7 @@ class Geoname
         switch ($meta->getStatus()) {
             case Repository\Meta::STATUS_INSTALL:
             case Repository\Meta::STATUS_INSTALL_DOWNLOAD:
+            case Repository\Meta::STATUS_INSTALL_PREPARE:
                 $this->install();
                 break;
             case Repository\Meta::STATUS_UPDATE:
@@ -205,6 +206,9 @@ class Geoname
 
     public function installDownload()
     {
+        $tmpDir = $this->getTmpDir();
+        $cli = $this->getCli();
+
         $cli->write('Download files', 'section');
         $files = array(
             'http://download.geonames.org/export/dump/countryInfo.txt',
@@ -218,9 +222,140 @@ class Geoname
         );
         foreach ($files as $url) {
             $cli->write($url, 'module');
+            $file = $tmpDir . '/' . basename($url);
             $this->downloadFile($url, $file);
         }
-        $this->getMeta()->setStatus(Repository\Job::STATUS_INSTALL_PREPARE);
+        $this->getMeta()->setStatus(
+            Repository\Meta::STATUS_INSTALL_PREPARE);
+        return $this;
+    }
+
+    public function installPrepare()
+    {
+        $tmpDir = $this->getTmpDir();
+        $cli = $this->getCli();
+
+        $cli->write('Prepare files', 'section');
+        foreach (array(
+            'allCountries' => 25000,
+            'alternateNames' => 50000,
+            'hierarchy' => 250000,
+        ) as $dir => $lineCount) {
+            $cli->write($dir, 'module');
+
+            if (!is_dir("$tmpDir/$dir")) {
+                mkdir("$tmpDir/$dir");
+            }
+
+            $cli->write('unzip', 'task');
+            $zip = new \ZipArchive;
+            $zip->open("$tmpDir/$dir.zip");
+            $zip->extractTo($tmpDir);
+            $zip->close();
+
+            $cli->write('split files', 'task');
+            $srcFh = fopen("$tmpDir/$dir.txt", 'r');
+            $curLine = 1;
+            while ($line = fgets($srcFh)) {
+                if ($curLine % $lineCount == 1) {
+                    $newFh = fopen("$tmpDir/$dir/$curLine", 'w');
+                }
+                fwrite($newFh, $line);
+                if ($curLine % $lineCount == 0) {
+                    fclose($newFh);
+                }
+                $curLine++;
+            }
+        }
+
+        $this->getMeta()->setStatus(
+            Repository\Meta::STATUS_INSTALL_LANGUAGE);
+        return $this;
+    }
+
+    public function installLanguage()
+    {
+        /* language */
+
+        $cli->write('Language', 'section');
+        $source = "$tmpDir/iso-languagecodes.txt";
+        if ($fh = fopen($source, 'r')) {
+            rename($source, "$source.lock");
+            fgets($fh); // skip first line
+            while ($line = fgets($fh)) {
+                list($iso3, $iso2, $iso1, $name) =
+                    explode("\t", $line);
+                $language = new Entity\Language;
+                $em->persist($language);
+                $language
+                    ->setName($name)
+                    ->setIso3($iso3)
+                    ->setIso2($iso2)
+                    ->setIso1($iso1);
+            }
+            fclose($fh);
+        }
+
+        /* feature */
+
+        $cli->write('Feature', 'section');
+        $source = "$tmpDir/featureCodes_en.txt";
+        if ($fh = fopen($source, 'r')) {
+            rename($source, "$source.lock");
+            $parentMap = array();
+            $parentDesc = array(
+                'A' => 'country, state, region',
+                'H' => 'stream, lake',
+                'L' => 'parks, area',
+                'P' => 'city, village',
+                'R' => 'road, railroad',
+                'S' => 'spot, building, farm',
+                'T' => 'mountain, hill, rock',
+                'U' => 'undersea',
+                'V' => 'forest, heath',
+            );
+            while ($line = fgets($fh)) {
+                list($rawCode, $description, $comment) =
+                    explode("\t", $line);
+
+                if ($rawCode == 'null') {
+                    continue;
+                }
+
+                list($parentCode, $code) =
+                    explode('.', $rawCode);
+
+                if (isset($parentMap[$parentCode])) {
+                    $parent = $parentMap[$parentCode];
+                } else {
+                    $parent = new Entity\Feature;
+                    $em->persist($parent);
+                    $parent->setCode($parentCode);
+                    if (isset($parentDesc[$parentCode])) {
+                        $parent->setDescription($parentDesc[$parentCode]);
+                    }
+                    $parentMap[$parentCode] = $parent;
+                }
+
+                $feature = new Entity\Feature;
+                $em->persist($feature);
+                $feature
+                    ->setCode($code)
+                    ->setDescription($description)
+                    ->setComment($comment)
+                    ->setParent($parent);
+            }
+            fclose($fh);
+        }
+
+        $em->flush();
+        rename("$tmpDir/iso-languagecodes.txt.lock",
+            "$tmpDir/iso-languagecodes.txt.done");
+        rename("$tmpDir/featureCodes_en.txt.lock",
+            "$tmpDir/featureCodes_en.txt.done");
+
+        $this->getMeta()->setStatus(
+            Repository\Meta::STATUS_INSTALL_PLACE_1);
         return $this;
     }
 
