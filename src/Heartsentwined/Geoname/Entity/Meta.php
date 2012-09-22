@@ -19,6 +19,11 @@ class Meta
      */
     private $status;
 
+    /**
+     * @var boolean $lock
+     */
+    private $lock;
+
 
     /**
      * Get id
@@ -51,5 +56,28 @@ class Meta
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * Set lock
+     *
+     * @param boolean $lock
+     * @return Meta
+     */
+    public function setLock($lock)
+    {
+        $this->lock = $lock;
+    
+        return $this;
+    }
+
+    /**
+     * Get lock
+     *
+     * @return boolean 
+     */
+    public function getLock()
+    {
+        return $this->lock;
     }
 }

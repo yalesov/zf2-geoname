@@ -98,6 +98,9 @@ class Geoname
         $this->downloadUpdate();
 
         $meta = $this->getMeta();
+        if ($meta->getLock()) return $this;
+
+        $meta->setLock(true);
         switch ($meta->getStatus()) {
             case Repository\Meta::STATUS_INSTALL:
             case Repository\Meta::STATUS_INSTALL_DOWNLOAD:
@@ -108,6 +111,7 @@ class Geoname
                 $this->update();
                 break;
         }
+        $meta->setLock(false);
 
         return $this;
     }
