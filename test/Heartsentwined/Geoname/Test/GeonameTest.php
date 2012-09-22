@@ -239,4 +239,27 @@ class GeonameTest extends DoctrineTestcase
         $this->assertSame(Repository\Meta::STATUS_INSTALL_LANGUAGE,
             $this->geoname->getMeta()->getStatus());
     }
+
+    public function testInstallLanguage()
+    {
+        $languageRepo =
+            $this->em->getRepository('Heartsentwined\Geoname\Entity\Language');
+        $fh = fopen('tmp/geoname/iso-languagecodes.txt', 'a+');
+        fwrite($fh, "\n");
+        fwrite($fh, "foo\tfo\tf\tFoo language\n");
+        fwrite($fh, "bar\tba\tb\tBar language\n");
+        fclose($fh);
+
+        $this->geoname->installLanguage();
+
+        $this->assertCount(2, $languageRepo->findAll());
+        $foo = $languageRepo->find(1);
+        $this->assertSame('foo', $foo->getIso3());
+        $this->assertSame('fo', $foo->getIso2());
+        $this->assertSame('f', $foo->getIso1());
+        $this->assertSame('Foo language', $foo->getName());
+
+        $this->assertSame(Repository\Meta::STATUS_INSTALL_FEATURE,
+            $this->geoname->getMeta()->getStatus());
+    }
 }

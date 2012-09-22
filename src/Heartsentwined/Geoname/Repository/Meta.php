@@ -15,5 +15,6 @@ class Meta extends EntityRepository
     const STATUS_INSTALL_DOWNLOAD   = 'install_download';
     const STATUS_INSTALL_PREPARE    = 'install_prepare';
     const STATUS_INSTALL_LANGUAGE   = 'install_language';
+    const STATUS_INSTALL_FEATURE    = 'install_feature';
     const STATUS_UPDATE     = 'update';
 }

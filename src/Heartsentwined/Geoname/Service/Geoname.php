@@ -275,14 +275,16 @@ class Geoname
 
     public function installLanguage()
     {
-        /* language */
+        $em = $this->getEm();
+        $tmpDir = $this->getTmpDir();
+        $cli = $this->getCli();
 
         $cli->write('Language', 'section');
         $source = "$tmpDir/iso-languagecodes.txt";
         if ($fh = fopen($source, 'r')) {
             rename($source, "$source.lock");
             fgets($fh); // skip first line
-            while ($line = fgets($fh)) {
+            while ($line = trim(fgets($fh))) {
                 list($iso3, $iso2, $iso1, $name) =
                     explode("\t", $line);
                 $language = new Entity\Language;
@@ -296,66 +298,12 @@ class Geoname
             fclose($fh);
         }
 
-        /* feature */
-
-        $cli->write('Feature', 'section');
-        $source = "$tmpDir/featureCodes_en.txt";
-        if ($fh = fopen($source, 'r')) {
-            rename($source, "$source.lock");
-            $parentMap = array();
-            $parentDesc = array(
-                'A' => 'country, state, region',
-                'H' => 'stream, lake',
-                'L' => 'parks, area',
-                'P' => 'city, village',
-                'R' => 'road, railroad',
-                'S' => 'spot, building, farm',
-                'T' => 'mountain, hill, rock',
-                'U' => 'undersea',
-                'V' => 'forest, heath',
-            );
-            while ($line = fgets($fh)) {
-                list($rawCode, $description, $comment) =
-                    explode("\t", $line);
-
-                if ($rawCode == 'null') {
-                    continue;
-                }
-
-                list($parentCode, $code) =
-                    explode('.', $rawCode);
-
-                if (isset($parentMap[$parentCode])) {
-                    $parent = $parentMap[$parentCode];
-                } else {
-                    $parent = new Entity\Feature;
-                    $em->persist($parent);
-                    $parent->setCode($parentCode);
-                    if (isset($parentDesc[$parentCode])) {
-                        $parent->setDescription($parentDesc[$parentCode]);
-                    }
-                    $parentMap[$parentCode] = $parent;
-                }
-
-                $feature = new Entity\Feature;
-                $em->persist($feature);
-                $feature
-                    ->setCode($code)
-                    ->setDescription($description)
-                    ->setComment($comment)
-                    ->setParent($parent);
-            }
-            fclose($fh);
-        }
-
         $em->flush();
         rename("$tmpDir/iso-languagecodes.txt.lock",
             "$tmpDir/iso-languagecodes.txt.done");
-        rename("$tmpDir/featureCodes_en.txt.lock",
-            "$tmpDir/featureCodes_en.txt.done");
 
         $this->getMeta()->setStatus(
-            Repository\Meta::STATUS_INSTALL_PLACE_1);
+            Repository\Meta::STATUS_INSTALL_FEATURE);
         return $this;
     }
 
