@@ -18,7 +18,7 @@ This module will install a self-updating local copy of the Geonames (places) dat
 }
 ```
 
-Then add `Heartsentwined\Geoname` to the `modules` key in `(app root)/config/application.config.yml`
+Then add `Heartsentwined\Geoname` to the `modules` key in `(app root)/config/application.config.*`
 
 Geoname module will also hook onto your application's database, through [`DoctrineORMModule`](https://github.com/doctrine/DoctrineORMModule). It will create a number of tables with the prefix `he_geoname_*`, and will use the default EntityManager `doctrine.entitymanager.orm_default`. If your settings are different, please modify the `doctrine` section of `config/module.config.yml` as needed.
 
