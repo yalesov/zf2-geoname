@@ -579,11 +579,11 @@ class Geoname
                     } else {
                         continue;
                     }
-                    $reverseCurNeighbours = array();
+                    $revCurNeighbours = array();
                     foreach ($neighbour->getNeighbours() as $neighbour2) {
-                        $reverseCurNeighbours[] = $neighbour2->getIso2();
+                        $revCurNeighbours[] = $neighbour2->getIso2();
                     }
-                    if (!in_array($neighbourIso2, $reverseCurNeighbours)) {
+                    if (!in_array($neighbourIso2, $revCurNeighbours)) {
                         $country->addNeighbour($neighbour);
                     }
                 }
