@@ -10,6 +10,15 @@ Heartsentwined\Geoname\Entity\Timezone:
                 strategy: AUTO
         code:
             type: string
+        offset:
+            type: decimal
+            nullable: true
+        offsetJan: # actually, offset as at 1 Jan 2012
+            type: decimal
+            nullable: true
+        offsetJul: # actually, offset as at 1 Jul 2012
+            type: decimal
+            nullable: true
 
     oneToMany:
         places:

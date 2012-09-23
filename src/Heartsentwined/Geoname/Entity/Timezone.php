@@ -20,6 +20,21 @@ class Timezone
     private $code;
 
     /**
+     * @var float $offset
+     */
+    private $offset;
+
+    /**
+     * @var float $offsetJan
+     */
+    private $offsetJan;
+
+    /**
+     * @var float $offsetJul
+     */
+    private $offsetJul;
+
+    /**
      * @var \Doctrine\Common\Collections\ArrayCollection
      */
     private $places;
@@ -68,6 +83,75 @@ class Timezone
     public function getCode()
     {
         return $this->code;
+    }
+
+    /**
+     * Set offset
+     *
+     * @param float $offset
+     * @return Timezone
+     */
+    public function setOffset($offset)
+    {
+        $this->offset = $offset;
+    
+        return $this;
+    }
+
+    /**
+     * Get offset
+     *
+     * @return float 
+     */
+    public function getOffset()
+    {
+        return $this->offset;
+    }
+
+    /**
+     * Set offsetJan
+     *
+     * @param float $offsetJan
+     * @return Timezone
+     */
+    public function setOffsetJan($offsetJan)
+    {
+        $this->offsetJan = $offsetJan;
+    
+        return $this;
+    }
+
+    /**
+     * Get offsetJan
+     *
+     * @return float 
+     */
+    public function getOffsetJan()
+    {
+        return $this->offsetJan;
+    }
+
+    /**
+     * Set offsetJul
+     *
+     * @param float $offsetJul
+     * @return Timezone
+     */
+    public function setOffsetJul($offsetJul)
+    {
+        $this->offsetJul = $offsetJul;
+    
+        return $this;
+    }
+
+    /**
+     * Get offsetJul
+     *
+     * @return float 
+     */
+    public function getOffsetJul()
+    {
+        return $this->offsetJul;
     }
 
     /**
