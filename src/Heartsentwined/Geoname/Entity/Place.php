@@ -30,6 +30,16 @@ class Place
     private $longitude;
 
     /**
+     * @var float $elevation
+     */
+    private $elevation;
+
+    /**
+     * @var string $digiEleModel
+     */
+    private $digiEleModel;
+
+    /**
      * @var integer $population
      */
     private $population;
@@ -194,6 +204,52 @@ class Place
     public function getLongitude()
     {
         return $this->longitude;
+    }
+
+    /**
+     * Set elevation
+     *
+     * @param float $elevation
+     * @return Place
+     */
+    public function setElevation($elevation)
+    {
+        $this->elevation = $elevation;
+    
+        return $this;
+    }
+
+    /**
+     * Get elevation
+     *
+     * @return float 
+     */
+    public function getElevation()
+    {
+        return $this->elevation;
+    }
+
+    /**
+     * Set digiEleModel
+     *
+     * @param string $digiEleModel
+     * @return Place
+     */
+    public function setDigiEleModel($digiEleModel)
+    {
+        $this->digiEleModel = $digiEleModel;
+    
+        return $this;
+    }
+
+    /**
+     * Get digiEleModel
+     *
+     * @return string 
+     */
+    public function getDigiEleModel()
+    {
+        return $this->digiEleModel;
     }
 
     /**

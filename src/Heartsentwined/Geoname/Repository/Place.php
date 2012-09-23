@@ -28,7 +28,7 @@ class Place extends EntityRepository
     {
         $dqb = $this->_em->createQueryBuilder();
         $dqb->select(array('p'))
-            ->from('Geoname\Entity\Place', 'p');
+            ->from('Heartsentwined\Geoname\Entity\Place', 'p');
         if (isset($criteria['featureCode'])) {
             $dqb->join('p.feature', 'f');
             if (isset($criteria['featureClass'])) {

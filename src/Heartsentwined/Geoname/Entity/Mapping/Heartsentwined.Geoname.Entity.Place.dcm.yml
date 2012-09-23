@@ -15,6 +15,12 @@ Heartsentwined\Geoname\Entity\Place:
         longitude:
             type: decimal
             nullable: true
+        elevation:
+            type: decimal
+            nullable: true
+        digiEleModel:
+            type: string
+            nullable: true
         population:
             type: bigint
             nullable: true

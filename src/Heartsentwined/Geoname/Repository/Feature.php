@@ -24,7 +24,7 @@ class Feature extends EntityRepository
 
         $dqb = $this->_em->createQueryBuilder();
         $dqb->select(array('f'))
-            ->from('Geoname\Entity\Feature', 'f')
+            ->from('Heartsentwined\Geoname\Entity\Feature', 'f')
             ->join('f.parent', 'p')
             ->where($dqb->expr()->andX(
                 $dqb->expr()->eq('p.code', ':parentCode'),

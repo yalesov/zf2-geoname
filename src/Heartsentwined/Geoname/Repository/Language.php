@@ -21,7 +21,7 @@ class Language extends EntityRepository
     {
         $dqb = $this->_em->createQueryBuilder();
         $dqb->select('l')
-            ->from('Geoname\Entity\Language', 'l')
+            ->from('Heartsentwined\Geoname\Entity\Language', 'l')
             ->where($dqb->expr()->orX(
                 $dqb->expr()->eq('l.iso3', ':iso3'),
                 $dqb->expr()->eq('l.iso2', ':iso2'),
