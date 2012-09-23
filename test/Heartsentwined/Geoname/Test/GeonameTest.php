@@ -336,11 +336,34 @@ class GeonameTest extends DoctrineTestcase
             . "\t2012-01-01"    // modification date
             . "\n"
         );
+        fwrite($fh,
+            '3'                 // non-sequential ID
+            . "\tbar placé 早"
+            . "\t"
+            . "\tfoo,bar"       // comma-separated alt names (no use anyway)
+            . "\t"
+            . "\t"
+            . "\tA"
+            . "\tBAZ"           // non-existent feature
+            . "\t"
+            . "\t"
+            . "\t"
+            . "\t"
+            . "\t"
+            . "\t"
+            . "\t"
+            . "\t"
+            . "\t"
+            . "\t"
+            . "\t"
+            . "\n"
+        );
         fclose($fh);
 
         $this->geoname->installPlace();
 
-        $this->assertCount(1, $placeRepo->findAll());
+        $this->assertCount(2, $placeRepo->findAll());
+
         $foo = $placeRepo->find(1);
         $this->assertNotEmpty($foo);
         $this->assertSame('foo placé 早', $foo->getName());
@@ -355,6 +378,23 @@ class GeonameTest extends DoctrineTestcase
         $this->assertSame('admin4', $foo->getAdmin4Code());
         $this->assertSame('100000', $foo->getPopulation());
         $this->assertSame($bar, $foo->getFeature());
+
+        $this->assertEmpty($placeRepo->find(2));
+
+        $bar = $placeRepo->find(3);
+        $this->assertNotEmpty($bar);
+        $this->assertSame('bar placé 早', $bar->getName());
+        $this->assertEmpty($bar->getLatitude());
+        $this->assertEmpty($bar->getLongitude());
+        $this->assertEmpty($bar->getElevation());
+        $this->assertEmpty($bar->getDigiEleModel());
+        $this->assertEmpty($bar->getCountryCode());
+        $this->assertEmpty($bar->getAdmin1Code());
+        $this->assertEmpty($bar->getAdmin2Code());
+        $this->assertEmpty($bar->getAdmin3Code());
+        $this->assertEmpty($bar->getAdmin4Code());
+        $this->assertEmpty($bar->getPopulation());
+        $this->assertEmpty($bar->getFeature());
 
         $this->assertFalse(file_exists('tmp/geoname/allCountries/1'));
         $this->assertFalse(file_exists('tmp/geoname/allCountries/1.lock'));
@@ -397,5 +437,203 @@ class GeonameTest extends DoctrineTestcase
         $this->assertFileExists('tmp/geoname/allCountries/3.done');
 
         // TODO test meta change
+    }
+
+    public function testInstallCountryCurrencyLocale()
+    {
+        $countryRepo =
+            $this->em->getRepository('Heartsentwined\Geoname\Entity\Country');
+        $currencyRepo =
+            $this->em->getRepository('Heartsentwined\Geoname\Entity\Currency');
+        $localeRepo =
+            $this->em->getRepository('Heartsentwined\Geoname\Entity\Locale');
+
+        // dummy place
+        $place1 = new Entity\Place;
+        $place1->setId(1);
+        $this->em->persist($place1);
+        $place2 = new Entity\Place;
+        $place2->setId(2);
+        $this->em->persist($place2);
+        $place3 = new Entity\Place;
+        $place3->setId(3);
+        $this->em->persist($place3);
+        // AF continent
+        $africa = new Entity\Place;
+        $africa->setId(6255146);
+        $this->em->persist($africa);
+        // dummy language
+        $enLang = new Entity\Language;
+        $this->em->persist($enLang);
+        $enLang->setIso2('en');
+        $esLang = new Entity\Language;
+        $this->em->persist($esLang);
+        $esLang->setIso2('es');
+        $bzLang = new Entity\Language;
+        $this->em->persist($bzLang);
+        $bzLang->setIso2('bz');
+
+        $this->em->flush();
+
+        mkdir('tmp/geoname/allCountries');
+        $fh = fopen('tmp/geoname/countryInfo.txt', 'a+');
+        fwrite($fh, "# foo\n"); // a comment line
+        fwrite($fh,
+            'FO'                // iso 2
+            . "\tFOO"           // iso 3
+            . "\tisonum"        // iso numeric
+            . "\tfips"          // FIPS code
+            . "\tfoo country"   // country name
+            . "\tfoo capital"   // capital
+            . "\t1000"          // area
+            . "\t100000"        // population
+            . "\tAF"            // continent code
+            . "\t.fo"           // TLD
+            . "\tFOD"           // currency code
+            . "\tfoo dollar"    // currency name
+            . "\t123"           // phone (calling code?)
+            . "\tFO###"         // postal code
+            . "\tFO[\d]{3}"     // postal code regex
+            . "\ten-FO,es"      // locale codes
+            . "\t1"             // place ID
+            . "\tBA"            // neighbour
+            . "\tequiv fips"    // equivalent FIPS code
+            . "\n"
+        );
+        fwrite($fh,
+            'BA'                // iso 2
+            . "\t"
+            . "\t"
+            . "\t"
+            . "\t"
+            . "\t"
+            . "\t"
+            . "\t"
+            . "\t"
+            . "\t"
+            . "\tFOD"           // same currency
+            . "\tfoo dollar"    // same currency
+            . "\t"
+            . "\t"
+            . "\t"
+            . "\tes"            // single locale code; same locale
+            . "\t2"             // place ID
+            . "\t"
+            . "\t"
+            . "\n"
+        );
+        fwrite($fh,
+            'BZ'                // iso 2
+            . "\t"
+            . "\t"
+            . "\t"
+            . "\t"
+            . "\t"
+            . "\t"
+            . "\t"
+            . "\t"
+            . "\t"
+            . "\tBZD"           // new currency
+            . "\tbaz dollar"    // new currency
+            . "\t"
+            . "\t"
+            . "\t"
+            . "\tbz"            // new locale
+            . "\t3"             // place ID
+            . "\t"
+            . "\t"
+            . "\n"
+        );
+
+        $this->geoname->installCountryCurrencyLocale();
+
+        $this->assertCount(2, $currencyRepo->findAll());
+        $fod = $currencyRepo->findOneBy(array('code' => 'FOD'));
+        $this->assertNotEmpty($fod);
+        $this->assertSame('FOD', $fod->getCode());
+        $this->assertSame('foo dollar', $fod->getName());
+        $bzd = $currencyRepo->findOneBy(array('code' => 'BZD'));
+        $this->assertNotEmpty($bzd);
+        $this->assertSame('BZD', $bzd->getCode());
+        $this->assertSame('baz dollar', $bzd->getName());
+
+        $this->assertCount(3, $localeRepo->findAll());
+        $enFo = $localeRepo->findoneBy(array('code' => 'en_FO'));
+        $this->assertNotEmpty($enFo);
+        $es = $localeRepo->findoneBy(array('code' => 'es'));
+        $this->assertNotEmpty($es);
+        $bz = $localeRepo->findoneBy(array('code' => 'bz'));
+        $this->assertNotEmpty($bz);
+
+        $foo = $countryRepo->find(1);
+        $this->assertNotEmpty($foo);
+        $this->assertSame('FO', $foo->getIso2());
+        $this->assertSame('FOO', $foo->getIso3());
+        $this->assertSame('isonum', $foo->getIsoNum());
+        $this->assertSame('foo capital', $foo->getCapital());
+        $this->assertSame('1000', $foo->getArea());
+        $this->assertSame('100000', $foo->getPopulation());
+        $this->assertSame('.fo', $foo->getTld());
+        $this->assertSame('123', $foo->getPhone());
+        $this->assertSame('FO###', $foo->getPostalCode());
+        $this->assertSame('FO[\d]{3}', $foo->getPostalCodeRegex());
+        $this->assertSame($place1, $foo->getPlace());
+        $this->assertSame($africa, $foo->getContinent());
+        $this->assertSame($fod, $foo->getCurrency());
+        $this->assertSame($enFo, $foo->getMainLocale());
+        $expectedLocales = array($enFo, $es);
+        $actualLocales = array();
+        foreach ($foo->getLocales() as $locale) {
+            $actualLocales[] = $locale;
+        }
+        sort($expectedLocales);
+        sort($actualLocales);
+        $this->assertSame($expectedLocales, $actualLocales);
+
+        $bar = $countryRepo->find(2);
+        $this->assertNotEmpty($bar);
+        $this->assertSame('BA', $bar->getIso2());
+        $this->assertEmpty($bar->getIso3());
+        $this->assertEmpty($bar->getIsoNum());
+        $this->assertEmpty($bar->getCapital());
+        $this->assertEmpty($bar->getArea());
+        $this->assertEmpty($bar->getPopulation());
+        $this->assertEmpty($bar->getTld());
+        $this->assertEmpty($bar->getPhone());
+        $this->assertEmpty($bar->getPostalCode());
+        $this->assertEmpty($bar->getPostalCodeRegex());
+        $this->assertSame($place2, $bar->getPlace());
+        $this->assertEmpty($bar->getContinent());
+        $this->assertSame($fod, $bar->getCurrency());
+        $this->assertSame($es, $bar->getMainLocale());
+        $expectedLocales = array($es);
+        $actualLocales = array();
+        foreach ($bar->getLocales() as $locale) {
+            $actualLocales[] = $locale;
+        }
+        $this->assertSame($expectedLocales, $actualLocales);
+
+        $baz = $countryRepo->find(3);
+        $this->assertNotEmpty($baz);
+        $this->assertSame('BZ', $baz->getIso2());
+        $this->assertEmpty($baz->getIso3());
+        $this->assertEmpty($baz->getIsoNum());
+        $this->assertEmpty($baz->getCapital());
+        $this->assertEmpty($baz->getArea());
+        $this->assertEmpty($baz->getPopulation());
+        $this->assertEmpty($baz->getTld());
+        $this->assertEmpty($baz->getPhone());
+        $this->assertEmpty($baz->getPostalCode());
+        $this->assertEmpty($baz->getPostalCodeRegex());
+        $this->assertSame($place3, $baz->getPlace());
+        $this->assertEmpty($baz->getContinent());
+        $this->assertSame($bzd, $baz->getCurrency());
+        $this->assertSame($bz, $baz->getMainLocale());
+        $expectedLocales = array($bz);
+        $actualLocales = array();
+        foreach ($baz->getLocales() as $locale) {
+            $actualLocales[] = $locale;
+        }
+        $this->assertSame($expectedLocales, $actualLocales);
     }
 }

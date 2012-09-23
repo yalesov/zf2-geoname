@@ -403,6 +403,108 @@ class Geoname
         return $this;
     }
 
+    public function installCountryCurrencyLocale()
+    {
+        $em = $this->getEm();
+        $placeRepo = $em->getRepository('Heartsentwined\Geoname\Entity\Place');
+        $languageRepo = $em->getRepository('Heartsentwined\Geoname\Entity\Language');
+        $currencyMap = array();
+        $localeMap = array();
+        $languageMap = array();
+        $continentMap = array(
+            'AF' => 6255146,
+            'AS' => 6255147,
+            'EU' => 6255148,
+            'NA' => 6255149,
+            'OC' => 6255151,
+            'SA' => 6255150,
+            'AN' => 6255152,
+        );
+        $source = $this->getTmpDir() . '/countryInfo.txt';
+        if ($fh = fopen($source, 'r')) {
+            while ($data = fgetcsv($fh, 0, "\t", "\0")) {
+                if (substr(trim($data[0]), 0, 1) === '#') {
+                    continue;
+                }
+                list($iso2, $iso3, $isoNum, /*fips*/, /*name*/,
+                    $capital, $area, $population, $continentCode, $tld,
+                    $currencyCode, $currencyName, $phone,
+                    $postalCode, $postalCodeRegex, $localeCodes, $placeId,
+                    $neighbours, /*equiv fips code*/) =
+                    $data;
+                if ($area == 'NA') $area = null;
+                if ($population == 'NA') $population = null;
+                $country = new Entity\Country;
+                $em->persist($country);
+                $country
+                    ->setIso3($iso3)
+                    ->setIso2($iso2)
+                    ->setIsoNum($isoNum)
+                    ->setCapital($capital)
+                    ->setArea($area)
+                    ->setPopulation($population)
+                    ->setTld($tld)
+                    ->setPhone($phone)
+                    ->setPostalCode($postalCode)
+                    ->setPostalCodeRegex($postalCodeRegex);
+
+                if ($place = $placeRepo->find((int)$placeId)) {
+                    $country->setPlace($place);
+                }
+                if (isset($continentMap[$continentCode])) {
+                    if ($continent = $placeRepo->find((int)$continentMap[$continentCode])) {
+                        $country->setContinent($continent);
+                    }
+                }
+                if (isset($currencyMap[$currencyCode])) {
+                    $currency = $currencyMap[$currencyCode];
+                } else {
+                    $currency = new Entity\Currency;
+                    $em->persist($currency);
+                    $currency
+                        ->setCode($currencyCode)
+                        ->setName($currencyName);
+                    $currencyMap[$currencyCode] = $currency;
+                }
+                $country->setCurrency($currency);
+                $count = 1;
+                foreach (array_unique(explode(',', $localeCodes)) as $localeCode) {
+                    $localeCode = strtr($localeCode, '-', '_');
+                    if (isset($localeMap[$localeCode])) {
+                        $locale = $localeMap[$localeCode];
+                    } else {
+                        $locale = new Entity\Locale;
+                        $em->persist($locale);
+                        $localeMap[$localeCode] = $locale;
+                        $locale->setCode($localeCode);
+                        list($iso2) = explode('_', $localeCode);
+                        if (isset($languageMap[$iso2])) {
+                            $language = $languageMap[$iso2];
+                        } else {
+                            if (!$language = $languageRepo->findOneBy(
+                                array('iso2' => $iso2))) {
+                                $language = new Entity\Language;
+                                $em->persist($language);
+                                $language->setIso2($iso2);
+                            }
+                            $languageMap[$iso2] = $language;
+                        }
+                        $locale->setLanguage($language);
+                    }
+                    if ($count === 1) {
+                        $country->setMainLocale($locale);
+                    }
+                    $country->addLocale($locale);
+                    $count++;
+                }
+            }
+            fclose($fh);
+        }
+        $em->flush();
+
+        return $this;
+    }
+
     /**
      * auto-install geoname database
      *
