@@ -475,7 +475,6 @@ class GeonameTest extends DoctrineTestcase
 
         $this->em->flush();
 
-        mkdir('tmp/geoname/allCountries');
         $fh = fopen('tmp/geoname/countryInfo.txt', 'a+');
         fwrite($fh, "# foo\n"); // a comment line
         fwrite($fh,
@@ -673,5 +672,98 @@ class GeonameTest extends DoctrineTestcase
         $this->assertSame('2.25', $bar->getOffsetJan());
         $this->assertSame('-2.5', $bar->getOffsetJul());
         $this->assertSame($barCountry, $bar->getCountry());
+    }
+
+    public function testInstallNeighbour()
+    {
+        $countryRepo =
+            $this->em->getRepository('Heartsentwined\Geoname\Entity\Country');
+
+        $foo1 = new Entity\Country;
+        $this->em->persist($foo1);
+        $foo1->setIso2('F1');
+        $foo2 = new Entity\Country;
+        $this->em->persist($foo2);
+        $foo2->setIso2('F2');
+        $foo3 = new Entity\Country;
+        $this->em->persist($foo3);
+        $foo3->setIso2('F3');
+        $bar1 = new Entity\Country;
+        $this->em->persist($bar1);
+        $bar1->setIso2('B1');
+        $bar2 = new Entity\Country;
+        $this->em->persist($bar2);
+        $bar2->setIso2('B2');
+        $baz = new Entity\Country;
+        $this->em->persist($baz);
+        $baz->setIso2('BZ');
+        $this->em->flush();
+
+        $fh = fopen('tmp/geoname/countryInfo.txt', 'a+');
+        fwrite($fh, "# foo\n"); // a comment line
+        // multiple neighbours
+        fwrite($fh, "F1\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tF2,F3\t\n");
+        fwrite($fh, "F2\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tF1,F3\t\n");
+        fwrite($fh, "F3\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tF1,F2\t\n");
+        // single neighbour
+        fwrite($fh, "B1\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tB2\t\n");
+        fwrite($fh, "B2\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tB1\t\n");
+        // no neighbour
+        fwrite($fh, "BZ\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n");
+        fclose($fh);
+
+        $this->geoname->installNeighbour();
+return;
+
+        $expectedNeighbours = array($foo2, $foo3);
+        $actualNeighbours = array();
+        foreach ($foo1->getNeighbours() as $neighbour) {
+            $actualNeighbours[] = $neighbour;
+        }
+        sort($expectedNeighbours);
+        sort($actualNeighbours);
+        $this->assertSame($expectedNeighbours, $actualNeighbours);
+        $expectedNeighbours = array($foo1, $foo3);
+        $actualNeighbours = array();
+        foreach ($foo2->getNeighbours() as $neighbour) {
+            $actualNeighbours[] = $neighbour;
+        }
+        sort($expectedNeighbours);
+        sort($actualNeighbours);
+        $this->assertSame($expectedNeighbours, $actualNeighbours);
+        $expectedNeighbours = array($foo1, $foo2);
+        $actualNeighbours = array();
+        foreach ($foo3->getNeighbours() as $neighbour) {
+            $actualNeighbours[] = $neighbour;
+        }
+        sort($expectedNeighbours);
+        sort($actualNeighbours);
+        $this->assertSame($expectedNeighbours, $actualNeighbours);
+
+        $expectedNeighbours = array($bar2);
+        $actualNeighbours = array();
+        foreach ($bar1->getNeighbours() as $neighbour) {
+            $actualNeighbours[] = $neighbour;
+        }
+        sort($expectedNeighbours);
+        sort($actualNeighbours);
+        $this->assertSame($expectedNeighbours, $actualNeighbours);
+        $expectedNeighbours = array($bar1);
+        $actualNeighbours = array();
+        foreach ($bar2->getNeighbours() as $neighbour) {
+            $actualNeighbours[] = $neighbour;
+        }
+        sort($expectedNeighbours);
+        sort($actualNeighbours);
+        $this->assertSame($expectedNeighbours, $actualNeighbours);
+
+        $expectedNeighbours = array();
+        $actualNeighbours = array();
+        foreach ($baz->getNeighbours() as $neighbour) {
+            $actualNeighbours[] = $neighbour;
+        }
+        sort($expectedNeighbours);
+        sort($actualNeighbours);
+        $this->assertSame($expectedNeighbours, $actualNeighbours);
     }
 }

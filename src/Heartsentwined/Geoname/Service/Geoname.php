@@ -539,6 +539,62 @@ class Geoname
         return $this;
     }
 
+    public function installNeighbour()
+    {
+        $em = $this->getEm();
+        $countryRepo = $em->getRepository('Heartsentwined\Geoname\Entity\Country');
+
+        $countryMap = array();
+        $source = $this->getTmpDir() . '/countryInfo.txt';
+        if ($fh = fopen($source, 'r')) {
+            while ($data = fgetcsv($fh, 0, "\t", "\0")) {
+                if (substr(trim($data[0]), 0, 1) === '#') {
+                    continue;
+                }
+                list($iso2, $iso3, $isoNum, /*fips*/, /*name*/,
+                    $capital, $area, $population, $continentCode, $tld,
+                    $currencyCode, $currencyName, $phone,
+                    $postalCode, $postalCodeRegex, $localeCodes, $placeId,
+                    $neighbours, /*equiv fips code*/) =
+                    $data;
+                if (isset($countryMap[$iso2])) {
+                    $country = $countryMap[$iso2];
+                } elseif ($country = $countryRepo->findOneBy(array('iso2' => $iso2))) {
+                    $countryMap[$iso2] = $country;
+                } else {
+                    continue;
+                }
+                $curNeighbours = array();
+                foreach ($country->getNeighbours() as $neighbour) {
+                    $curNeighbours[] = $neighbour->getIso2();
+                }
+                foreach (explode(',', $neighbours) as $neighbourIso2) {
+                    if (in_array($neighbourIso2, $curNeighbours)) {
+                        continue;
+                    }
+                    if (isset($countryMap[$neighbourIso2])) {
+                        $neighbour = $countryMap[$neighbourIso2];
+                    } elseif ($neighbour = $countryRepo->findOneBy(array('iso2' => $neighbourIso2))) {
+                        $countryMap[$neighbourIso2] = $neighbour;
+                    } else {
+                        continue;
+                    }
+                    $reverseCurNeighbours = array();
+                    foreach ($neighbour->getNeighbours() as $neighbour2) {
+                        $reverseCurNeighbours[] = $neighbour2->getIso2();
+                    }
+                    if (!in_array($neighbourIso2, $reverseCurNeighbours)) {
+                        $country->addNeighbour($neighbour);
+                    }
+                }
+            }
+            fclose($fh);
+        }
+        $em->flush();
+
+        return $this;
+    }
+
     /**
      * auto-install geoname database
      *
