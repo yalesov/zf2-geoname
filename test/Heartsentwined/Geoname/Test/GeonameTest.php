@@ -636,4 +636,42 @@ class GeonameTest extends DoctrineTestcase
         }
         $this->assertSame($expectedLocales, $actualLocales);
     }
+
+    public function testInstallTimezone()
+    {
+        $timezoneRepo =
+            $this->em->getRepository('Heartsentwined\Geoname\Entity\Timezone');
+
+        $fooCountry = new Entity\Country;
+        $this->em->persist($fooCountry);
+        $fooCountry->setIso2('FO');
+        $barCountry = new Entity\Country;
+        $this->em->persist($barCountry);
+        $barCountry->setIso2('BA');
+        $this->em->flush();
+
+        $fh = fopen('tmp/geoname/timeZones.txt', 'a+');
+        fwrite($fh, "\n");
+        fwrite($fh, "FO\tAfrica/Foo\t1.0\t-1.0\t1.0\n");
+        fwrite($fh, "BA\tAfrica/Bar_Baz\t2.25\t-2.5\t0.0\n");
+        fclose($fh);
+
+        $this->geoname->installTimezone();
+
+        $this->assertCount(2, $timezoneRepo->findAll());
+        $foo = $timezoneRepo->find(1);
+        $this->assertNotEmpty($foo);
+        $this->assertSame('Africa/Foo', $foo->getCode());
+        $this->assertSame('1.0', $foo->getOffset());
+        $this->assertSame('1.0', $foo->getOffsetJan());
+        $this->assertSame('-1.0', $foo->getOffsetJul());
+        $this->assertSame($fooCountry, $foo->getCountry());
+        $bar = $timezoneRepo->find(2);
+        $this->assertNotEmpty($bar);
+        $this->assertSame('Africa/Bar_Baz', $bar->getCode());
+        $this->assertSame('0.0', $bar->getOffset());
+        $this->assertSame('2.25', $bar->getOffsetJan());
+        $this->assertSame('-2.5', $bar->getOffsetJul());
+        $this->assertSame($barCountry, $bar->getCountry());
+    }
 }

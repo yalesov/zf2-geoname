@@ -505,6 +505,40 @@ class Geoname
         return $this;
     }
 
+    public function installTimezone()
+    {
+        $em = $this->getEm();
+        $countryRepo = $em->getRepository('Heartsentwined\Geoname\Entity\Country');
+
+        $countryMap = array();
+        $source = $this->getTmpDir() . '/timeZones.txt';
+        if ($fh = fopen($source, 'r')) {
+            fgets($fh); //skip header
+            while ($data = fgetcsv($fh, 0, "\t", "\0")) {
+                list($countryCode, $code,
+                    $offsetJan, $offsetJul, $offset) =
+                    $data;
+                $timezone = new Entity\Timezone;
+                $em->persist($timezone);
+                $timezone
+                    ->setCode($code)
+                    ->setOffset($offset)
+                    ->setOffsetJan($offsetJan)
+                    ->setOffsetJul($offsetJul);
+                if (isset($countryMap[$countryCode])) {
+                    $timezone->setCountry($countryMap[$countryCode]);
+                } elseif ($country = $countryRepo->findOneBy(array('iso2' => $countryCode))) {
+                    $countryMap[$countryCode] = $country;
+                    $timezone->setCountry($country);
+                }
+            }
+            fclose($fh);
+        }
+        $em->flush();
+
+        return $this;
+    }
+
     /**
      * auto-install geoname database
      *
