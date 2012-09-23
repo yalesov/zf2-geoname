@@ -351,6 +351,58 @@ class Geoname
         return $this;
     }
 
+    public function installPlace()
+    {
+        $em = $this->getEm();
+        $featureRepo = $em->getRepository('Heartsentwined\Geoname\Entity\Feature');
+
+        foreach (FileSystemManager::fileIterator($this->getTmpDir() . '/allCountries') as $source) {
+            if (!strpos($source, '.done')
+                && !strpos($source, '.lock')
+                && $fh = fopen($source, 'r')) {
+                $this->getCli()->write($source, 'module');
+                rename($source, "$source.lock");
+                while ($data = fgetcsv($fh, 0, "\t", "\0")) {
+                    list($id, $name, /*ascii name*/, /*alt name*/,
+                        $latitude, $longitude, $featureClass, $featureCode,
+                        $countryCode, /*alt country code*/,
+                        $admin1Code, $admin2Code, $admin3Code, $admin4Code,
+                        $population, $elevation, $digiEleModel,
+                        $timezoneCode, /*modification date*/) =
+                        $data;
+
+                    $place = new Entity\Place;
+                    $place
+                        ->setId($id)
+                        ->setName($name)
+                        ->setLatitude($latitude)
+                        ->setLongitude($longitude)
+                        ->setElevation($elevation)
+                        ->setDigiEleModel($digiEleModel)
+                        ->setCountryCode($countryCode)
+                        ->setAdmin1Code($admin1Code)
+                        ->setAdmin2Code($admin2Code)
+                        ->setAdmin3Code($admin3Code)
+                        ->setAdmin4Code($admin4Code)
+                        ->setPopulation($population);
+                    $em->persist($place);
+
+                    $featureCode = "$featureClass.$featureCode";
+                    if ($feature = $featureRepo->findByGeonameCode($featureCode)) {
+                        $place->setFeature($feature);
+                    }
+                }
+                fclose($fh);
+                $em->flush();
+                rename("$source.lock", "$source.done");
+                return $this;
+            }
+        }
+        // all done, change meta status here
+        // TODO
+        return $this;
+    }
+
     /**
      * auto-install geoname database
      *
