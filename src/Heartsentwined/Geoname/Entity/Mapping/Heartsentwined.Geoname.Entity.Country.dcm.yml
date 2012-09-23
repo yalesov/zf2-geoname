@@ -55,6 +55,8 @@ Heartsentwined\Geoname\Entity\Country:
         continent:
             targetEntity: Heartsentwined\Geoname\Entity\Place
             inversedBy: countries
+        mainLocale:
+            targetEntity: Heartsentwined\Geoname\Entity\Locale
     manyToMany:
         locales:
             targetEntity: Heartsentwined\Geoname\Entity\Locale

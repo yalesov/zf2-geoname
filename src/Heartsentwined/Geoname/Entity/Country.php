@@ -85,6 +85,11 @@ class Country
     private $continent;
 
     /**
+     * @var Heartsentwined\Geoname\Entity\Locale
+     */
+    private $mainLocale;
+
+    /**
      * @var \Doctrine\Common\Collections\ArrayCollection
      */
     private $locales;
@@ -444,6 +449,29 @@ class Country
     public function getContinent()
     {
         return $this->continent;
+    }
+
+    /**
+     * Set mainLocale
+     *
+     * @param Heartsentwined\Geoname\Entity\Locale $mainLocale
+     * @return Country
+     */
+    public function setMainLocale(\Heartsentwined\Geoname\Entity\Locale $mainLocale = null)
+    {
+        $this->mainLocale = $mainLocale;
+    
+        return $this;
+    }
+
+    /**
+     * Get mainLocale
+     *
+     * @return Heartsentwined\Geoname\Entity\Locale 
+     */
+    public function getMainLocale()
+    {
+        return $this->mainLocale;
     }
 
     /**

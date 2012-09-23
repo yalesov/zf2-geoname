@@ -20,11 +20,6 @@ class Locale
     private $code;
 
     /**
-     * @var boolean $isMain
-     */
-    private $isMain;
-
-    /**
      * @var Heartsentwined\Geoname\Entity\Language
      */
     private $language;
@@ -61,29 +56,6 @@ class Locale
     public function getCode()
     {
         return $this->code;
-    }
-
-    /**
-     * Set isMain
-     *
-     * @param boolean $isMain
-     * @return Locale
-     */
-    public function setIsMain($isMain)
-    {
-        $this->isMain = $isMain;
-    
-        return $this;
-    }
-
-    /**
-     * Get isMain
-     *
-     * @return boolean 
-     */
-    public function getIsMain()
-    {
-        return $this->isMain;
     }
 
     /**
