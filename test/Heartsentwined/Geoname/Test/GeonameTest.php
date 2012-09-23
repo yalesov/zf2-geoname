@@ -248,6 +248,7 @@ class GeonameTest extends DoctrineTestcase
 
         $this->assertCount(2, $languageRepo->findAll());
         $foo = $languageRepo->find(1);
+        $this->assertNotEmpty($foo);
         $this->assertSame('foo', $foo->getIso3());
         $this->assertSame('fo', $foo->getIso2());
         $this->assertSame('f', $foo->getIso1());
@@ -268,18 +269,21 @@ class GeonameTest extends DoctrineTestcase
 
         $this->assertCount(4, $featureRepo->findAll());
         $admin = $featureRepo->findOneBy(array('code' => 'A'));
+        $this->assertNotEmpty($admin);
         $this->assertSame('A', $admin->getCode());
         $this->assertSame('country, state, region', $admin->getDescription());
         $this->assertEmpty($admin->getComment());
         $this->assertEmpty($admin->getParent());
 
         $fooAdmin = $featureRepo->findOneBy(array('description' => 'admin foo'));
+        $this->assertNotEmpty($fooAdmin);
         $this->assertSame('FOO', $fooAdmin->getCode());
         $this->assertSame('admin foo', $fooAdmin->getDescription());
         $this->assertSame('admin foo comment', $fooAdmin->getComment());
         $this->assertSame($admin, $fooAdmin->getParent());
 
         $fooForest = $featureRepo->findOneBy(array('description' => 'forest foo'));
+        $this->assertNotEmpty($fooForest);
         $this->assertSame('FOO', $fooForest->getCode());
         $this->assertSame('forest foo', $fooForest->getDescription());
         $this->assertEmpty($fooForest->getComment());
