@@ -39,9 +39,6 @@ Heartsentwined\Geoname\Entity\Country:
         postalCodeRegex:
             type: string
             nullable: true
-        currencyCode:
-            type: string
-            nullable: true
 
     oneToOne:
         place:

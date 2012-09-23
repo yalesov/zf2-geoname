@@ -65,11 +65,6 @@ class Country
     private $postalCodeRegex;
 
     /**
-     * @var string $currencyCode
-     */
-    private $currencyCode;
-
-    /**
      * @var Heartsentwined\Geoname\Entity\Place
      */
     private $place;
@@ -347,29 +342,6 @@ class Country
     public function getPostalCodeRegex()
     {
         return $this->postalCodeRegex;
-    }
-
-    /**
-     * Set currencyCode
-     *
-     * @param string $currencyCode
-     * @return Country
-     */
-    public function setCurrencyCode($currencyCode)
-    {
-        $this->currencyCode = $currencyCode;
-    
-        return $this;
-    }
-
-    /**
-     * Get currencyCode
-     *
-     * @return string 
-     */
-    public function getCurrencyCode()
-    {
-        return $this->currencyCode;
     }
 
     /**
