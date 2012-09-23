@@ -16,10 +16,10 @@ Heartsentwined\Geoname\Entity\Place:
             type: decimal
             nullable: true
         elevation:
-            type: decimal
+            type: integer
             nullable: true
         digiEleModel:
-            type: string
+            type: integer
             nullable: true
         population:
             type: bigint
