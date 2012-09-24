@@ -997,4 +997,23 @@ return;
         }
         $this->assertSame(0, $count);
     }
+
+    public function testInstallCleanup()
+    {
+        mkdir('tmp/geoname/foo');
+        mkdir('tmp/geoname/foo/bar');
+        touch('tmp/geoname/foo/baz');
+        mkdir('tmp/geoname/update');
+        mkdir('tmp/geoname/update/bar');
+        touch('tmp/geoname/update/baz');
+
+        $this->geoname->installCleanup();
+
+        $this->assertFalse(file_exists('tmp/geoname/foo'));
+        $this->assertFalse(file_exists('tmp/geoname/foo/bar'));
+        $this->assertFalse(file_exists('tmp/geoname/foo/baz'));
+        $this->assertFileExists('tmp/geoname/update');
+        $this->assertFileExists('tmp/geoname/update/bar');
+        $this->assertFileExists('tmp/geoname/update/baz');
+    }
 }

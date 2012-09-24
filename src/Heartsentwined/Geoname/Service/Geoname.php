@@ -752,6 +752,20 @@ class Geoname
         return $this;
     }
 
+    public function installCleanup()
+    {
+        foreach (new \FilesystemIterator($this->getTmpDir()) as $dir) {
+            if (!is_dir($dir)) {
+                unlink($dir);
+            } else {
+                if (basename($dir) != 'update') {
+                    FileSystemManager::rrmdir($dir);
+                }
+            }
+        }
+        return $this;
+    }
+
     /**
      * auto-install geoname database
      *
