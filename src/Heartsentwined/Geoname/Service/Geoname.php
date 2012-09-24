@@ -275,6 +275,37 @@ class Geoname
         return $this;
     }
 
+    public function getLock($file)
+    {
+        if (!file_exists($file)) return false;
+        if (!strpos($file, '.done') && !strpos($file, '.lock')) {
+            rename($file, "$file.lock");
+            return true;
+        }
+        return false;
+    }
+
+    public function markDone($file)
+    {
+        $lockFile = $file . '.lock';
+        if (!file_exists($lockFile)) return false;
+        if (strpos($lockFile, '.lock')) {
+            rename($lockFile, $file . '.done');
+            return true;
+        }
+        return false;
+    }
+
+    public function resetFiles($dir)
+    {
+        foreach (FileSystemManager::fileIterator($dir) as $file) {
+            if (strpos($file, '.done') || strpos($file, '.lock')) {
+                rename($file, substr($file, 0, strlen($file)-5));
+            }
+        }
+        return $this;
+    }
+
     public function installLanguage()
     {
         $em = $this->getEm();
@@ -356,12 +387,10 @@ class Geoname
         $em = $this->getEm();
         $featureRepo = $em->getRepository('Heartsentwined\Geoname\Entity\Feature');
 
-        foreach (FileSystemManager::fileIterator($this->getTmpDir() . '/allCountries') as $source) {
-            if (!strpos($source, '.done')
-                && !strpos($source, '.lock')
-                && $fh = fopen($source, 'r')) {
+        $sourceDir = $this->getTmpDir() . '/allCountries';
+        foreach (FileSystemManager::fileIterator($sourceDir) as $source) {
+            if ($this->getLock($source) && $fh = fopen("$source.lock", 'r')) {
                 $this->getCli()->write($source, 'module');
-                rename($source, "$source.lock");
                 while ($data = fgetcsv($fh, 0, "\t", "\0")) {
                     list($id, $name, /*ascii name*/, /*alt name*/,
                         $latitude, $longitude, $featureClass, $featureCode,
@@ -394,10 +423,11 @@ class Geoname
                 }
                 fclose($fh);
                 $em->flush();
-                rename("$source.lock", "$source.done");
+                $this->markDone($source);
                 return $this;
             }
         }
+        $this->resetFiles($sourceDir);
         // all done, change meta status here
         // TODO
         return $this;
@@ -603,12 +633,10 @@ class Geoname
         $countryRepo = $em->getRepository('Heartsentwined\Geoname\Entity\Country');
 
         $countryMap = array();
-        foreach (FileSystemManager::fileIterator($this->getTmpDir() . '/allCountries') as $source) {
-            if (!strpos($source, '.done2')
-                && !strpos($source, '.lock2')
-                && $fh = fopen($source, 'r')) {
+        $sourceDir = $this->getTmpDir() . '/allCountries';
+        foreach (FileSystemManager::fileIterator($sourceDir) as $source) {
+            if ($this->getLock($source) && $fh = fopen("$source.lock", 'r')) {
                 $this->getCli()->write($source, 'module');
-                rename($source, "$source.lock2");
                 while ($data = fgetcsv($fh, 0, "\t", "\0")) {
                     list($id, /*$name*/, /*ascii name*/, /*alt name*/,
                         /*$latitude*/, /*$longitude*/, /*$featureClass*/, /*$featureCode*/,
@@ -636,10 +664,11 @@ class Geoname
                 }
                 fclose($fh);
                 $em->flush();
-                rename("$source.lock2", "$source.done2");
+                $this->markDone($source);
                 return $this;
             }
         }
+        $this->resetFiles($sourceDir);
         // change meta status now
         // TODO
         return $this;

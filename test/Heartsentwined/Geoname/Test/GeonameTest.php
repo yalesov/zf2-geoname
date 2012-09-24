@@ -148,6 +148,81 @@ class GeonameTest extends DoctrineTestcase
             ->downloadUpdate();
     }
 
+    public function testGetLock()
+    {
+        $this->assertFalse(file_exists('tmp/foo'));
+        $this->assertFalse(file_exists('tmp/foo.lock'));
+
+        $this->assertFalse($this->geoname->getLock('tmp/foo'));
+        $this->assertFalse(file_exists('tmp/foo'));
+        $this->assertFalse(file_exists('tmp/foo.lock'));
+
+        touch('tmp/foo');
+        $this->assertTrue($this->geoname->getLock('tmp/foo'));
+        $this->assertFalse(file_exists('tmp/foo'));
+        $this->assertTrue(file_exists('tmp/foo.lock'));
+
+        $this->assertFalse($this->geoname->getLock('tmp/foo'));
+        $this->assertFalse(file_exists('tmp/foo'));
+        $this->assertTrue(file_exists('tmp/foo.lock'));
+
+        $this->assertFalse($this->geoname->getLock('tmp/foo.lock'));
+        $this->assertFalse(file_exists('tmp/foo'));
+        $this->assertTrue(file_exists('tmp/foo.lock'));
+    }
+
+    public function testMarkDone()
+    {
+        $this->assertFalse(file_exists('tmp/foo'));
+        $this->assertFalse(file_exists('tmp/foo.lock'));
+        $this->assertFalse(file_exists('tmp/foo.done'));
+
+        $this->assertFalse($this->geoname->markDone('tmp/foo'));
+        $this->assertFalse(file_exists('tmp/foo'));
+        $this->assertFalse(file_exists('tmp/foo.lock'));
+        $this->assertFalse(file_exists('tmp/foo.done'));
+
+        touch('tmp/foo');
+        $this->assertFalse($this->geoname->markDone('tmp/foo'));
+        $this->assertTrue(file_exists('tmp/foo'));
+        $this->assertFalse(file_exists('tmp/foo.lock'));
+        $this->assertFalse(file_exists('tmp/foo.done'));
+
+        unlink('tmp/foo');
+        touch('tmp/foo.done');
+        $this->assertFalse($this->geoname->markDone('tmp/foo'));
+        $this->assertFalse(file_exists('tmp/foo'));
+        $this->assertFalse(file_exists('tmp/foo.lock'));
+        $this->assertTrue(file_exists('tmp/foo.done'));
+
+        unlink('tmp/foo.done');
+        touch('tmp/foo.lock');
+        $this->assertTrue($this->geoname->markDone('tmp/foo'));
+        $this->assertFalse(file_exists('tmp/foo'));
+        $this->assertFalse(file_exists('tmp/foo.lock'));
+        $this->assertTrue(file_exists('tmp/foo.done'));
+
+        $this->assertFalse($this->geoname->markDone('tmp/foo'));
+        $this->assertFalse(file_exists('tmp/foo'));
+        $this->assertFalse(file_exists('tmp/foo.lock'));
+        $this->assertTrue(file_exists('tmp/foo.done'));
+    }
+
+    public function testResetFiles()
+    {
+        mkdir('tmp/foo');
+        touch('tmp/foo/foo');
+        touch('tmp/foo/bar.lock');
+        touch('tmp/foo/baz.done');
+
+        $this->geoname->resetFiles('tmp/foo');
+        $this->assertTrue(file_exists('tmp/foo/foo'));
+        $this->assertTrue(file_exists('tmp/foo/bar'));
+        $this->assertTrue(file_exists('tmp/foo/baz'));
+        $this->assertFalse(file_exists('tmp/foo/bar.lock'));
+        $this->assertFalse(file_exists('tmp/foo/baz.done'));
+    }
+
     public function testInstallDownload()
     {
         foreach(array(
@@ -396,46 +471,14 @@ class GeonameTest extends DoctrineTestcase
         $this->assertEmpty($bar->getPopulation());
         $this->assertEmpty($bar->getFeature());
 
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/1'));
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/1.lock'));
-        $this->assertFileExists('tmp/geoname/allCountries/1.done');
-
-        // make two more files for install to process - test lock and done
-        touch('tmp/geoname/allCountries/2');
-        touch('tmp/geoname/allCountries/3');
-
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/1'));
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/1.lock'));
-        $this->assertFileExists('tmp/geoname/allCountries/1.done');
-        $this->assertFileExists('tmp/geoname/allCountries/2');
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/2.lock'));
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/2.done'));
-        $this->assertFileExists('tmp/geoname/allCountries/3');
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/3.lock'));
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/3.done'));
-
         $this->geoname->installPlace();
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/1'));
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/1.lock'));
-        $this->assertFileExists('tmp/geoname/allCountries/1.done');
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/2'));
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/2.lock'));
-        $this->assertFileExists('tmp/geoname/allCountries/2.done');
-        $this->assertFileExists('tmp/geoname/allCountries/3');
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/3.lock'));
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/3.done'));
-
-        $this->geoname->installPlace();
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/1'));
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/1.lock'));
-        $this->assertFileExists('tmp/geoname/allCountries/1.done');
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/2'));
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/2.lock'));
-        $this->assertFileExists('tmp/geoname/allCountries/2.done');
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/3'));
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/3.lock'));
-        $this->assertFileExists('tmp/geoname/allCountries/3.done');
-
+        $count = 0;
+        foreach (FileSystemManager::fileIterator('tmp/geoname/allCountries') as $file) {
+            if (strpos($file, '.lock') || strpos($file, '.done')) {
+                $count++;
+            }
+        }
+        $this->assertSame(0, $count);
         // TODO test meta change
     }
 
@@ -791,7 +834,7 @@ return;
         $this->em->flush();
 
         mkdir('tmp/geoname/allCountries');
-        $fh = fopen('tmp/geoname/allCountries/1.done', 'a+');
+        $fh = fopen('tmp/geoname/allCountries/1', 'a+');
         // existing timezone
         fwrite($fh, "1\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tAsia/Foo\t\n");
         // new timezone
@@ -812,66 +855,14 @@ return;
         $this->assertNotEmpty($bar);
         $this->assertSame($barTimezone, $bar->getTimezone());
 
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/1'));
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/1.lock'));
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/1.done'));
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/1.done.lock2'));
-        $this->assertFileExists('tmp/geoname/allCountries/1.done.done2');
-
-        // make two more files for install to process - test lock and done
-        touch('tmp/geoname/allCountries/2.done');
-        touch('tmp/geoname/allCountries/3.done');
-
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/1'));
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/1.done'));
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/1.lock'));
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/1.done.lock2'));
-        $this->assertFileExists('tmp/geoname/allCountries/1.done.done2');
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/2'));
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/2.lock'));
-        $this->assertFileExists('tmp/geoname/allCountries/2.done');
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/2.done.lock2'));
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/2.done.done2'));
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/3'));
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/3.lock'));
-        $this->assertFileExists('tmp/geoname/allCountries/3.done');
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/3.done.lock2'));
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/3.done.done2'));
-
         $this->geoname->installPlaceTimezone();
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/1'));
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/1.done'));
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/1.lock'));
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/1.done.lock2'));
-        $this->assertFileExists('tmp/geoname/allCountries/1.done.done2');
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/2'));
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/2.done'));
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/2.lock'));
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/2.done.lock2'));
-        $this->assertFileExists('tmp/geoname/allCountries/2.done.done2');
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/3'));
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/3.lock'));
-        $this->assertFileExists('tmp/geoname/allCountries/3.done');
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/3.done.lock2'));
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/3.done.done2'));
-
-        $this->geoname->installPlaceTimezone();
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/1'));
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/1.done'));
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/1.lock'));
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/1.done.lock2'));
-        $this->assertFileExists('tmp/geoname/allCountries/1.done.done2');
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/2'));
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/2.done'));
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/2.lock'));
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/2.done.lock2'));
-        $this->assertFileExists('tmp/geoname/allCountries/2.done.done2');
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/3'));
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/3.done'));
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/3.lock'));
-        $this->assertFalse(file_exists('tmp/geoname/allCountries/3.done.lock2'));
-        $this->assertFileExists('tmp/geoname/allCountries/3.done.done2');
-
+        $count = 0;
+        foreach (FileSystemManager::fileIterator('tmp/geoname/allCountries') as $file) {
+            if (strpos($file, '.lock') || strpos($file, '.done')) {
+                $count++;
+            }
+        }
+        $this->assertSame(0, $count);
         // TODO test meta change
     }
 
