@@ -674,6 +674,34 @@ class Geoname
         return $this;
     }
 
+    public function installHierarchy()
+    {
+        $em = $this->getEm();
+        $placeRepo = $em->getRepository('Heartsentwined\Geoname\Entity\Place');
+
+        $sourceDir = $this->getTmpDir() . '/hierarchy';
+        foreach (FileSystemManager::fileIterator($sourceDir) as $source) {
+            if ($this->getLock($source) && $fh = fopen("$source.lock", 'r')) {
+                $this->getCli()->write($source, 'module');
+                while ($data = fgetcsv($fh, 0, "\t", "\0")) {
+                    list($parentId, $childId, /*$type*/) = $data;
+
+                    if (($parent = $placeRepo->find((int)$parentId))
+                        && ($child = $placeRepo->find((int)$childId))) {
+                        $child->setParent($parent);
+                    }
+                }
+                fclose($fh);
+                $em->flush();
+                $this->markDone($source);
+                return $this;
+            }
+        }
+        $this->resetFiles($sourceDir);
+        // TODO
+        return $this;
+    }
+
     /**
      * auto-install geoname database
      *

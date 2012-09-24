@@ -866,4 +866,46 @@ return;
         // TODO test meta change
     }
 
+    public function testInstallHierarchy()
+    {
+        $placeRepo =
+            $this->em->getRepository('Heartsentwined\Geoname\Entity\Place');
+
+        $foo = new Entity\Place;
+        $foo->setId(1);
+        $this->em->persist($foo);
+        $bar = new Entity\Place;
+        $bar->setId(2);
+        $this->em->persist($bar);
+        $baz = new Entity\Place;
+        $baz->setId(3);
+        $this->em->persist($baz);
+        $qux = new Entity\Place;
+        $qux->setId(4);
+        $this->em->persist($qux);
+
+        $this->em->flush();
+
+        mkdir('tmp/geoname/hierarchy');
+        $fh = fopen('tmp/geoname/hierarchy/1', 'a+');
+        fwrite($fh, "1\t2\t\n");
+        fwrite($fh, "2\t3\t\n");
+        fclose($fh);
+
+        $this->geoname->installHierarchy();
+
+        $this->assertEmpty($foo->getParent());
+        $this->assertSame($foo, $bar->getParent());
+        $this->assertSame($bar, $baz->getParent());
+        $this->assertEmpty($qux->getParent());
+
+        $this->geoname->installHierarchy();
+        $count = 0;
+        foreach (FileSystemManager::fileIterator('tmp/geoname/hierarchy') as $file) {
+            if (strpos($file, '.lock') || strpos($file, '.done')) {
+                $count++;
+            }
+        }
+        $this->assertSame(0, $count);
+    }
 }
