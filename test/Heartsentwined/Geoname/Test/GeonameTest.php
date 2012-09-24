@@ -908,4 +908,93 @@ return;
         }
         $this->assertSame(0, $count);
     }
+
+    public function testInstallAltName()
+    {
+        $altNameRepo =
+            $this->em->getRepository('Heartsentwined\Geoname\Entity\AltName');
+
+        $fooPlace = new Entity\Place;
+        $fooPlace->setId(1);
+        $this->em->persist($fooPlace);
+        $lang = new Entity\Language;
+        $this->em->persist($lang);
+        $lang
+            ->setIso3('foo')
+            ->setIso2('fo')
+            ->setIso1('f');
+        $this->em->flush();
+
+        mkdir('tmp/geoname/alternateNames');
+        $fh = fopen('tmp/geoname/alternateNames/1', 'a+');
+        fwrite($fh, "1\t1\tfoo\tfoo alt name\t1\t1\t1\t1\n");
+        fwrite($fh, "2\t1\tfo\tكوه زرد سياه لت\t0\t0\t0\t0\n");
+        fwrite($fh, "3\t1\tf\tplacé\t\t\t\t\n");
+        fwrite($fh, "4\t1\t\tplace\t\t\t\t\n");
+        fwrite($fh, "5\t2\t\tplace\t\t\t\t\n");
+        fclose($fh);
+
+        $this->geoname->installAltName();
+
+        $this->assertCount(5, $altNameRepo->findAll());
+
+        $altName1 = $altNameRepo->find(1);
+        $this->assertNotEmpty($altName1);
+        $this->assertSame('foo alt name', $altName1->getName());
+        $this->assertSame(true, $altName1->getIsPreferred());
+        $this->assertSame(true, $altName1->getIsShort());
+        $this->assertSame(true, $altName1->getIsColloquial());
+        $this->assertSame(true, $altName1->getIsHistoric());
+        $this->assertSame($fooPlace, $altName1->getPlace());
+        $this->assertSame($lang, $altName1->getLanguage());
+
+        $altName2 = $altNameRepo->find(2);
+        $this->assertNotEmpty($altName2);
+        $this->assertSame('كوه زرد سياه لت', $altName2->getName());
+        $this->assertSame(false, $altName2->getIsPreferred());
+        $this->assertSame(false, $altName2->getIsShort());
+        $this->assertSame(false, $altName2->getIsColloquial());
+        $this->assertSame(false, $altName2->getIsHistoric());
+        $this->assertSame($fooPlace, $altName2->getPlace());
+        $this->assertSame($lang, $altName2->getLanguage());
+
+        $altName3 = $altNameRepo->find(3);
+        $this->assertNotEmpty($altName3);
+        $this->assertSame('placé', $altName3->getName());
+        $this->assertSame(false, $altName3->getIsPreferred());
+        $this->assertSame(false, $altName3->getIsShort());
+        $this->assertSame(false, $altName3->getIsColloquial());
+        $this->assertSame(false, $altName3->getIsHistoric());
+        $this->assertSame($fooPlace, $altName3->getPlace());
+        $this->assertSame($lang, $altName3->getLanguage());
+
+        $altName4 = $altNameRepo->find(4);
+        $this->assertNotEmpty($altName4);
+        $this->assertSame('place', $altName4->getName());
+        $this->assertSame(false, $altName4->getIsPreferred());
+        $this->assertSame(false, $altName4->getIsShort());
+        $this->assertSame(false, $altName4->getIsColloquial());
+        $this->assertSame(false, $altName4->getIsHistoric());
+        $this->assertSame($fooPlace, $altName4->getPlace());
+        $this->assertEmpty($altName4->getLanguage());
+
+        $altName5 = $altNameRepo->find(5);
+        $this->assertNotEmpty($altName5);
+        $this->assertSame('place', $altName5->getName());
+        $this->assertSame(false, $altName5->getIsPreferred());
+        $this->assertSame(false, $altName5->getIsShort());
+        $this->assertSame(false, $altName5->getIsColloquial());
+        $this->assertSame(false, $altName5->getIsHistoric());
+        $this->assertEmpty($altName5->getPlace());
+        $this->assertEmpty($altName5->getLanguage());
+
+        $this->geoname->installAltName();
+        $count = 0;
+        foreach (FileSystemManager::fileIterator('tmp/geoname/alternateNames') as $file) {
+            if (strpos($file, '.lock') || strpos($file, '.done')) {
+                $count++;
+            }
+        }
+        $this->assertSame(0, $count);
+    }
 }

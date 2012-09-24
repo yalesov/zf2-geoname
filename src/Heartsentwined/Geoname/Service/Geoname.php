@@ -702,6 +702,56 @@ class Geoname
         return $this;
     }
 
+    public function installAltName()
+    {
+        $em = $this->getEm();
+        $placeRepo = $em->getRepository('Heartsentwined\Geoname\Entity\Place');
+        $languageRepo = $em->getRepository('Heartsentwined\Geoname\Entity\Language');
+
+        $languageMap = array();
+        $sourceDir = $this->getTmpDir() . '/alternateNames';
+        foreach (FileSystemManager::fileIterator($sourceDir) as $source) {
+            if ($this->getLock($source) && $fh = fopen("$source.lock", 'r')) {
+                $this->getCli()->write($source, 'module');
+                while ($data = fgetcsv($fh, 0, "\t", "\0")) {
+                    list($id, $placeId, $languageCode, $name,
+                        $isPreferred, $isShort, $isColloquial, $isHistoric) =
+                        $data;
+
+                    $altName = new Entity\AltName;
+                    $altName
+                        ->setId($id)
+                        ->setName($name)
+                        ->setIsPreferred((bool)trim($isPreferred))
+                        ->setIsShort((bool)trim($isShort))
+                        ->setIsColloquial((bool)trim($isColloquial))
+                        ->setIsHistoric((bool)trim($isHistoric));
+                    $em->persist($altName);
+
+                    if ($place = $placeRepo->find((int)$placeId)) {
+                        $altName->setPlace($place);
+                    }
+
+                    if (isset($languageMap[$languageCode])) {
+                        $altName->setLanguage($languageMap[$languageCode]);
+                    } elseif ($language = $languageRepo->findLanguage($languageCode)) {
+                        $altName->setLanguage($language);
+                        $languageMap[$languageCode] = $language;
+                    } else {
+                        $altName->setLanguageOther($languageCode);
+                    }
+                }
+                fclose($fh);
+                $em->flush();
+                $this->markDone($source);
+                return $this;
+            }
+        }
+        $this->resetFiles($sourceDir);
+        // TODO
+        return $this;
+    }
+
     /**
      * auto-install geoname database
      *
