@@ -766,4 +766,113 @@ return;
         sort($actualNeighbours);
         $this->assertSame($expectedNeighbours, $actualNeighbours);
     }
+
+    public function testInstallPlaceTimezone()
+    {
+        $placeRepo =
+            $this->em->getRepository('Heartsentwined\Geoname\Entity\Place');
+        $timezoneRepo =
+            $this->em->getRepository('Heartsentwined\Geoname\Entity\Timezone');
+
+        $foo = new Entity\Place;
+        $foo->setId(1);
+        $this->em->persist($foo);
+        $bar = new Entity\Place;
+        $bar->setId(2);
+        $this->em->persist($bar);
+
+        $fooTimezone = new Entity\Timezone;
+        $this->em->persist($fooTimezone);
+        $fooTimezone->setCode('Asia/Foo');
+        $barCountry = new Entity\Country;
+        $this->em->persist($barCountry);
+        $barCountry->setIso2('BA');
+
+        $this->em->flush();
+
+        mkdir('tmp/geoname/allCountries');
+        $fh = fopen('tmp/geoname/allCountries/1.done', 'a+');
+        // existing timezone
+        fwrite($fh, "1\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tAsia/Foo\t\n");
+        // new timezone
+        fwrite($fh, "2\t\t\t\t\t\t\t\tBA\t\t\t\t\t\t\t\t\tAsia/Bar\t\n");
+        fclose($fh);
+
+        $this->geoname->installPlaceTimezone();
+
+        $this->assertCount(2, $timezoneRepo->findAll());
+        $barTimezone = $timezoneRepo->findOneBy(array('code' => 'Asia/Bar'));
+        $this->assertSame($barCountry, $barTimezone->getCountry());
+
+        $foo = $placeRepo->find(1);
+        $this->assertNotEmpty($foo);
+        $this->assertSame($fooTimezone, $foo->getTimezone());
+
+        $bar = $placeRepo->find(2);
+        $this->assertNotEmpty($bar);
+        $this->assertSame($barTimezone, $bar->getTimezone());
+
+        $this->assertFalse(file_exists('tmp/geoname/allCountries/1'));
+        $this->assertFalse(file_exists('tmp/geoname/allCountries/1.lock'));
+        $this->assertFalse(file_exists('tmp/geoname/allCountries/1.done'));
+        $this->assertFalse(file_exists('tmp/geoname/allCountries/1.done.lock2'));
+        $this->assertFileExists('tmp/geoname/allCountries/1.done.done2');
+
+        // make two more files for install to process - test lock and done
+        touch('tmp/geoname/allCountries/2.done');
+        touch('tmp/geoname/allCountries/3.done');
+
+        $this->assertFalse(file_exists('tmp/geoname/allCountries/1'));
+        $this->assertFalse(file_exists('tmp/geoname/allCountries/1.done'));
+        $this->assertFalse(file_exists('tmp/geoname/allCountries/1.lock'));
+        $this->assertFalse(file_exists('tmp/geoname/allCountries/1.done.lock2'));
+        $this->assertFileExists('tmp/geoname/allCountries/1.done.done2');
+        $this->assertFalse(file_exists('tmp/geoname/allCountries/2'));
+        $this->assertFalse(file_exists('tmp/geoname/allCountries/2.lock'));
+        $this->assertFileExists('tmp/geoname/allCountries/2.done');
+        $this->assertFalse(file_exists('tmp/geoname/allCountries/2.done.lock2'));
+        $this->assertFalse(file_exists('tmp/geoname/allCountries/2.done.done2'));
+        $this->assertFalse(file_exists('tmp/geoname/allCountries/3'));
+        $this->assertFalse(file_exists('tmp/geoname/allCountries/3.lock'));
+        $this->assertFileExists('tmp/geoname/allCountries/3.done');
+        $this->assertFalse(file_exists('tmp/geoname/allCountries/3.done.lock2'));
+        $this->assertFalse(file_exists('tmp/geoname/allCountries/3.done.done2'));
+
+        $this->geoname->installPlaceTimezone();
+        $this->assertFalse(file_exists('tmp/geoname/allCountries/1'));
+        $this->assertFalse(file_exists('tmp/geoname/allCountries/1.done'));
+        $this->assertFalse(file_exists('tmp/geoname/allCountries/1.lock'));
+        $this->assertFalse(file_exists('tmp/geoname/allCountries/1.done.lock2'));
+        $this->assertFileExists('tmp/geoname/allCountries/1.done.done2');
+        $this->assertFalse(file_exists('tmp/geoname/allCountries/2'));
+        $this->assertFalse(file_exists('tmp/geoname/allCountries/2.done'));
+        $this->assertFalse(file_exists('tmp/geoname/allCountries/2.lock'));
+        $this->assertFalse(file_exists('tmp/geoname/allCountries/2.done.lock2'));
+        $this->assertFileExists('tmp/geoname/allCountries/2.done.done2');
+        $this->assertFalse(file_exists('tmp/geoname/allCountries/3'));
+        $this->assertFalse(file_exists('tmp/geoname/allCountries/3.lock'));
+        $this->assertFileExists('tmp/geoname/allCountries/3.done');
+        $this->assertFalse(file_exists('tmp/geoname/allCountries/3.done.lock2'));
+        $this->assertFalse(file_exists('tmp/geoname/allCountries/3.done.done2'));
+
+        $this->geoname->installPlaceTimezone();
+        $this->assertFalse(file_exists('tmp/geoname/allCountries/1'));
+        $this->assertFalse(file_exists('tmp/geoname/allCountries/1.done'));
+        $this->assertFalse(file_exists('tmp/geoname/allCountries/1.lock'));
+        $this->assertFalse(file_exists('tmp/geoname/allCountries/1.done.lock2'));
+        $this->assertFileExists('tmp/geoname/allCountries/1.done.done2');
+        $this->assertFalse(file_exists('tmp/geoname/allCountries/2'));
+        $this->assertFalse(file_exists('tmp/geoname/allCountries/2.done'));
+        $this->assertFalse(file_exists('tmp/geoname/allCountries/2.lock'));
+        $this->assertFalse(file_exists('tmp/geoname/allCountries/2.done.lock2'));
+        $this->assertFileExists('tmp/geoname/allCountries/2.done.done2');
+        $this->assertFalse(file_exists('tmp/geoname/allCountries/3'));
+        $this->assertFalse(file_exists('tmp/geoname/allCountries/3.done'));
+        $this->assertFalse(file_exists('tmp/geoname/allCountries/3.lock'));
+        $this->assertFalse(file_exists('tmp/geoname/allCountries/3.done.lock2'));
+        $this->assertFileExists('tmp/geoname/allCountries/3.done.done2');
+
+        // TODO test meta change
+    }
+
 }

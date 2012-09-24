@@ -595,6 +595,56 @@ class Geoname
         return $this;
     }
 
+    public function installPlaceTimezone()
+    {
+        $em = $this->getEm();
+        $placeRepo = $em->getRepository('Heartsentwined\Geoname\Entity\Place');
+        $timezoneRepo = $em->getRepository('Heartsentwined\Geoname\Entity\Timezone');
+        $countryRepo = $em->getRepository('Heartsentwined\Geoname\Entity\Country');
+
+        $countryMap = array();
+        foreach (FileSystemManager::fileIterator($this->getTmpDir() . '/allCountries') as $source) {
+            if (!strpos($source, '.done2')
+                && !strpos($source, '.lock2')
+                && $fh = fopen($source, 'r')) {
+                $this->getCli()->write($source, 'module');
+                rename($source, "$source.lock2");
+                while ($data = fgetcsv($fh, 0, "\t", "\0")) {
+                    list($id, /*$name*/, /*ascii name*/, /*alt name*/,
+                        /*$latitude*/, /*$longitude*/, /*$featureClass*/, /*$featureCode*/,
+                        $countryCode, /*alt country code*/,
+                        /*$admin1Code*/, /*$admin2Code*/, /*$admin3Code*/, /*$admin4Code*/,
+                        /*$population*/, /*$elevation*/, /*$digiEleModel*/,
+                        $timezoneCode, /*modification date*/) =
+                        $data;
+                    if (!$place = $placeRepo->find((int)$id)) {
+                        continue;
+                    }
+                    if (!$timezone = $timezoneRepo->findOneBy(
+                        array('code' => $timezoneCode))) {
+                        $timezone = new Entity\Timezone;
+                        $em->persist($timezone);
+                        $timezone->setCode($timezoneCode);
+                        if (isset($countryMap[$countryCode])) {
+                            $timezone->setCountry($countryMap[$countryCode]);
+                        } elseif ($country = $countryRepo->findOneBy(
+                            array('iso2' => $countryCode))) {
+                            $timezone->setCountry($country);
+                        }
+                    }
+                    $place->setTimezone($timezone);
+                }
+                fclose($fh);
+                $em->flush();
+                rename("$source.lock2", "$source.done2");
+                return $this;
+            }
+        }
+        // change meta status now
+        // TODO
+        return $this;
+    }
+
     /**
      * auto-install geoname database
      *
