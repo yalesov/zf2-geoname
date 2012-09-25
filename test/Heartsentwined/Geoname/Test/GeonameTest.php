@@ -50,6 +50,30 @@ class GeonameTest extends DoctrineTestcase
         return $cli;
     }
 
+    public function getGeonameDummy()
+    {
+        return $this->getMock(
+            'Heartsentwined\Geoname\Service\Geoname',
+            array(
+                'downloadUpdate',
+                'installDownload',
+                'installPrepare',
+                'installLanguage',
+                'installFeature',
+                'installPlace',
+                'installCountryCurrencyLocale',
+                'installTimezone',
+                'installNeighbour',
+                'installPlaceTimezone',
+                'installHierarchy',
+                'installAltName',
+                'installCleanup',
+                'update',
+            ))
+            ->setEm($this->em)
+            ->setTmpDir('tmp/geoname');
+    }
+
     public function testGetMeta()
     {
         $metaRepo = $this->em
@@ -86,6 +110,99 @@ class GeonameTest extends DoctrineTestcase
             $meta->getStatus());
         $this->assertCount(1, $metaRepo->findAll());
     }
+    public function testRun()
+    {
+        $geoname = $this->getGeonameDummy();
+
+        $stageMap = array(
+            Repository\Meta::STATUS_INSTALL_DOWNLOAD => array(
+                'status' => Repository\Meta::STATUS_INSTALL_PREPARE,
+                'method' => 'installDownload',
+            ),
+            Repository\Meta::STATUS_INSTALL_PREPARE => array(
+                'status' => Repository\Meta::STATUS_INSTALL_LANGUAGE,
+                'method' => 'installPrepare',
+            ),
+            Repository\Meta::STATUS_INSTALL_LANGUAGE => array(
+                'status' => Repository\Meta::STATUS_INSTALL_FEATURE,
+                'method' => 'installLanguage',
+            ),
+            Repository\Meta::STATUS_INSTALL_FEATURE => array(
+                'status' => Repository\Meta::STATUS_INSTALL_PLACE,
+                'method' => 'installFeature',
+            ),
+            Repository\Meta::STATUS_INSTALL_PLACE => array(
+                'status' => null,
+                'method' => 'installPlace',
+            ),
+            Repository\Meta::STATUS_INSTALL_COUNTRY_CURRENCY_LOCALE => array(
+                'status' => Repository\Meta::STATUS_INSTALL_TIMEZONE,
+                'method' => 'installCountryCurrencyLocale',
+            ),
+            Repository\Meta::STATUS_INSTALL_TIMEZONE => array(
+                'status' => Repository\Meta::STATUS_INSTALL_NEIGHBOUR,
+                'method' => 'installTimezone',
+            ),
+            Repository\Meta::STATUS_INSTALL_NEIGHBOUR => array(
+                'status' => Repository\Meta::STATUS_INSTALL_PLACE_TIMEZONE,
+                'method' => 'installNeighbour',
+            ),
+            Repository\Meta::STATUS_INSTALL_PLACE_TIMEZONE => array(
+                'status' => null,
+                'method' => 'installPlaceTimezone',
+            ),
+            Repository\Meta::STATUS_INSTALL_HIERARCHY => array(
+                'status' => null,
+                'method' => 'installHierarchy',
+            ),
+            Repository\Meta::STATUS_INSTALL_ALT_NAME => array(
+                'status' => null,
+                'method' => 'installAltName',
+            ),
+            Repository\Meta::STATUS_INSTALL_CLEANUP => array(
+                'status' => Repository\Meta::STATUS_UPDATE,
+                'method' => 'installCleanup',
+            ),
+            Repository\Meta::STATUS_UPDATE => array(
+                'status' => null,
+                'method' => 'update',
+            ),
+        );
+
+        foreach ($stageMap as $curStatus => $data) {
+            $meta = new Entity\Meta;
+            $this->em->persist($meta);
+            $meta
+                ->setStatus($curStatus)
+                ->setLock(false);
+            $this->em->flush();
+
+            $geoname = $this->getGeonameDummy();
+            $geoname
+                ->expects($this->once())
+                ->method('downloadUpdate');
+            $geoname
+                ->expects($this->once())
+                ->method($data['method']);
+            $geoname->run();
+
+            if ($data['status'] !== null) {
+                $this->assertSame($data['status'], $meta->getStatus());
+            } else {
+                $this->assertSame($curStatus, $meta->getStatus());
+            }
+            $this->assertFalse($meta->getLock());
+
+            $metaRepo = $this->em
+                ->getRepository('Heartsentwined\Geoname\Entity\Meta');
+            foreach ($metaRepo->findAll() as $meta) {
+                $this->em->remove($meta);
+            }
+            $this->em->flush();
+            $this->assertCount(0, $metaRepo->findAll());
+        }
+    }
+
     public function testdownloadFile()
     {
         // download file and save to tmp/foo
@@ -479,7 +596,9 @@ class GeonameTest extends DoctrineTestcase
             }
         }
         $this->assertSame(0, $count);
-        // TODO test meta change
+        $this->assertSame(
+            Repository\Meta::STATUS_INSTALL_COUNTRY_CURRENCY_LOCALE,
+            $this->geoname->getMeta()->getStatus());
     }
 
     public function testInstallCountryCurrencyLocale()
@@ -863,7 +982,9 @@ return;
             }
         }
         $this->assertSame(0, $count);
-        // TODO test meta change
+        $this->assertSame(
+            Repository\Meta::STATUS_INSTALL_HIERARCHY,
+            $this->geoname->getMeta()->getStatus());
     }
 
     public function testInstallHierarchy()
@@ -907,8 +1028,10 @@ return;
             }
         }
         $this->assertSame(0, $count);
+        $this->assertSame(
+            Repository\Meta::STATUS_INSTALL_ALT_NAME,
+            $this->geoname->getMeta()->getStatus());
     }
-
     public function testInstallAltName()
     {
         $altNameRepo =
@@ -996,6 +1119,9 @@ return;
             }
         }
         $this->assertSame(0, $count);
+        $this->assertSame(
+            Repository\Meta::STATUS_INSTALL_CLEANUP,
+            $this->geoname->getMeta()->getStatus());
     }
 
     public function testInstallCleanup()

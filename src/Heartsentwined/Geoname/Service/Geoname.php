@@ -102,12 +102,57 @@ class Geoname
 
         $meta->setLock(true);
         switch ($meta->getStatus()) {
-            case Repository\Meta::STATUS_INSTALL:
             case Repository\Meta::STATUS_INSTALL_DOWNLOAD:
+                $this->installDownload();
+                $meta->setStatus(
+                    Repository\Meta::STATUS_INSTALL_PREPARE);
+                break;
             case Repository\Meta::STATUS_INSTALL_PREPARE:
+                $this->installPrepare();
+                $meta->setStatus(
+                    Repository\Meta::STATUS_INSTALL_LANGUAGE);
+                break;
             case Repository\Meta::STATUS_INSTALL_LANGUAGE:
+                $this->installLanguage();
+                $meta->setStatus(
+                    Repository\Meta::STATUS_INSTALL_FEATURE);
+                break;
             case Repository\Meta::STATUS_INSTALL_FEATURE:
-                $this->install();
+                $this->installFeature();
+                $meta->setStatus(
+                    Repository\Meta::STATUS_INSTALL_PLACE);
+                break;
+            case Repository\Meta::STATUS_INSTALL_PLACE:
+                $this->installPlace();
+                break;
+            case Repository\Meta::STATUS_INSTALL_COUNTRY_CURRENCY_LOCALE:
+                $this->installCountryCurrencyLocale();
+                $meta->setStatus(
+                    Repository\Meta::STATUS_INSTALL_TIMEZONE);
+                break;
+            case Repository\Meta::STATUS_INSTALL_TIMEZONE:
+                $this->installTimezone();
+                $meta->setStatus(
+                    Repository\Meta::STATUS_INSTALL_NEIGHBOUR);
+                break;
+            case Repository\Meta::STATUS_INSTALL_NEIGHBOUR:
+                $this->installNeighbour();
+                $meta->setStatus(
+                    Repository\Meta::STATUS_INSTALL_PLACE_TIMEZONE);
+                break;
+            case Repository\Meta::STATUS_INSTALL_PLACE_TIMEZONE:
+                $this->installPlaceTimezone();
+                break;
+            case Repository\Meta::STATUS_INSTALL_HIERARCHY:
+                $this->installHierarchy();
+                break;
+            case Repository\Meta::STATUS_INSTALL_ALT_NAME:
+                $this->installAltName();
+                break;
+            case Repository\Meta::STATUS_INSTALL_CLEANUP:
+                $this->installCleanup();
+                $meta->setStatus(
+                    Repository\Meta::STATUS_UPDATE);
                 break;
             case Repository\Meta::STATUS_UPDATE:
                 $this->update();
@@ -428,8 +473,8 @@ class Geoname
             }
         }
         $this->resetFiles($sourceDir);
-        // all done, change meta status here
-        // TODO
+        $this->getMeta()->setStatus(
+            Repository\Meta::STATUS_INSTALL_COUNTRY_CURRENCY_LOCALE);
         return $this;
     }
 
@@ -669,8 +714,8 @@ class Geoname
             }
         }
         $this->resetFiles($sourceDir);
-        // change meta status now
-        // TODO
+        $this->getMeta()->setStatus(
+            Repository\Meta::STATUS_INSTALL_HIERARCHY);
         return $this;
     }
 
@@ -698,7 +743,8 @@ class Geoname
             }
         }
         $this->resetFiles($sourceDir);
-        // TODO
+        $this->getMeta()->setStatus(
+            Repository\Meta::STATUS_INSTALL_ALT_NAME);
         return $this;
     }
 
@@ -748,7 +794,8 @@ class Geoname
             }
         }
         $this->resetFiles($sourceDir);
-        // TODO
+        $this->getMeta()->setStatus(
+            Repository\Meta::STATUS_INSTALL_CLEANUP);
         return $this;
     }
 
