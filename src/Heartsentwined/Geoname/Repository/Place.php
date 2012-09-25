@@ -37,26 +37,53 @@ class Place extends EntityRepository
         }
         $dqb->where($dqb->expr()->andX(
                 isset($criteria['countryCode']) ?
-                    $dqb->expr()->eq('p.countryCode', ':countryCode') : null,
+                    $dqb->expr()->orX(
+                        $dqb->expr()->eq('p.countryCode', ':countryCode'),
+                        empty($criteria['countryCode']) ?
+                            $dqb->expr()->isNull('p.countryCode') : null
+                    ) : null,
                 isset($criteria['admin1Code']) ?
-                    $dqb->expr()->eq('p.admin1Code', ':admin1Code') : null,
+                    $dqb->expr()->orX(
+                        $dqb->expr()->eq('p.admin1Code', ':admin1Code'),
+                        empty($criteria['admin1Code']) ?
+                            $dqb->expr()->isNull('p.admin1Code') : null
+                    ) : null,
                 isset($criteria['admin2Code']) ?
-                    $dqb->expr()->eq('p.admin2Code', ':admin2Code') : null,
+                    $dqb->expr()->orX(
+                        $dqb->expr()->eq('p.admin2Code', ':admin2Code'),
+                        empty($criteria['admin2Code']) ?
+                            $dqb->expr()->isNull('p.admin2Code') : null
+                    ) : null,
                 isset($criteria['admin3Code']) ?
-                    $dqb->expr()->eq('p.admin3Code', ':admin3Code') : null,
+                    $dqb->expr()->orX(
+                        $dqb->expr()->eq('p.admin3Code', ':admin3Code'),
+                        empty($criteria['admin3Code']) ?
+                            $dqb->expr()->isNull('p.admin3Code') : null
+                    ) : null,
                 isset($criteria['admin4Code']) ?
-                    $dqb->expr()->eq('p.admin4Code', ':admin4Code') : null,
+                    $dqb->expr()->orX(
+                        $dqb->expr()->eq('p.admin4Code', ':admin4Code'),
+                        empty($criteria['admin4Code']) ?
+                            $dqb->expr()->isNull('p.admin4Code') : null
+                    ) : null,
                 isset($criteria['featureCode']) ?
-                    $dqb->expr()->eq('f.code', ':featureCode') : null,
+                    $dqb->expr()->orX(
+                        $dqb->expr()->eq('f.code', ':featureCode'),
+                        empty($criteria['featureCode']) ?
+                            $dqb->expr()->isNull('f.code') : null
+                    ) : null,
                 isset($criteria['featureClass']) ?
-                    $dqb->expr()->eq('fp.code', ':featureClass') : null
+                    $dqb->expr()->orX(
+                        $dqb->expr()->eq('fp.code', ':featureClass'),
+                        empty($criteria['featureClass']) ?
+                            $dqb->expr()->isNull('fp.code') : null
+                    ) : null
             ))
             ->setMaxResults(1);
 
         foreach ($criteria as $key => $value) {
             $dqb->setParameter($key, $value);
         }
-
         if ($places = $dqb->getQuery()->getResult()) {
             return current($places);
         } else {
