@@ -1,5 +1,7 @@
 # zf2-geoname
 
+[![Build Status](https://secure.travis-ci.org/heartsentwined/zf2-geoname.png)](http://travis-ci.org/heartsentwined/zf2-geoname)
+
 Maintain a local copy of the [Geonames](http://geonames.org) (places) database.
 
 This module will install a self-updating local copy of the Geonames (places) database. It covers the location information, as available from [the official database dump](http://download.geonames.org/export/dump/). It does not cover the "add-ons", e.g. earthquake, weather data, etc, as available from their webservices.
