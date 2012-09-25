@@ -826,6 +826,7 @@ class Geoname
      */
     public function install()
     {
+        return;
         $cli = $this->getCli();
         $tmpDir = $this->getTmpDir();
         $em = $this->getEm();
