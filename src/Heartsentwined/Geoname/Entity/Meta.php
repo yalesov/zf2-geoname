@@ -15,7 +15,7 @@ class Meta
     private $id;
 
     /**
-     * @var string $status
+     * @var integer $status
      */
     private $status;
 
@@ -38,7 +38,7 @@ class Meta
     /**
      * Set status
      *
-     * @param string $status
+     * @param integer $status
      * @return Meta
      */
     public function setStatus($status)
@@ -51,7 +51,7 @@ class Meta
     /**
      * Get status
      *
-     * @return string 
+     * @return integer 
      */
     public function getStatus()
     {

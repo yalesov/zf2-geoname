@@ -9,7 +9,7 @@ Heartsentwined\Geoname\Entity\Meta:
             generator:
                 strategy: AUTO
         status:
-            type: string
+            type: integer
         lock:
             type: boolean
             nullable: true
