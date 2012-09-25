@@ -165,7 +165,12 @@ class GeonameTest extends DoctrineTestcase
             ),
             Repository\Meta::STATUS_UPDATE => array(
                 'status' => null,
-                'method' => 'update',
+                'method' => array(
+                    'updatePlaceModify',
+                    'updatePlaceDelete',
+                    'updateAltNameModify',
+                    'updateAltNameDelete',
+                ),
             ),
         );
 
@@ -181,9 +186,11 @@ class GeonameTest extends DoctrineTestcase
             $geoname
                 ->expects($this->once())
                 ->method('downloadUpdate');
-            $geoname
-                ->expects($this->once())
-                ->method($data['method']);
+            foreach ((array)$data['method'] as $method) {
+                $geoname
+                    ->expects($this->once())
+                    ->method($method);
+            }
             $geoname->run();
 
             if ($data['status'] !== null) {
@@ -1141,5 +1148,25 @@ return;
         $this->assertFileExists('tmp/geoname/update');
         $this->assertFileExists('tmp/geoname/update/bar');
         $this->assertFileExists('tmp/geoname/update/baz');
+    }
+
+    public function testUpdatePlaceModify()
+    {
+        $this->fail('not yet impelemented');
+    }
+
+    public function testUpdatePlaceDelete()
+    {
+        $this->fail('not yet impelemented');
+    }
+
+    public function testUpdateAltNameModify()
+    {
+        $this->fail('not yet impelemented');
+    }
+
+    public function testUpdateAltNameDelete()
+    {
+        $this->fail('not yet impelemented');
     }
 }

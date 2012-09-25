@@ -155,7 +155,10 @@ class Geoname
                     Repository\Meta::STATUS_UPDATE);
                 break;
             case Repository\Meta::STATUS_UPDATE:
-                $this->update();
+                $this->updatePlaceModify();
+                $this->updatePlaceDelete();
+                $this->updateAltNameModify();
+                $this->updateAltNameDelete();
                 break;
         }
         $meta->setLock(false);
@@ -1336,6 +1339,26 @@ class Geoname
         $em->flush();
 
         return $this;
+    }
+
+    public function updatePlaceModify()
+    {
+        throw new \Exception('not yet implemented');
+    }
+
+    public function updatePlaceDelete()
+    {
+        throw new \Exception('not yet implemented');
+    }
+
+    public function updateAltNameModify()
+    {
+        throw new \Exception('not yet implemented');
+    }
+
+    public function updateAltNameDelete()
+    {
+        throw new \Exception('not yet implemented');
     }
 
     /**
