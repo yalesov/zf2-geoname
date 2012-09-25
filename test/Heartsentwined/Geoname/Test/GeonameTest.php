@@ -573,6 +573,8 @@ class GeonameTest extends DoctrineTestcase
         $this->assertSame('admin4', $foo->getAdmin4Code());
         $this->assertSame('100000', $foo->getPopulation());
         $this->assertSame($bar, $foo->getFeature());
+        $this->assertEmpty($foo->getParent());
+        $this->assertEmpty($foo->getTimezone());
 
         $this->assertEmpty($placeRepo->find(2));
 
@@ -590,6 +592,8 @@ class GeonameTest extends DoctrineTestcase
         $this->assertEmpty($bar->getAdmin4Code());
         $this->assertEmpty($bar->getPopulation());
         $this->assertEmpty($bar->getFeature());
+        $this->assertEmpty($bar->getParent());
+        $this->assertEmpty($bar->getTimezone());
 
         $this->geoname->installPlace();
         $count = 0;
