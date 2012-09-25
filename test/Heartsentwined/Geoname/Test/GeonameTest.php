@@ -1452,7 +1452,30 @@ return;
 
     public function testUpdatePlaceDelete()
     {
-        $this->fail('not yet impelemented');
+        $placeRepo =
+            $this->em->getRepository('Heartsentwined\Geoname\Entity\Place');
+
+        $foo = new Entity\Place;
+        $foo
+            ->setId(1);
+        $this->em->persist($foo);
+        $bar = new Entity\Place;
+        $bar
+            ->setId(2);
+        $this->em->persist($bar);
+        $this->em->flush();
+
+        mkdir('tmp/geoname/update/place/delete', 0777, true);
+        $fh = fopen('tmp/geoname/update/place/delete/1', 'a+');
+        fwrite($fh, "1\tfoo\tfoo comment\n");
+        fclose($fh);
+
+        $this->geoname->updatePlaceDelete();
+
+        $this->assertCount(2, $placeRepo->findAll());
+
+        $this->assertTrue((bool)$foo->getIsDeprecated());
+        $this->assertFalse((bool)$bar->getIsDeprecated());
     }
 
     public function testUpdateAltNameModify()

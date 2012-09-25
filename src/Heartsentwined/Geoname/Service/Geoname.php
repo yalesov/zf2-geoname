@@ -1483,7 +1483,23 @@ class Geoname
 
     public function updatePlaceDelete()
     {
-        throw new \Exception('not yet implemented');
+        $em = $this->getEm();
+        $placeRepo =
+            $em->getRepository('Heartsentwined\Geoname\Entity\Place');
+        foreach (FileSystemManager::fileIterator($this->getTmpDir() . '/update/place/delete') as $source) {
+            if ($this->getLock($source) && $fh = fopen("$source.lock", 'r')) {
+                $this->getCli()->write($source, 'module');
+                while ($data = fgetcsv($fh, 0, "\t", "\0")) {
+                    list($id, /*name*/, /*comment*/) = $data;
+                    if ($place = $placeRepo->find((int)$id)) {
+                        $place->setIsDeprecated(true);
+                    }
+                }
+                fclose($fh);
+            }
+        }
+        $em->flush();
+        return $this;
     }
 
     public function updateAltNameModify()
