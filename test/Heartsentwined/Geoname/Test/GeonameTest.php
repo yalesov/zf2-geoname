@@ -1480,7 +1480,53 @@ return;
 
     public function testUpdateAltNameModify()
     {
-        $this->fail('not yet impelemented');
+        $altNameRepo =
+            $this->em->getRepository('Heartsentwined\Geoname\Entity\AltName');
+
+        $fooPlace = new Entity\Place;
+        $fooPlace->setId(1);
+        $this->em->persist($fooPlace);
+        $fooLang = new Entity\Language;
+        $this->em->persist($fooLang);
+        $fooLang->setIso3('foo');
+        $fooAltName = new Entity\AltName;
+        $fooAltName
+            ->setId(1)
+            ->setName('dummy')
+            ->setIsPreferred(false)
+            ->setIsShort(false)
+            ->setIsColloquial(false)
+            ->setIsHistoric(false);
+        $this->em->persist($fooAltName);
+        $this->em->flush();
+
+        mkdir('tmp/geoname/update/altName/modification', 0777, true);
+        $fh = fopen('tmp/geoname/update/altName/modification/1', 'a+');
+        fwrite($fh, "1\t1\tfoo\tfoo alt name\t1\t1\t1\t1\n");
+        fwrite($fh, "2\t2\tcustom lang\tfoo alt name\t\t\t\t\n");
+        fclose($fh);
+
+        $this->geoname->updateAltNameModify();
+
+        $this->assertCount(2, $altNameRepo->findAll());
+
+        $this->assertSame('foo alt name', $fooAltName->getName());
+        $this->assertSame(true, $fooAltName->getIsPreferred());
+        $this->assertSame(true, $fooAltName->getIsShort());
+        $this->assertSame(true, $fooAltName->getIsColloquial());
+        $this->assertSame(true, $fooAltName->getIsHistoric());
+        $this->assertSame($fooPlace, $fooAltName->getPlace());
+        $this->assertSame($fooLang, $fooAltName->getLanguage());
+
+        $altName = $altNameRepo->find(2);
+        $this->assertNotEmpty($altName);
+        $this->assertSame('foo alt name', $altName->getName());
+        $this->assertSame(false, $altName->getIsPreferred());
+        $this->assertSame(false, $altName->getIsShort());
+        $this->assertSame(false, $altName->getIsColloquial());
+        $this->assertSame(false, $altName->getIsHistoric());
+        $this->assertEmpty($altName->getPlace());
+        $this->assertEmpty($altName->getLanguage());
     }
 
     public function testUpdateAltNameDelete()

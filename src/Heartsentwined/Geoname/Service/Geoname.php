@@ -1505,7 +1505,59 @@ class Geoname
 
     public function updateAltNameModify()
     {
-        throw new \Exception('not yet implemented');
+        $em = $this->getEm();
+        $altNameRepo =
+            $em->getRepository('Heartsentwined\Geoname\Entity\AltName');
+        $placeRepo =
+            $em->getRepository('Heartsentwined\Geoname\Entity\Place');
+        $languageRepo =
+            $em->getRepository('Heartsentwined\Geoname\Entity\Language');
+
+        $placeMap = array();
+        $languageMap = array();
+        foreach (FileSystemManager::fileIterator($this->getTmpDir() . '/update/altName/modification') as $source) {
+            if ($this->getLock($source) && $fh = fopen("$source.lock", 'r')) {
+                $this->getCli()->write($source, 'module');
+                while ($data = fgetcsv($fh, 0, "\t", "\0")) {
+                    list($id, $placeId, $languageCode, $name,
+                        $isPreferred, $isShort, $isColloquial, $isHistoric) =
+                        $data;
+
+                    if (!$altName = $altNameRepo->find((int)$id)) {
+                        $altName = new Entity\AltName;
+                        $altName->setId($id);
+                        $em->persist($altName);
+                    }
+                    $altName
+                        ->setName($name)
+                        ->setIsPreferred((bool)trim($isPreferred))
+                        ->setIsShort((bool)trim($isShort))
+                        ->setIsColloquial((bool)trim($isColloquial))
+                        ->setIsHistoric((bool)trim($isHistoric));
+
+                    if (isset($placeMap[$placeId])) {
+                        $altName->setPlace($placeMap[$placeId]);
+                        $em->persist($placeMap[$placeId]); // ?! XXX
+                    } elseif ($place = $placeRepo->find((int)$placeId)) {
+                        $altName->setPlace($place);
+                        $placeMap[$placeId] = $place;
+                    }
+
+                    if (isset($languageMap[$languageCode])) {
+                        $altName->setLanguage($languageMap[$languageCode]);
+                    } elseif ($language = $languageRepo->findLanguage($languageCode)) {
+                        $altName->setLanguage($language);
+                        $languageMap[$languageCode] = $language;
+                    } else {
+                        $altName->setLanguageOther($languageCode);
+                    }
+                }
+                fclose($fh);
+                $this->markDone($source);
+            }
+        }
+        $em->flush();
+        return $this;
     }
 
     public function updateAltNameDelete()
