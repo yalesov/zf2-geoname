@@ -695,9 +695,9 @@ class Geoname
                         /*$population*/, /*$elevation*/, /*$digiEleModel*/,
                         $timezoneCode, /*modification date*/) =
                         $data;
-                    if (!$place = $placeRepo->find((int)$id)) {
-                        continue;
-                    }
+                    if (!$place = $placeRepo->find((int)$id)) continue;
+                    if (empty($timezoneCode)) continue;
+
                     if (!$timezone = $timezoneRepo->findOneBy(
                         array('code' => $timezoneCode))) {
                         $timezone = new Entity\Timezone;
