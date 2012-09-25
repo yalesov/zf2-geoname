@@ -187,7 +187,8 @@ class GeonameTest extends DoctrineTestcase
             foreach ((array)$data['method'] as $method) {
                 $geoname
                     ->expects($this->once())
-                    ->method($method);
+                    ->method($method)
+                    ->will($this->returnSelf());
             }
             $geoname->run();
 
