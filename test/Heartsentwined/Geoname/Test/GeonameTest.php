@@ -50,30 +50,6 @@ class GeonameTest extends DoctrineTestcase
         return $cli;
     }
 
-    public function getGeonameDummy()
-    {
-        return $this->getMock(
-            'Heartsentwined\Geoname\Service\Geoname',
-            array(
-                'downloadUpdate',
-                'installDownload',
-                'installPrepare',
-                'installLanguage',
-                'installFeature',
-                'installPlace',
-                'installCountryCurrencyLocale',
-                'installTimezone',
-                'installNeighbour',
-                'installPlaceTimezone',
-                'installHierarchy',
-                'installAltName',
-                'installCleanup',
-                'update',
-            ))
-            ->setEm($this->em)
-            ->setTmpDir('tmp/geoname');
-    }
-
     public function testGetMeta()
     {
         $metaRepo = $this->em
@@ -182,7 +158,29 @@ class GeonameTest extends DoctrineTestcase
                 ->setLock(false);
             $this->em->flush();
 
-            $geoname = $this->getGeonameDummy();
+            $geoname = $this->getMock(
+                'Heartsentwined\Geoname\Service\Geoname',
+                array(
+                    'downloadUpdate',
+                    'installDownload',
+                    'installPrepare',
+                    'installLanguage',
+                    'installFeature',
+                    'installPlace',
+                    'installCountryCurrencyLocale',
+                    'installTimezone',
+                    'installNeighbour',
+                    'installPlaceTimezone',
+                    'installHierarchy',
+                    'installAltName',
+                    'installCleanup',
+                    'updatePlaceModify',
+                    'updatePlaceDelete',
+                    'updateAltNameModify',
+                    'updateAltNameDelete',
+                ))
+                ->setEm($this->em)
+                ->setTmpDir('tmp/geoname');
             $geoname
                 ->expects($this->once())
                 ->method('downloadUpdate');
