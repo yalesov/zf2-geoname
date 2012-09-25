@@ -70,6 +70,11 @@ class Place
     private $admin4Code;
 
     /**
+     * @var boolean $isDeprecated
+     */
+    private $isDeprecated;
+
+    /**
      * @var Heartsentwined\Geoname\Entity\Country
      */
     private $country;
@@ -388,6 +393,29 @@ class Place
     public function getAdmin4Code()
     {
         return $this->admin4Code;
+    }
+
+    /**
+     * Set isDeprecated
+     *
+     * @param boolean $isDeprecated
+     * @return Place
+     */
+    public function setIsDeprecated($isDeprecated)
+    {
+        $this->isDeprecated = $isDeprecated;
+    
+        return $this;
+    }
+
+    /**
+     * Get isDeprecated
+     *
+     * @return boolean 
+     */
+    public function getIsDeprecated()
+    {
+        return $this->isDeprecated;
     }
 
     /**

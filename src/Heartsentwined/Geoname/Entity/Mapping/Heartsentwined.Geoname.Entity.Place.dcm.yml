@@ -39,6 +39,9 @@ Heartsentwined\Geoname\Entity\Place:
         admin4Code:
             type: string
             nullable: true
+        isDeprecated:
+            type: boolean
+            nullable: true
 
     oneToOne:
         country:

@@ -45,6 +45,11 @@ class AltName
     private $languageOther;
 
     /**
+     * @var boolean $isDeprecated
+     */
+    private $isDeprecated;
+
+    /**
      * @var Heartsentwined\Geoname\Entity\Place
      */
     private $place;
@@ -214,6 +219,29 @@ class AltName
     public function getLanguageOther()
     {
         return $this->languageOther;
+    }
+
+    /**
+     * Set isDeprecated
+     *
+     * @param boolean $isDeprecated
+     * @return AltName
+     */
+    public function setIsDeprecated($isDeprecated)
+    {
+        $this->isDeprecated = $isDeprecated;
+    
+        return $this;
+    }
+
+    /**
+     * Get isDeprecated
+     *
+     * @return boolean 
+     */
+    public function getIsDeprecated()
+    {
+        return $this->isDeprecated;
     }
 
     /**

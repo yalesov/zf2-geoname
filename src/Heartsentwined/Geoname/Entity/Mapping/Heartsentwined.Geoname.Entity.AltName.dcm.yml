@@ -20,6 +20,9 @@ Heartsentwined\Geoname\Entity\AltName:
             type: string
             nullable: true
             # 4-characters 'post' for postal codes and 'iata','icao' and faac for airport codes, fr_1793 for French Revolution names,  abbr for abbreviation, link for a website
+        isDeprecated:
+            type: boolean
+            nullable: true
 
     manyToOne:
         place:
