@@ -26,7 +26,6 @@ class GeonameTest extends DoctrineTestcase
     public function tearDown()
     {
         unset($this->geoname);
-        FileSystemManager::rrmdir('tmp/goename');
         parent::tearDown();
     }
 
