@@ -210,6 +210,37 @@ class Geoname
         return $this;
     }
 
+    public function getLock($file)
+    {
+        if (!file_exists($file)) return false;
+        if (!strpos($file, '.done') && !strpos($file, '.lock')) {
+            rename($file, "$file.lock");
+            return true;
+        }
+        return false;
+    }
+
+    public function markDone($file)
+    {
+        $lockFile = $file . '.lock';
+        if (!file_exists($lockFile)) return false;
+        if (strpos($lockFile, '.lock')) {
+            rename($lockFile, $file . '.done');
+            return true;
+        }
+        return false;
+    }
+
+    public function resetFiles($dir)
+    {
+        foreach (FileSystemManager::fileIterator($dir) as $file) {
+            if (strpos($file, '.done') || strpos($file, '.lock')) {
+                rename($file, substr($file, 0, strlen($file)-5));
+            }
+        }
+        return $this;
+    }
+
     public function installDownload()
     {
         $tmpDir = $this->getTmpDir();
@@ -272,37 +303,6 @@ class Geoname
             }
         }
 
-        return $this;
-    }
-
-    public function getLock($file)
-    {
-        if (!file_exists($file)) return false;
-        if (!strpos($file, '.done') && !strpos($file, '.lock')) {
-            rename($file, "$file.lock");
-            return true;
-        }
-        return false;
-    }
-
-    public function markDone($file)
-    {
-        $lockFile = $file . '.lock';
-        if (!file_exists($lockFile)) return false;
-        if (strpos($lockFile, '.lock')) {
-            rename($lockFile, $file . '.done');
-            return true;
-        }
-        return false;
-    }
-
-    public function resetFiles($dir)
-    {
-        foreach (FileSystemManager::fileIterator($dir) as $file) {
-            if (strpos($file, '.done') || strpos($file, '.lock')) {
-                rename($file, substr($file, 0, strlen($file)-5));
-            }
-        }
         return $this;
     }
 
