@@ -88,8 +88,6 @@ class GeonameTest extends DoctrineTestcase
     }
     public function testRun()
     {
-        $geoname = $this->getGeonameDummy();
-
         $stageMap = array(
             Repository\Meta::STATUS_INSTALL_DOWNLOAD => array(
                 'status' => Repository\Meta::STATUS_INSTALL_PREPARE,
