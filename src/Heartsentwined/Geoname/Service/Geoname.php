@@ -1496,6 +1496,7 @@ class Geoname
                     }
                 }
                 fclose($fh);
+                $this->markDone($source);
             }
         }
         $em->flush();
