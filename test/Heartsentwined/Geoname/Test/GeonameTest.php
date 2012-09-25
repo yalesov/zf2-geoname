@@ -144,6 +144,7 @@ class GeonameTest extends DoctrineTestcase
                     'updatePlaceDelete',
                     'updateAltNameModify',
                     'updateAltNameDelete',
+                    'updateCleanup',
                 ),
             ),
         );
@@ -176,6 +177,7 @@ class GeonameTest extends DoctrineTestcase
                     'updatePlaceDelete',
                     'updateAltNameModify',
                     'updateAltNameDelete',
+                    'updateCleanup',
                 ))
                 ->setEm($this->em)
                 ->setTmpDir('tmp/geoname');
