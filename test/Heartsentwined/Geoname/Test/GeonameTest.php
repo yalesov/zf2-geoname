@@ -1155,7 +1155,300 @@ return;
 
     public function testUpdatePlaceModify()
     {
-        $this->fail('not yet impelemented');
+        $placeRepo =
+            $this->em->getRepository('Heartsentwined\Geoname\Entity\Place');
+        $featureRepo =
+            $this->em->getRepository('Heartsentwined\Geoname\Entity\Feature');
+        $timezoneRepo =
+            $this->em->getRepository('Heartsentwined\Geoname\Entity\Timezone');
+
+        $place2 = new Entity\Place;
+        $place2->setId(2);
+        $this->em->persist($place2);
+
+        $forest = new Entity\Feature;
+        $this->em->persist($forest);
+        $forest
+            ->setCode('V')
+            ->setDescription('')
+            ->setComment('');
+        $admin = new Entity\Feature;
+        $this->em->persist($admin);
+        $admin
+            ->setCode('A')
+            ->setDescription('')
+            ->setComment('');
+        $bar = new Entity\Feature;
+        $this->em->persist($bar);
+        $bar
+            ->setCode('BAR')
+            ->setDescription('')
+            ->setComment('')
+            ->setParent($forest);
+
+        $kabul = new Entity\Timezone;
+        $this->em->persist($kabul);
+        $kabul->setCode('Asia/Kabul');
+
+        $germany = new Entity\Place;
+        $germany
+            ->setId(90)
+            ->setName('germany')
+            ->setCountryCode('DE');
+        $this->em->persist($germany);
+        $usa = new Entity\Place;
+        $usa
+            ->setId(91)
+            ->setName('usa')
+            ->setCountryCode('US');
+        $this->em->persist($usa);
+
+        $this->em->flush();
+
+        mkdir('tmp/geoname/update/place/modification', 0777, true);
+        $fh = fopen('tmp/geoname/update/place/modification/1', 'a+');
+        // new place
+        fwrite($fh,
+            '1'                 // id
+            . "\tfoo placé 早"  // name - with funny chars
+            . "\tfoo ascii"     // ascii name
+            . "\tfoo alt"       // alt name
+            . "\t50.1"          // latitude
+            . "\t100.2"         // longitude
+            . "\tV"             // feature class
+            . "\tBAR"           // feature code
+            . "\tAB"            // country code
+            . "\tAC"            // alt country code
+            . "\tadmin1"        // admin 1 code
+            . "\tadmin2"        // admin 2 code
+            . "\tadmin3"        // admin 3 code
+            . "\tadmin4"        // admin 4 code
+            . "\t100000"        // population
+            . "\t1000"          // elevation
+            . "\t2000"          // digital elevation model
+            . "\tAsia/Kabul"    // timezone code
+            . "\t2012-01-01"    // modification date
+            . "\n"
+        );
+        // existing place
+        fwrite($fh,
+            '2'                 // id
+            . "\tfoo placé 早"  // name - with funny chars
+            . "\tfoo ascii"     // ascii name
+            . "\tfoo alt"       // alt name
+            . "\t50.1"          // latitude
+            . "\t100.2"         // longitude
+            . "\tV"             // feature class
+            . "\tBAR"           // feature code
+            . "\tAB"            // country code
+            . "\tAC"            // alt country code
+            . "\tadmin1"        // admin 1 code
+            . "\tadmin2"        // admin 2 code
+            . "\tadmin3"        // admin 3 code
+            . "\tadmin4"        // admin 4 code
+            . "\t100000"        // population
+            . "\t1000"          // elevation
+            . "\t2000"          // digital elevation model
+            . "\tAsia/Kabul"    // timezone code
+            . "\t2012-01-01"    // modification date
+            . "\n"
+        );
+        fwrite($fh,
+            '3'                 // id
+            . "\t"
+            . "\t"
+            . "\t"
+            . "\t"
+            . "\t"
+            . "\tV"             // feature class
+            . "\tBAZ"           // new feature
+            . "\t"
+            . "\t"
+            . "\t"
+            . "\t"
+            . "\t"
+            . "\t"
+            . "\t"
+            . "\t"
+            . "\t"
+            . "\tAsia/Baz"      // new timezone
+            . "\t"
+            . "\n"
+        );
+        // germany admin 1
+        fwrite($fh, "10\t\t\t\t\t\tA\tADM1\tDE\t\t01\t\t\t\t\t\t\t\t\n");
+        // germany admin 2
+        fwrite($fh, "11\t\t\t\t\t\tA\tADM2\tDE\t\t01\t01\t\t\t\t\t\t\t\n");
+        // germany admin 4
+        fwrite($fh, "12\t\t\t\t\t\tA\tADM4\tDE\t\t01\t01\t00\t01\t\t\t\t\t\n");
+        // usa admin 1
+        fwrite($fh, "21\t\t\t\t\t\tA\tADM1\tUS\t\t01\t\t\t\t\t\t\t\t\n");
+        // usa admin 2
+        fwrite($fh, "22\t\t\t\t\t\tA\tADM2\tUS\t\t01\t01\t\t\t\t\t\t\t\n");
+        fclose($fh);
+
+        $this->geoname->updatePlaceModify();
+
+        $this->assertCount(7, $featureRepo->findAll());
+
+        $bazFeature = $featureRepo->findOneBy(array('code' => 'BAZ'));
+        $this->assertNotEmpty($bazFeature);
+        $this->assertSame($forest, $bazFeature->getParent());
+
+        $admin1 = $featureRepo->findOneBy(array('code' => 'ADM1'));
+        $this->assertNotEmpty($admin1);
+        $this->assertSame($admin, $admin1->getParent());
+
+        $admin2 = $featureRepo->findOneBy(array('code' => 'ADM2'));
+        $this->assertNotEmpty($admin2);
+        $this->assertSame($admin, $admin2->getParent());
+
+        $admin4 = $featureRepo->findOneBy(array('code' => 'ADM4'));
+        $this->assertNotEmpty($admin4);
+        $this->assertSame($admin, $admin4->getParent());
+
+        $this->assertCount(2, $timezoneRepo->findAll());
+        $bazTimezone = $timezoneRepo->findOneBy(array('code' => 'Asia/Baz'));
+        $this->assertNotEmpty($bazTimezone);
+
+        $this->assertCount(10, $placeRepo->findAll());
+
+        $foo = $placeRepo->find(1);
+        $this->assertNotEmpty($foo);
+        $this->assertSame('foo placé 早', $foo->getName());
+        $this->assertSame('50.1', $foo->getLatitude());
+        $this->assertSame('100.2', $foo->getLongitude());
+        $this->assertSame('1000', $foo->getElevation());
+        $this->assertSame('2000', $foo->getDigiEleModel());
+        $this->assertSame('AB', $foo->getCountryCode());
+        $this->assertSame('admin1', $foo->getAdmin1Code());
+        $this->assertSame('admin2', $foo->getAdmin2Code());
+        $this->assertSame('admin3', $foo->getAdmin3Code());
+        $this->assertSame('admin4', $foo->getAdmin4Code());
+        $this->assertSame('100000', $foo->getPopulation());
+        $this->assertSame($bar, $foo->getFeature());
+        $this->assertEmpty($foo->getParent());
+        $this->assertSame($kabul, $foo->getTimezone());
+
+        $foo2 = $placeRepo->find(2);
+        $this->assertNotEmpty($foo2);
+        $this->assertSame($place2, $foo2);
+        $this->assertSame('foo placé 早', $foo2->getName());
+        $this->assertSame('50.1', $foo2->getLatitude());
+        $this->assertSame('100.2', $foo2->getLongitude());
+        $this->assertSame('1000', $foo2->getElevation());
+        $this->assertSame('2000', $foo2->getDigiEleModel());
+        $this->assertSame('AB', $foo2->getCountryCode());
+        $this->assertSame('admin1', $foo2->getAdmin1Code());
+        $this->assertSame('admin2', $foo2->getAdmin2Code());
+        $this->assertSame('admin3', $foo2->getAdmin3Code());
+        $this->assertSame('admin4', $foo2->getAdmin4Code());
+        $this->assertSame('100000', $foo2->getPopulation());
+        $this->assertSame($bar, $foo2->getFeature());
+        $this->assertEmpty($foo2->getParent());
+        $this->assertSame($kabul, $foo2->getTimezone());
+
+        $place3 = $placeRepo->find(3);
+        $this->assertNotEmpty($place3);
+        $this->assertEmpty($place3->getName());
+        $this->assertEmpty($place3->getLatitude());
+        $this->assertEmpty($place3->getLongitude());
+        $this->assertEmpty($place3->getElevation());
+        $this->assertEmpty($place3->getDigiEleModel());
+        $this->assertEmpty($place3->getCountryCode());
+        $this->assertEmpty($place3->getAdmin1Code());
+        $this->assertEmpty($place3->getAdmin2Code());
+        $this->assertEmpty($place3->getAdmin3Code());
+        $this->assertEmpty($place3->getAdmin4Code());
+        $this->assertEmpty($place3->getPopulation());
+        $this->assertSame($bazFeature, $place3->getFeature());
+        $this->assertEmpty($place3->getParent());
+        $this->assertSame($bazTimezone, $place3->getTimezone());
+
+        $germany1 = $placeRepo->find(10);
+        $this->assertNotEmpty($germany1);
+        $this->assertEmpty($germany1->getName());
+        $this->assertEmpty($germany1->getLatitude());
+        $this->assertEmpty($germany1->getLongitude());
+        $this->assertEmpty($germany1->getElevation());
+        $this->assertEmpty($germany1->getDigiEleModel());
+        $this->assertSame('DE', $germany1->getCountryCode());
+        $this->assertSame('01', $germany1->getAdmin1Code());
+        $this->assertEmpty($germany1->getAdmin2Code());
+        $this->assertEmpty($germany1->getAdmin3Code());
+        $this->assertEmpty($germany1->getAdmin4Code());
+        $this->assertEmpty($germany1->getPopulation());
+        $this->assertSame($admin1, $germany1->getFeature());
+        $this->assertSame($germany, $germany1->getParent());
+        $this->assertEmpty($germany1->getTimezone());
+
+        $germany2 = $placeRepo->find(11);
+        $this->assertNotEmpty($germany2);
+        $this->assertEmpty($germany2->getName());
+        $this->assertEmpty($germany2->getLatitude());
+        $this->assertEmpty($germany2->getLongitude());
+        $this->assertEmpty($germany2->getElevation());
+        $this->assertEmpty($germany2->getDigiEleModel());
+        $this->assertSame('DE', $germany2->getCountryCode());
+        $this->assertSame('01', $germany2->getAdmin1Code());
+        $this->assertSame('01', $germany2->getAdmin2Code());
+        $this->assertEmpty($germany2->getAdmin3Code());
+        $this->assertEmpty($germany2->getAdmin4Code());
+        $this->assertEmpty($germany2->getPopulation());
+        $this->assertSame($admin2, $germany2->getFeature());
+        $this->assertSame($germany1, $germany2->getParent());
+        $this->assertEmpty($germany2->getTimezone());
+
+        $germany4 = $placeRepo->find(12);
+        $this->assertNotEmpty($germany4);
+        $this->assertEmpty($germany4->getName());
+        $this->assertEmpty($germany4->getLatitude());
+        $this->assertEmpty($germany4->getLongitude());
+        $this->assertEmpty($germany4->getElevation());
+        $this->assertEmpty($germany4->getDigiEleModel());
+        $this->assertSame('DE', $germany4->getCountryCode());
+        $this->assertSame('01', $germany4->getAdmin1Code());
+        $this->assertSame('01', $germany4->getAdmin2Code());
+        $this->assertSame('00', $germany4->getAdmin3Code());
+        $this->assertSame('01', $germany4->getAdmin4Code());
+        $this->assertEmpty($germany4->getPopulation());
+        $this->assertSame($admin4, $germany4->getFeature());
+        $this->assertSame($germany2, $germany4->getParent());
+        $this->assertEmpty($germany4->getTimezone());
+
+        $usa1 = $placeRepo->find(21);
+        $this->assertNotEmpty($usa1);
+        $this->assertEmpty($usa1->getName());
+        $this->assertEmpty($usa1->getLatitude());
+        $this->assertEmpty($usa1->getLongitude());
+        $this->assertEmpty($usa1->getElevation());
+        $this->assertEmpty($usa1->getDigiEleModel());
+        $this->assertSame('US', $usa1->getCountryCode());
+        $this->assertSame('01', $usa1->getAdmin1Code());
+        $this->assertEmpty($usa1->getAdmin2Code());
+        $this->assertEmpty($usa1->getAdmin3Code());
+        $this->assertEmpty($usa1->getAdmin4Code());
+        $this->assertEmpty($usa1->getPopulation());
+        $this->assertSame($admin1, $usa1->getFeature());
+        $this->assertSame($usa, $usa1->getParent());
+        $this->assertEmpty($usa1->getTimezone());
+
+        $usa2 = $placeRepo->find(22);
+        $this->assertNotEmpty($usa2);
+        $this->assertEmpty($usa2->getName());
+        $this->assertEmpty($usa2->getLatitude());
+        $this->assertEmpty($usa2->getLongitude());
+        $this->assertEmpty($usa2->getElevation());
+        $this->assertEmpty($usa2->getDigiEleModel());
+        $this->assertSame('US', $usa2->getCountryCode());
+        $this->assertSame('01', $usa2->getAdmin1Code());
+        $this->assertSame('01', $usa2->getAdmin2Code());
+        $this->assertEmpty($usa2->getAdmin3Code());
+        $this->assertEmpty($usa2->getAdmin4Code());
+        $this->assertEmpty($usa2->getPopulation());
+        $this->assertSame($admin2, $usa2->getFeature());
+        $this->assertSame($usa1, $usa2->getParent());
+        $this->assertEmpty($usa2->getTimezone());
     }
 
     public function testUpdatePlaceDelete()

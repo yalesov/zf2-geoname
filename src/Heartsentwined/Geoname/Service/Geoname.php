@@ -1345,7 +1345,140 @@ class Geoname
 
     public function updatePlaceModify()
     {
-        throw new \Exception('not yet implemented');
+        $em = $this->getEm();
+        $placeRepo =
+            $em->getRepository('Heartsentwined\Geoname\Entity\Place');
+        $featureRepo =
+            $em->getRepository('Heartsentwined\Geoname\Entity\Feature');
+        $timezoneRepo =
+            $em->getRepository('Heartsentwined\Geoname\Entity\Timezone');
+        $countryRepo =
+            $em->getRepository('Heartsentwined\Geoname\Entity\Country');
+
+        $countryMap = array();
+        $featureMap = array();
+        $placeMap = array();
+        foreach (FileSystemManager::fileIterator($this->getTmpDir() . '/update/place/modification') as $source) {
+            if ($this->getLock($source) && $fh = fopen("$source.lock", 'r')) {
+                $this->getCli()->write($source, 'module');
+                while ($data = fgetcsv($fh, 0, "\t", "\0")) {
+                    list($id, $name, /*ascii name*/, /*alt name*/,
+                        $latitude, $longitude, $featureClass, $featureCode,
+                        $countryCode, /*alt country code*/,
+                        $admin1Code, $admin2Code, $admin3Code, $admin4Code,
+                        $population, $elevation, $digiEleModel,
+                        $timezoneCode, /*modification date*/) =
+                        $data;
+
+                    if (!$place = $placeRepo->find((int)$id)) {
+                        $place = new Entity\Place;
+                        $place->setId($id);
+                        $placeMap[$id] = $place;
+                        $em->persist($place);
+                    }
+                    $place
+                        ->setName($name)
+                        ->setLatitude($latitude)
+                        ->setLongitude($longitude)
+                        ->setElevation($elevation)
+                        ->setDigiEleModel($digiEleModel)
+                        ->setCountryCode($countryCode)
+                        ->setAdmin1Code($admin1Code)
+                        ->setAdmin2Code($admin2Code)
+                        ->setAdmin3Code($admin3Code)
+                        ->setAdmin4Code($admin4Code)
+                        ->setPopulation($population);
+
+                    $fullFeatureCode = "$featureClass.$featureCode";
+                    if (isset($featureMap[$fullFeatureCode])) {
+                        $feature = $featureMap[$fullFeatureCode];
+                    } elseif (!$feature = $featureRepo->findByGeonameCode($fullFeatureCode)) {
+                        $feature = new Entity\Feature;
+                        $em->persist($feature);
+                        $feature->setCode($featureCode);
+                        if (isset($featureMap[$featureClass])) {
+                            $feature->setParent($featureMap[$featureClass]);
+                        } elseif ($parent = $featureRepo->findOneBy(
+                            array('code' => $featureClass))) {
+                            $featureMap[$featureClass] = $parent;
+                            $feature->setParent($parent);
+                        }
+                        $featureMap[$fullFeatureCode] = $feature;
+                    }
+                    $place->setFeature($feature);
+
+                    if (!empty($timezoneCode)) {
+                        if (!$timezone = $timezoneRepo->findOneBy(
+                            array('code' => $timezoneCode))) {
+                            $timezone = new Entity\Timezone;
+                            $em->persist($timezone);
+                            $timezone->setCode($timezoneCode);
+                            if (isset($countryMap[$countryCode])) {
+                                $timezone->setCountry($countryMap[$countryCode]);
+                            } elseif ($country = $countryRepo->findOneBy(
+                                array('iso2' => $countryCode))) {
+                                $timezone->setCountry($country);
+                            }
+                        }
+                        $place->setTimezone($timezone);
+                    }
+
+                    // hierarchy
+
+                    $em->flush();   // in case this entity will become
+                                    // dependency for the next entity
+
+                    if ($featureClass !== 'A'
+                        || !in_array($featureCode, array('ADM1', 'ADM2', 'ADM3', 'ADM4'))) {
+                        continue;
+                    }
+
+                    // determine parent feature
+                    $parentFeatureCode = '';
+                    $adminLevel = (int)substr($featureCode, -1);
+                    while ($adminLevel > 1) {
+                        $parentLevel = $adminLevel - 1;
+                        $parentVar = "admin{$parentLevel}Code";
+                        $parentCode = $$parentVar;
+                        if ($parentCode != '00') {
+                            $parentFeatureCode = "ADM{$parentLevel}";
+                            break;
+                        }
+                        $adminLevel--;
+                    }
+
+                    // assemble criteria
+                    $criteria = array(
+                        'admin3Code' => '',
+                        'admin2Code' => '',
+                        'admin1Code' => '',
+                        'countryCode' => '',
+                    );
+                    switch ($parentFeatureCode) {
+                        // intentional fall throughs
+                        case 'ADM3':
+                            $criteria['admin3Code'] = $admin3Code;
+                        case 'ADM2':
+                            $criteria['admin2Code'] = $admin2Code;
+                        case 'ADM1':
+                            $criteria['admin1Code'] = $admin1Code;
+                        default:
+                            $criteria['countryCode'] = $countryCode;
+                    }
+                    if ($parentFeatureCode) {
+                        $criteria['featureCode'] = $parentFeatureCode;
+                        $criteria['featureClass'] = 'A';
+                    }
+                    if ($parent = $placeRepo->findPlace($criteria)) {
+                        $place->setParent($parent);
+                    }
+                }
+                fclose($fh);
+                $this->markDone($source);
+            }
+        }
+        $em->flush();
+        return $this;
     }
 
     public function updatePlaceDelete()
