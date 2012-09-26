@@ -271,8 +271,17 @@ class Geoname
         return $this;
     }
 
+    /**
+     * crude implementation of a across-script file lock
+     *
+     * will append .lock to a target file, if it is not already .done / .lock
+     *
+     * @param string $file target file
+     * @return bool
+     */
     public function getLock($file)
     {
+        ArgValidator::assert($file, 'string');
         if (!file_exists($file)) return false;
         if (!strpos($file, '.done') && !strpos($file, '.lock')) {
             rename($file, "$file.lock");
@@ -281,8 +290,17 @@ class Geoname
         return false;
     }
 
+    /**
+     * crude implementation of a across-script "done" file marker
+     *
+     * will append .done to a target file, but only if it is currently .lock
+     *
+     * @param string $file target file
+     * @return bool
+     */
     public function markDone($file)
     {
+        ArgValidator::assert($file, 'string');
         $lockFile = $file . '.lock';
         if (!file_exists($lockFile)) return false;
         if (strpos($lockFile, '.lock')) {
@@ -292,8 +310,15 @@ class Geoname
         return false;
     }
 
+    /**
+     * remove .lock and .done markers
+     *
+     * @param string $dir target dir, will scan it and its children for files
+     * @return self
+     */
     public function resetFiles($dir)
     {
+        ArgValidator::assert($file, 'string');
         foreach (FileSystemManager::fileIterator($dir) as $file) {
             if (strpos($file, '.done') || strpos($file, '.lock')) {
                 rename($file, substr($file, 0, strlen($file)-5));
@@ -302,6 +327,11 @@ class Geoname
         return $this;
     }
 
+    /**
+     * install: download source files
+     *
+     * @return self
+     */
     public function installDownload()
     {
         $tmpDir = $this->getTmpDir();
@@ -326,6 +356,14 @@ class Geoname
         return $this;
     }
 
+    /**
+     * install: prepare files
+     *
+     * - unzip
+     * - split to smaller chunks
+     *
+     * @return self
+     */
     public function installPrepare()
     {
         $tmpDir = $this->getTmpDir();
@@ -367,6 +405,11 @@ class Geoname
         return $this;
     }
 
+    /**
+     * install: language
+     *
+     * @return self
+     */
     public function installLanguage()
     {
         $em = $this->getEm();
@@ -391,6 +434,11 @@ class Geoname
         return $this;
     }
 
+    /**
+     * install: feature
+     *
+     * @return self
+     */
     public function installFeature()
     {
         $em = $this->getEm();
@@ -443,6 +491,11 @@ class Geoname
         return $this;
     }
 
+    /**
+     * install: place (except timezone and hierarchy) [multi]
+     *
+     * @return self
+     */
     public function installPlace()
     {
         $em = $this->getEm();
@@ -494,6 +547,11 @@ class Geoname
         return $this;
     }
 
+    /**
+     * install: country (except neighbour), currency, locale
+     *
+     * @return self
+     */
     public function installCountryCurrencyLocale()
     {
         $em = $this->getEm();
@@ -596,6 +654,11 @@ class Geoname
         return $this;
     }
 
+    /**
+     * install: timezone
+     *
+     * @return self
+     */
     public function installTimezone()
     {
         $em = $this->getEm();
@@ -630,6 +693,11 @@ class Geoname
         return $this;
     }
 
+    /**
+     * install: country neighbour
+     *
+     * @return self
+     */
     public function installNeighbour()
     {
         $em = $this->getEm();
@@ -686,6 +754,11 @@ class Geoname
         return $this;
     }
 
+    /**
+     * install: place timezone [multi]
+     *
+     * @return self
+     */
     public function installPlaceTimezone()
     {
         $em = $this->getEm();
@@ -735,6 +808,11 @@ class Geoname
         return $this;
     }
 
+    /**
+     * install: place hierarchy [multi]
+     *
+     * @return self
+     */
     public function installHierarchy()
     {
         $em = $this->getEm();
@@ -764,6 +842,11 @@ class Geoname
         return $this;
     }
 
+    /**
+     * install: alt name [multi]
+     *
+     * @return self
+     */
     public function installAltName()
     {
         $em = $this->getEm();
@@ -815,6 +898,13 @@ class Geoname
         return $this;
     }
 
+    /**
+     * install: cleanup
+     *
+     * - remove source files and dir, except updates
+     *
+     * @return self
+     */
     public function installCleanup()
     {
         foreach (new \FilesystemIterator($this->getTmpDir()) as $dir) {
@@ -829,6 +919,11 @@ class Geoname
         return $this;
     }
 
+    /**
+     * update: place modification
+     *
+     * @return self
+     */
     public function updatePlaceModify()
     {
         $em = $this->getEm();
@@ -967,6 +1062,13 @@ class Geoname
         return $this;
     }
 
+    /**
+     * update: place delete
+     *
+     * BC: will not actually delete the place, only mark as deprecated
+     *
+     * @return self
+     */
     public function updatePlaceDelete()
     {
         $em = $this->getEm();
@@ -989,6 +1091,11 @@ class Geoname
         return $this;
     }
 
+    /**
+     * update: alt name modification
+     *
+     * @return self
+     */
     public function updateAltNameModify()
     {
         $em = $this->getEm();
@@ -1045,6 +1152,13 @@ class Geoname
         return $this;
     }
 
+    /**
+     * update: alt name delete
+     *
+     * BC: will not actually delete the alt name, only mark as deprecated
+     *
+     * @return self
+     */
     public function updateAltNameDelete()
     {
         $em = $this->getEm();
@@ -1067,6 +1181,14 @@ class Geoname
         return $this;
     }
 
+    /**
+     * update: cleanup
+     *
+     * - delete .done update files,
+     *   but preserve recent two days as downloaded mark
+     *
+     * @return self
+     */
     public function updateCleanup()
     {
         // geoname seems to update at UTC ~2am
