@@ -1562,7 +1562,24 @@ class Geoname
 
     public function updateAltNameDelete()
     {
-        throw new \Exception('not yet implemented');
+        $em = $this->getEm();
+        $altNameRepo =
+            $em->getRepository('Heartsentwined\Geoname\Entity\AltName');
+        foreach (FileSystemManager::fileIterator($this->getTmpDir() . '/update/altName/delete') as $source) {
+            if ($this->getLock($source) && $fh = fopen("$source.lock", 'r')) {
+                $this->getCli()->write($source, 'module');
+                while ($data = fgetcsv($fh, 0, "\t", "\0")) {
+                    list($id, /*name*/, /*comment*/) = $data;
+                    if ($altName = $altNameRepo->find((int)$id)) {
+                        $altName->setIsDeprecated(true);
+                    }
+                }
+                fclose($fh);
+                $this->markDone($source);
+            }
+        }
+        $em->flush();
+        return $this;
     }
 
     public function updateCleanup()

@@ -1531,6 +1531,39 @@ return;
 
     public function testUpdateAltNameDelete()
     {
-        $this->fail('not yet impelemented');
+        $altNameRepo =
+            $this->em->getRepository('Heartsentwined\Geoname\Entity\AltName');
+
+        $fooAltName = new Entity\AltName;
+        $fooAltName
+            ->setId(1)
+            ->setName('dummy')
+            ->setIsPreferred(false)
+            ->setIsShort(false)
+            ->setIsColloquial(false)
+            ->setIsHistoric(false);
+        $this->em->persist($fooAltName);
+        $barAltName = new Entity\AltName;
+        $barAltName
+            ->setId(2)
+            ->setName('dummy')
+            ->setIsPreferred(false)
+            ->setIsShort(false)
+            ->setIsColloquial(false)
+            ->setIsHistoric(false);
+        $this->em->persist($barAltName);
+        $this->em->flush();
+
+        mkdir('tmp/geoname/update/altName/delete', 0777, true);
+        $fh = fopen('tmp/geoname/update/altName/delete/1', 'a+');
+        fwrite($fh, "1\tfoo\tfoo comment\n");
+        fclose($fh);
+
+        $this->geoname->updateAltNameDelete();
+
+        $this->assertCount(2, $altNameRepo->findAll());
+
+        $this->assertTrue((bool)$fooAltName->getIsDeprecated());
+        $this->assertFalse((bool)$barAltName->getIsDeprecated());
     }
 }
