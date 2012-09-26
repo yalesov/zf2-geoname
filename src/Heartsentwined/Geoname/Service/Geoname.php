@@ -176,7 +176,8 @@ class Geoname
     public function getMeta()
     {
         $em = $this->getEm();
-        $repo = $em->getRepository('Heartsentwined\Geoname\Entity\Meta');
+        $repo =
+            $em->getRepository('Heartsentwined\Geoname\Entity\Meta');
         $meta = $repo->findOneBy(array());
         if (!$meta) {
             $meta = new Entity\Meta;
@@ -499,7 +500,8 @@ class Geoname
     public function installPlace()
     {
         $em = $this->getEm();
-        $featureRepo = $em->getRepository('Heartsentwined\Geoname\Entity\Feature');
+        $featureRepo =
+            $em->getRepository('Heartsentwined\Geoname\Entity\Feature');
 
         $sourceDir = $this->getTmpDir() . '/allCountries';
         foreach (FileSystemManager::fileIterator($sourceDir) as $source) {
@@ -531,7 +533,8 @@ class Geoname
                     $em->persist($place);
 
                     $featureCode = "$featureClass.$featureCode";
-                    if ($feature = $featureRepo->findByGeonameCode($featureCode)) {
+                    if ($feature = $featureRepo
+                            ->findByGeonameCode($featureCode)) {
                         $place->setFeature($feature);
                     }
                 }
@@ -555,8 +558,10 @@ class Geoname
     public function installCountryCurrencyLocale()
     {
         $em = $this->getEm();
-        $placeRepo = $em->getRepository('Heartsentwined\Geoname\Entity\Place');
-        $languageRepo = $em->getRepository('Heartsentwined\Geoname\Entity\Language');
+        $placeRepo =
+            $em->getRepository('Heartsentwined\Geoname\Entity\Place');
+        $languageRepo =
+            $em->getRepository('Heartsentwined\Geoname\Entity\Language');
         $currencyMap = array();
         $localeMap = array();
         $languageMap = array();
@@ -601,7 +606,8 @@ class Geoname
                     $country->setPlace($place);
                 }
                 if (isset($continentMap[$continentCode])) {
-                    if ($continent = $placeRepo->find((int)$continentMap[$continentCode])) {
+                    if ($continent = $placeRepo
+                            ->find((int)$continentMap[$continentCode])) {
                         $country->setContinent($continent);
                     }
                 }
@@ -617,7 +623,8 @@ class Geoname
                 }
                 $country->setCurrency($currency);
                 $count = 1;
-                foreach (array_unique(explode(',', $localeCodes)) as $localeCode) {
+                foreach (array_unique(explode(',', $localeCodes))
+                    as $localeCode) {
                     $localeCode = strtr($localeCode, '-', '_');
                     if (isset($localeMap[$localeCode])) {
                         $locale = $localeMap[$localeCode];
@@ -662,7 +669,8 @@ class Geoname
     public function installTimezone()
     {
         $em = $this->getEm();
-        $countryRepo = $em->getRepository('Heartsentwined\Geoname\Entity\Country');
+        $countryRepo =
+            $em->getRepository('Heartsentwined\Geoname\Entity\Country');
 
         $countryMap = array();
         $source = $this->getTmpDir() . '/timeZones.txt';
@@ -681,7 +689,8 @@ class Geoname
                     ->setOffsetJul($offsetJul);
                 if (isset($countryMap[$countryCode])) {
                     $timezone->setCountry($countryMap[$countryCode]);
-                } elseif ($country = $countryRepo->findOneBy(array('iso2' => $countryCode))) {
+                } elseif ($country = $countryRepo
+                    ->findOneBy(array('iso2' => $countryCode))) {
                     $countryMap[$countryCode] = $country;
                     $timezone->setCountry($country);
                 }
@@ -701,7 +710,8 @@ class Geoname
     public function installNeighbour()
     {
         $em = $this->getEm();
-        $countryRepo = $em->getRepository('Heartsentwined\Geoname\Entity\Country');
+        $countryRepo =
+            $em->getRepository('Heartsentwined\Geoname\Entity\Country');
 
         $countryMap = array();
         $source = $this->getTmpDir() . '/countryInfo.txt';
@@ -718,7 +728,8 @@ class Geoname
                     $data;
                 if (isset($countryMap[$iso2])) {
                     $country = $countryMap[$iso2];
-                } elseif ($country = $countryRepo->findOneBy(array('iso2' => $iso2))) {
+                } elseif ($country = $countryRepo
+                    ->findOneBy(array('iso2' => $iso2))) {
                     $countryMap[$iso2] = $country;
                 } else {
                     continue;
@@ -733,7 +744,8 @@ class Geoname
                     }
                     if (isset($countryMap[$neighbourIso2])) {
                         $neighbour = $countryMap[$neighbourIso2];
-                    } elseif ($neighbour = $countryRepo->findOneBy(array('iso2' => $neighbourIso2))) {
+                    } elseif ($neighbour = $countryRepo
+                        ->findOneBy(array('iso2' => $neighbourIso2))) {
                         $countryMap[$neighbourIso2] = $neighbour;
                     } else {
                         continue;
@@ -762,9 +774,12 @@ class Geoname
     public function installPlaceTimezone()
     {
         $em = $this->getEm();
-        $placeRepo = $em->getRepository('Heartsentwined\Geoname\Entity\Place');
-        $timezoneRepo = $em->getRepository('Heartsentwined\Geoname\Entity\Timezone');
-        $countryRepo = $em->getRepository('Heartsentwined\Geoname\Entity\Country');
+        $placeRepo =
+            $em->getRepository('Heartsentwined\Geoname\Entity\Place');
+        $timezoneRepo =
+            $em->getRepository('Heartsentwined\Geoname\Entity\Timezone');
+        $countryRepo =
+            $em->getRepository('Heartsentwined\Geoname\Entity\Country');
 
         $countryMap = array();
         $sourceDir = $this->getTmpDir() . '/allCountries';
@@ -773,9 +788,10 @@ class Geoname
                 $this->getCli()->write($source, 'module');
                 while ($data = fgetcsv($fh, 0, "\t", "\0")) {
                     list($id, /*$name*/, /*ascii name*/, /*alt name*/,
-                        /*$latitude*/, /*$longitude*/, /*$featureClass*/, /*$featureCode*/,
-                        $countryCode, /*alt country code*/,
-                        /*$admin1Code*/, /*$admin2Code*/, /*$admin3Code*/, /*$admin4Code*/,
+                        /*$latitude*/, /*$longitude*/,
+                        /*$featureClass*/, /*$featureCode*/,
+                        $countryCode, /*alt country code*/, /*$admin1Code*/,
+                        /*$admin2Code*/, /*$admin3Code*/, /*$admin4Code*/,
                         /*$population*/, /*$elevation*/, /*$digiEleModel*/,
                         $timezoneCode, /*modification date*/) =
                         $data;
@@ -816,7 +832,8 @@ class Geoname
     public function installHierarchy()
     {
         $em = $this->getEm();
-        $placeRepo = $em->getRepository('Heartsentwined\Geoname\Entity\Place');
+        $placeRepo =
+            $em->getRepository('Heartsentwined\Geoname\Entity\Place');
 
         $sourceDir = $this->getTmpDir() . '/hierarchy';
         foreach (FileSystemManager::fileIterator($sourceDir) as $source) {
@@ -850,8 +867,10 @@ class Geoname
     public function installAltName()
     {
         $em = $this->getEm();
-        $placeRepo = $em->getRepository('Heartsentwined\Geoname\Entity\Place');
-        $languageRepo = $em->getRepository('Heartsentwined\Geoname\Entity\Language');
+        $placeRepo =
+            $em->getRepository('Heartsentwined\Geoname\Entity\Place');
+        $languageRepo =
+            $em->getRepository('Heartsentwined\Geoname\Entity\Language');
 
         $languageMap = array();
         $sourceDir = $this->getTmpDir() . '/alternateNames';
@@ -879,7 +898,8 @@ class Geoname
 
                     if (isset($languageMap[$languageCode])) {
                         $altName->setLanguage($languageMap[$languageCode]);
-                    } elseif ($language = $languageRepo->findLanguage($languageCode)) {
+                    } elseif ($language = $languageRepo
+                        ->findLanguage($languageCode)) {
                         $altName->setLanguage($language);
                         $languageMap[$languageCode] = $language;
                     } else {
@@ -939,7 +959,8 @@ class Geoname
         $countryMap = array();
         $featureMap = array();
         $placeMap = array();
-        foreach (FileSystemManager::fileIterator($this->getTmpDir() . '/update/place/modification') as $source) {
+        foreach (FileSystemManager::fileIterator(
+            $this->getTmpDir() . '/update/place/modification') as $source) {
             if ($this->getLock($source) && $fh = fopen("$source.lock", 'r')) {
                 $this->getCli()->write($source, 'module');
                 while ($data = fgetcsv($fh, 0, "\t", "\0")) {
@@ -973,7 +994,8 @@ class Geoname
                     $fullFeatureCode = "$featureClass.$featureCode";
                     if (isset($featureMap[$fullFeatureCode])) {
                         $feature = $featureMap[$fullFeatureCode];
-                    } elseif (!$feature = $featureRepo->findByGeonameCode($fullFeatureCode)) {
+                    } elseif (!$feature = $featureRepo
+                        ->findByGeonameCode($fullFeatureCode)) {
                         $feature = new Entity\Feature;
                         $em->persist($feature);
                         $feature->setCode($featureCode);
@@ -995,7 +1017,8 @@ class Geoname
                             $em->persist($timezone);
                             $timezone->setCode($timezoneCode);
                             if (isset($countryMap[$countryCode])) {
-                                $timezone->setCountry($countryMap[$countryCode]);
+                                $timezone
+                                    ->setCountry($countryMap[$countryCode]);
                             } elseif ($country = $countryRepo->findOneBy(
                                 array('iso2' => $countryCode))) {
                                 $timezone->setCountry($country);
@@ -1010,7 +1033,8 @@ class Geoname
                                     // dependency for the next entity
 
                     if ($featureClass !== 'A'
-                        || !in_array($featureCode, array('ADM1', 'ADM2', 'ADM3', 'ADM4'))) {
+                        || !in_array($featureCode,
+                            array('ADM1', 'ADM2', 'ADM3', 'ADM4'))) {
                         continue;
                     }
 
@@ -1074,7 +1098,8 @@ class Geoname
         $em = $this->getEm();
         $placeRepo =
             $em->getRepository('Heartsentwined\Geoname\Entity\Place');
-        foreach (FileSystemManager::fileIterator($this->getTmpDir() . '/update/place/delete') as $source) {
+        foreach (FileSystemManager::fileIterator(
+            $this->getTmpDir() . '/update/place/delete') as $source) {
             if ($this->getLock($source) && $fh = fopen("$source.lock", 'r')) {
                 $this->getCli()->write($source, 'module');
                 while ($data = fgetcsv($fh, 0, "\t", "\0")) {
@@ -1108,7 +1133,8 @@ class Geoname
 
         $placeMap = array();
         $languageMap = array();
-        foreach (FileSystemManager::fileIterator($this->getTmpDir() . '/update/altName/modification') as $source) {
+        foreach (FileSystemManager::fileIterator(
+            $this->getTmpDir() . '/update/altName/modification') as $source) {
             if ($this->getLock($source) && $fh = fopen("$source.lock", 'r')) {
                 $this->getCli()->write($source, 'module');
                 while ($data = fgetcsv($fh, 0, "\t", "\0")) {
@@ -1137,7 +1163,8 @@ class Geoname
 
                     if (isset($languageMap[$languageCode])) {
                         $altName->setLanguage($languageMap[$languageCode]);
-                    } elseif ($language = $languageRepo->findLanguage($languageCode)) {
+                    } elseif ($language = $languageRepo
+                        ->findLanguage($languageCode)) {
                         $altName->setLanguage($language);
                         $languageMap[$languageCode] = $language;
                     } else {
@@ -1164,7 +1191,8 @@ class Geoname
         $em = $this->getEm();
         $altNameRepo =
             $em->getRepository('Heartsentwined\Geoname\Entity\AltName');
-        foreach (FileSystemManager::fileIterator($this->getTmpDir() . '/update/altName/delete') as $source) {
+        foreach (FileSystemManager::fileIterator(
+            $this->getTmpDir() . '/update/altName/delete') as $source) {
             if ($this->getLock($source) && $fh = fopen("$source.lock", 'r')) {
                 $this->getCli()->write($source, 'module');
                 while ($data = fgetcsv($fh, 0, "\t", "\0")) {
@@ -1217,7 +1245,8 @@ class Geoname
             $beforeDate = $before->format('Y-m-d');
         }
 
-        foreach (FileSystemManager::fileIterator($this->getTmpDir() . '/update') as $source) {
+        foreach (FileSystemManager::fileIterator(
+            $this->getTmpDir() . '/update') as $source) {
             if (strpos($source, '.done')
                 && !strpos($source, $latestDate)
                 && !strpos($source, $beforeDate)) {
