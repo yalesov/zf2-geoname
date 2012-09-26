@@ -15,7 +15,7 @@ This module will install a self-updating local copy of the Geonames (places) dat
 ```json
 {
     "require": {
-        "heartsentwined/zf2-geoname": "2.*"
+        "heartsentwined/zf2-geoname": "3.*"
     }
 }
 ```
@@ -43,13 +43,15 @@ How frequent should `cron` be? The recommended setup is every 15 minutes, which 
 
 At present (18 Sep 2012), it will take 820 cron jobs to install the database. At 15-minute intervals, that would take ~8.5 days to install the database. As for the updates, only 1 cron job per day is needed. However, setting more than one per day is highly recommended to provide redundancy - just in case the geonames server is temporarily unreachable, for example.
 
-You can also adjust to a less frequent cron after install. The `status` field of the `Meta` entity, or the `he_geoname_meta` table, will be `install` during installation, and `update` afterwards.
+You can also adjust to a less frequent cron after install. The `status` field of the `Meta` entity, or the `he_geoname_meta` table, will be `Heartsentwined\Geoname\Repository\Meta::STATUS_INSTALL_*` during installation, and `Heartsentwined\Geoname\Repository\Meta::STATUS_UPDATE` afterwards.
 
 # Usage
 
 ## Database sync
 
 Just follow the installation instructions. Geoname module will install and update its database in your cron jobs.
+
+Note: when the sources indicate a "delete", Geoname module will not actually delete the corresponding record from your database; it will only mark it as deprecated (by setting the `isDeprecated` field to `true` in the entities `Place` and `AltName`). This is to ensure that you can rely on the primary IDs set up by Geoname module in your ZF2 app.
 
 ## Querying the database
 
