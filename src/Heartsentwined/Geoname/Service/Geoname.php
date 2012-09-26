@@ -98,9 +98,9 @@ class Geoname
         $this->downloadUpdate();
 
         $meta = $this->getMeta();
-        if ($meta->getLock()) return $this;
+        if ($meta->getIsLocked()) return $this;
 
-        $meta->setLock(true);
+        $meta->setIsLocked(true);
         switch ($meta->getStatus()) {
             case Repository\Meta::STATUS_INSTALL_DOWNLOAD:
                 $this->installDownload();
@@ -163,7 +163,7 @@ class Geoname
                     ->updateCleanup();
                 break;
         }
-        $meta->setLock(false);
+        $meta->setIsLocked(false);
 
         return $this;
     }

@@ -10,6 +10,6 @@ Heartsentwined\Geoname\Entity\Meta:
                 strategy: AUTO
         status:
             type: integer
-        lock:
+        isLocked:
             type: boolean
             nullable: true

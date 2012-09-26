@@ -20,15 +20,15 @@ class Meta
     private $status;
 
     /**
-     * @var boolean $lock
+     * @var boolean $isLocked
      */
-    private $lock;
+    private $isLocked;
 
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -44,14 +44,14 @@ class Meta
     public function setStatus($status)
     {
         $this->status = $status;
-    
+
         return $this;
     }
 
     /**
      * Get status
      *
-     * @return integer 
+     * @return integer
      */
     public function getStatus()
     {
@@ -59,25 +59,25 @@ class Meta
     }
 
     /**
-     * Set lock
+     * Set isLocked
      *
-     * @param boolean $lock
+     * @param boolean $isLocked
      * @return Meta
      */
-    public function setLock($lock)
+    public function setIsLocked($isLocked)
     {
-        $this->lock = $lock;
-    
+        $this->isLocked = $isLocked;
+
         return $this;
     }
 
     /**
-     * Get lock
+     * Get isLocked
      *
-     * @return boolean 
+     * @return boolean
      */
-    public function getLock()
+    public function getIsLocked()
     {
-        return $this->lock;
+        return $this->isLocked;
     }
 }

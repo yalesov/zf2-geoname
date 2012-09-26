@@ -153,7 +153,7 @@ class GeonameTest extends DoctrineTestcase
             $this->em->persist($meta);
             $meta
                 ->setStatus($curStatus)
-                ->setLock(false);
+                ->setIsLocked(false);
             $this->em->flush();
 
             $geoname = $this->getMock(
@@ -196,7 +196,7 @@ class GeonameTest extends DoctrineTestcase
             } else {
                 $this->assertSame($curStatus, $meta->getStatus());
             }
-            $this->assertFalse($meta->getLock());
+            $this->assertFalse($meta->getIsLocked());
 
             $metaRepo = $this->em
                 ->getRepository('Heartsentwined\Geoname\Entity\Meta');
