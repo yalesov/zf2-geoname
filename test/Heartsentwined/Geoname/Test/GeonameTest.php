@@ -1566,4 +1566,41 @@ return;
         $this->assertTrue((bool)$fooAltName->getIsDeprecated());
         $this->assertFalse((bool)$barAltName->getIsDeprecated());
     }
+
+    public function testUpdateCleanup()
+    {
+        $dt = new \DateTime;
+        $today = $dt->format('Y-m-d');
+        $dt->setTimestamp(time()-3600*22);
+        $yesterday = $dt->format('Y-m-d');
+        $dt->setTimestamp(time()-3600*(22+24));
+        $before = $dt->format('Y-m-d');
+
+        $testDirs = array(
+            'tmp/geoname/update/foo',
+            'tmp/geoname/update/foo/foo',
+            'tmp/geoname/update/bar'
+        );
+
+        foreach ($testDirs as $dir) {
+            mkdir($dir, 0777, true);
+            touch("$dir/test$today");
+            touch("$dir/test$today.done");
+            touch("$dir/test$yesterday");
+            touch("$dir/test$yesterday.done");
+            touch("$dir/test$before");
+            touch("$dir/test$before.done");
+        }
+
+        $this->geoname->updateCleanup();
+
+        foreach ($testDirs as $dir) {
+            $this->assertTrue(file_exists("$dir/test$today"));
+            $this->assertTrue(file_exists("$dir/test$today.done"));
+            $this->assertTrue(file_exists("$dir/test$yesterday"));
+            $this->assertTrue(file_exists("$dir/test$yesterday.done"));
+            $this->assertTrue(file_exists("$dir/test$before"));
+            $this->assertFalse(file_exists("$dir/test$before.done"));
+        }
+    }
 }

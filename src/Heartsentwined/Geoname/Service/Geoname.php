@@ -1584,7 +1584,21 @@ class Geoname
 
     public function updateCleanup()
     {
-        throw new \Exception('not yet implemented');
+        $dt = new \DateTime;
+        $today = $dt->format('Y-m-d');
+        // geoname seems to update at ~2am
+        $dt->setTimestamp(time()-3600*22);
+        $yesterday = $dt->format('Y-m-d');
+
+        foreach (FileSystemManager::fileIterator($this->getTmpDir() . '/update') as $source) {
+            if (strpos($source, '.done')
+                && !strpos($source, $today)
+                && !strpos($source, $yesterday)) {
+                unlink($source);
+            }
+        }
+
+        return $this;
     }
 
     /**
