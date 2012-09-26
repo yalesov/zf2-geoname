@@ -1537,7 +1537,6 @@ class Geoname
 
                     if (isset($placeMap[$placeId])) {
                         $altName->setPlace($placeMap[$placeId]);
-                        $em->persist($placeMap[$placeId]); // ?! XXX
                     } elseif ($place = $placeRepo->find((int)$placeId)) {
                         $altName->setPlace($place);
                         $placeMap[$placeId] = $place;
