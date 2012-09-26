@@ -319,7 +319,7 @@ class Geoname
      */
     public function resetFiles($dir)
     {
-        ArgValidator::assert($file, 'string');
+        ArgValidator::assert($dir, 'string');
         foreach (FileSystemManager::fileIterator($dir) as $file) {
             if (strpos($file, '.done') || strpos($file, '.lock')) {
                 rename($file, substr($file, 0, strlen($file)-5));
