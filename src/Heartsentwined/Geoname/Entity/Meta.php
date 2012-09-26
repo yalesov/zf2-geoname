@@ -28,7 +28,7 @@ class Meta
     /**
      * Get id
      *
-     * @return integer
+     * @return integer 
      */
     public function getId()
     {
@@ -44,14 +44,14 @@ class Meta
     public function setStatus($status)
     {
         $this->status = $status;
-
+    
         return $this;
     }
 
     /**
      * Get status
      *
-     * @return integer
+     * @return integer 
      */
     public function getStatus()
     {
@@ -67,14 +67,14 @@ class Meta
     public function setIsLocked($isLocked)
     {
         $this->isLocked = $isLocked;
-
+    
         return $this;
     }
 
     /**
      * Get isLocked
      *
-     * @return boolean
+     * @return boolean 
      */
     public function getIsLocked()
     {
