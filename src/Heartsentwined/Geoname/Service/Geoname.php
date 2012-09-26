@@ -1608,6 +1608,7 @@ class Geoname
      */
     public function update()
     {
+        return;
         $cli = $this->getCli();
         $tmpDir = $this->getTmpDir();
         $em = $this->getEm();
