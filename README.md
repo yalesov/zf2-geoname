@@ -36,7 +36,7 @@ $ vendor/bin/doctrine-module orm:schema-tool:update --force
 
 Copy `config/geoname.local.php.dist` to `(app root)/config/autoload/geoname.local.php`, and modify the settings.
 
-- `tmpDir`: temporary directory for storing geonames database source files.
+- `tmpDir`: temporary directory for storing geonames database source files. (Make sure it is script-writable.)
 - `cron`: (cron expression) how frequently Geoname should be run.
 
 How frequent should `cron` be? The recommended setup is every 15 minutes, which is also the default. However, you can make your own adjustments:
