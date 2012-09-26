@@ -231,8 +231,9 @@ class Geoname
         $em = $this->getEm();
         $tmpDir = $this->getTmpDir();
 
-        $now = \DateTime::createFromFormat('U', strtotime('-1 day'));
-        $date = $now->format('Y-m-d');
+        // geoname seems to update at ~2am
+        $yesterday = \DateTime::createFromFormat('U', time()-3600*22);
+        $date = $yesterday->format('Y-m-d');
 
         foreach (array(
             "$tmpDir/update/place/modification",

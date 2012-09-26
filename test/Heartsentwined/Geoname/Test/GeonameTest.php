@@ -245,8 +245,8 @@ class GeonameTest extends DoctrineTestcase
 
     public function testDownloadUpdate()
     {
-        $now = \DateTime::createFromFormat('U', strtotime('-1 day'));
-        $date = $now->format('Y-m-d');
+        $yesterday = \DateTime::createFromFormat('U', time()-3600*22);
+        $date = $yesterday->format('Y-m-d');
         foreach(array(
             "http://download.geonames.org/export/dump/modifications-$date.txt",
             "http://download.geonames.org/export/dump/deletes-$date.txt",
