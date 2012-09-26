@@ -1,5 +1,5 @@
 <?php
-namespace Heartsentwined\Geoname\Test;
+namespace Heartsentwined\Geoname\Test\Service;
 
 use Heartsentwined\FileSystemManager\FileSystemManager;
 use Heartsentwined\Geoname\Entity;
@@ -12,7 +12,7 @@ class GeonameTest extends DoctrineTestcase
     public function setUp()
     {
         $this
-            ->setBootstrap(__DIR__ . '/../../../../bootstrap.php')
+            ->setBootstrap(__DIR__ . '/../../../../../bootstrap.php')
             ->setEmAlias('doctrine.entitymanager.orm_default')
             ->setTmpDir('tmp');
         parent::setUp();
