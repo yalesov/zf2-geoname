@@ -2,6 +2,8 @@
 namespace Heartsentwined\Geoname\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Heartsentwined\ArgValidator\ArgValidator;
+use Heartsentwined\Geoname\Exception;
 
 /**
  * Feature
@@ -20,7 +22,18 @@ class Feature extends EntityRepository
      */
     public function findByGeonameCode($code)
     {
-        list($parentCode, $featureCode) = explode('.', $code);
+        ArgValidator::assert($code, 'string');
+        $codeParts = explode('.', $code);
+        if (count($codeParts) !== 2) {
+            throw new Exception\InvalidArgumentException(sprintf(
+                '$code should be in the format '
+                . '[feature class].[feature code], e.g. "A.ADM1". '
+                . '"%s" given',
+                $code
+            ));
+        }
+
+        list($parentCode, $featureCode) = $codeParts;
 
         $dqb = $this->_em->createQueryBuilder();
         $dqb->select(array('f'))
