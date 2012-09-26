@@ -245,8 +245,19 @@ class GeonameTest extends DoctrineTestcase
 
     public function testDownloadUpdate()
     {
-        $yesterday = \DateTime::createFromFormat('U', time()-3600*22);
-        $date = $yesterday->format('Y-m-d');
+        $latest = \DateTime::createFromFormat('U', strtotime('-1 day'));
+        $cutoff = clone $latest;
+        $cutoff->setTime(2, 0);
+        if ($latest > $cutoff) {
+            $date = $latest->format('Y-m-d');
+        } else {
+            $latest->setDate(
+                $latest->format('Y'),
+                $latest->format('n'),
+                $latest->format('j')-1);
+            $date = $latest->format('Y-m-d');
+        }
+
         foreach(array(
             "http://download.geonames.org/export/dump/modifications-$date.txt",
             "http://download.geonames.org/export/dump/deletes-$date.txt",
@@ -1569,12 +1580,42 @@ return;
 
     public function testUpdateCleanup()
     {
-        $dt = new \DateTime;
-        $today = $dt->format('Y-m-d');
-        $dt->setTimestamp(time()-3600*22);
-        $yesterday = $dt->format('Y-m-d');
-        $dt->setTimestamp(time()-3600*(22+24));
-        $before = $dt->format('Y-m-d');
+        $latest = \DateTime::createFromFormat('U', strtotime('-1 day'));
+        $cutoff = clone $latest;
+        $cutoff->setTime(2, 0);
+        if ($latest > $cutoff) {
+            $latestDate = $latest->format('Y-m-d');
+            $before = clone $latest;
+            $before->setDate(
+                $before->format('Y'),
+                $before->format('n'),
+                $before->format('j')-1);
+            $beforeDate = $before->format('Y-m-d');
+            $beyond = clone $latest;
+            $beyond->setDate(
+                $beyond->format('Y'),
+                $beyond->format('n'),
+                $beyond->format('j')-2);
+            $beyondDate = $beyond->format('Y-m-d');
+        } else {
+            $latest->setDate(
+                $latest->format('Y'),
+                $latest->format('n'),
+                $latest->format('j')-1);
+            $latestDate = $latest->format('Y-m-d');
+            $before = clone $latest;
+            $before->setDate(
+                $before->format('Y'),
+                $before->format('n'),
+                $before->format('j')-1);
+            $beforeDate = $before->format('Y-m-d');
+            $beyond = clone $latest;
+            $beyond->setDate(
+                $beyond->format('Y'),
+                $beyond->format('n'),
+                $beyond->format('j')-2);
+            $beyondDate = $beyond->format('Y-m-d');
+        }
 
         $testDirs = array(
             'tmp/geoname/update/foo',
@@ -1584,23 +1625,23 @@ return;
 
         foreach ($testDirs as $dir) {
             mkdir($dir, 0777, true);
-            touch("$dir/test$today");
-            touch("$dir/test$today.done");
-            touch("$dir/test$yesterday");
-            touch("$dir/test$yesterday.done");
-            touch("$dir/test$before");
-            touch("$dir/test$before.done");
+            touch("$dir/test$latestDate");
+            touch("$dir/test$latestDate.done");
+            touch("$dir/test$beforeDate");
+            touch("$dir/test$beforeDate.done");
+            touch("$dir/test$beyondDate");
+            touch("$dir/test$beyondDate.done");
         }
 
         $this->geoname->updateCleanup();
 
         foreach ($testDirs as $dir) {
-            $this->assertTrue(file_exists("$dir/test$today"));
-            $this->assertTrue(file_exists("$dir/test$today.done"));
-            $this->assertTrue(file_exists("$dir/test$yesterday"));
-            $this->assertTrue(file_exists("$dir/test$yesterday.done"));
-            $this->assertTrue(file_exists("$dir/test$before"));
-            $this->assertFalse(file_exists("$dir/test$before.done"));
+            $this->assertTrue(file_exists("$dir/test$latestDate"));
+            $this->assertTrue(file_exists("$dir/test$latestDate.done"));
+            $this->assertTrue(file_exists("$dir/test$beforeDate"));
+            $this->assertTrue(file_exists("$dir/test$beforeDate.done"));
+            $this->assertTrue(file_exists("$dir/test$beyondDate"));
+            $this->assertFalse(file_exists("$dir/test$beyondDate.done"));
         }
     }
 }
