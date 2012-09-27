@@ -2,6 +2,7 @@
 namespace Heartsentwined\Geoname\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Heartsentwined\ArgValidator\ArgValidator;
 
 /**
  * Language
@@ -19,6 +20,8 @@ class Language extends EntityRepository
      */
     public function findLanguage($code)
     {
+        ArgValidator::assert($code, 'string');
+
         $dqb = $this->_em->createQueryBuilder();
         $dqb->select('l')
             ->from('Heartsentwined\Geoname\Entity\Language', 'l')

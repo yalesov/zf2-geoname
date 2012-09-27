@@ -2,6 +2,7 @@
 namespace Heartsentwined\Geoname\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Heartsentwined\ArgValidator\ArgValidator;
 
 /**
  * Place
@@ -26,6 +27,16 @@ class Place extends EntityRepository
      */
     public function findPlace(array $criteria = array())
     {
+        ArgValidator::arrayAssert($criteria, array(
+            'countryCode'   => array('string', 'notSet'),
+            'admin1Code'    => array('string', 'notSet'),
+            'admin2Code'    => array('string', 'notSet'),
+            'admin3Code'    => array('string', 'notSet'),
+            'admin4Code'    => array('string', 'notSet'),
+            'featureClass'  => array('string', 'notSet'),
+            'featureCode'   => array('string', 'notSet'),
+        ));
+
         $dqb = $this->_em->createQueryBuilder();
         $dqb->select(array('p'))
             ->from('Heartsentwined\Geoname\Entity\Place', 'p');
