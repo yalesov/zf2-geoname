@@ -1074,8 +1074,8 @@ class Geoname
                         $criteria['featureCode'] = $parentFeatureCode;
                         $criteria['featureClass'] = 'A';
                     }
-                    if ($parent = $placeRepo->findPlace($criteria)) {
-                        $place->setParent($parent);
+                    if ($places = $placeRepo->findPlace($criteria, 1)) {
+                        $place->setParent(current($places));
                     }
                 }
                 fclose($fh);
