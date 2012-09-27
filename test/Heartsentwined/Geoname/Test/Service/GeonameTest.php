@@ -85,6 +85,7 @@ class GeonameTest extends DoctrineTestcase
             $meta->getStatus());
         $this->assertCount(1, $metaRepo->findAll());
     }
+
     public function testRun()
     {
         $stageMap = array(
@@ -1052,6 +1053,7 @@ return;
             Repository\Meta::STATUS_INSTALL_ALT_NAME,
             $this->geoname->getMeta()->getStatus());
     }
+
     public function testInstallAltName()
     {
         $altNameRepo =
