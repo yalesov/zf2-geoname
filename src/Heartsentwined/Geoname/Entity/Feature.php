@@ -2,8 +2,6 @@
 
 namespace Heartsentwined\Geoname\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * Heartsentwined\Geoname\Entity\Feature
  */
@@ -52,11 +50,11 @@ class Feature
         $this->children = new \Doctrine\Common\Collections\ArrayCollection();
         $this->places = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -66,20 +64,20 @@ class Feature
     /**
      * Set code
      *
-     * @param string $code
+     * @param  string  $code
      * @return Feature
      */
     public function setCode($code)
     {
         $this->code = $code;
-    
+
         return $this;
     }
 
     /**
      * Get code
      *
-     * @return string 
+     * @return string
      */
     public function getCode()
     {
@@ -89,20 +87,20 @@ class Feature
     /**
      * Set description
      *
-     * @param string $description
+     * @param  string  $description
      * @return Feature
      */
     public function setDescription($description)
     {
         $this->description = $description;
-    
+
         return $this;
     }
 
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -112,20 +110,20 @@ class Feature
     /**
      * Set comment
      *
-     * @param string $comment
+     * @param  string  $comment
      * @return Feature
      */
     public function setComment($comment)
     {
         $this->comment = $comment;
-    
+
         return $this;
     }
 
     /**
      * Get comment
      *
-     * @return string 
+     * @return string
      */
     public function getComment()
     {
@@ -135,13 +133,13 @@ class Feature
     /**
      * Add children
      *
-     * @param Heartsentwined\Geoname\Entity\Feature $children
+     * @param  Heartsentwined\Geoname\Entity\Feature $children
      * @return Feature
      */
     public function addChildren(\Heartsentwined\Geoname\Entity\Feature $children)
     {
         $this->children[] = $children;
-    
+
         return $this;
     }
 
@@ -158,7 +156,7 @@ class Feature
     /**
      * Get children
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getChildren()
     {
@@ -168,13 +166,13 @@ class Feature
     /**
      * Add places
      *
-     * @param Heartsentwined\Geoname\Entity\Place $places
+     * @param  Heartsentwined\Geoname\Entity\Place $places
      * @return Feature
      */
     public function addPlace(\Heartsentwined\Geoname\Entity\Place $places)
     {
         $this->places[] = $places;
-    
+
         return $this;
     }
 
@@ -191,7 +189,7 @@ class Feature
     /**
      * Get places
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getPlaces()
     {
@@ -201,20 +199,20 @@ class Feature
     /**
      * Set parent
      *
-     * @param Heartsentwined\Geoname\Entity\Feature $parent
+     * @param  Heartsentwined\Geoname\Entity\Feature $parent
      * @return Feature
      */
     public function setParent(\Heartsentwined\Geoname\Entity\Feature $parent = null)
     {
         $this->parent = $parent;
-    
+
         return $this;
     }
 
     /**
      * Get parent
      *
-     * @return Heartsentwined\Geoname\Entity\Feature 
+     * @return Heartsentwined\Geoname\Entity\Feature
      */
     public function getParent()
     {

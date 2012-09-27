@@ -2,8 +2,6 @@
 
 namespace Heartsentwined\Geoname\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * Heartsentwined\Geoname\Entity\Locale
  */
@@ -24,11 +22,10 @@ class Locale
      */
     private $language;
 
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -38,20 +35,20 @@ class Locale
     /**
      * Set code
      *
-     * @param string $code
+     * @param  string $code
      * @return Locale
      */
     public function setCode($code)
     {
         $this->code = $code;
-    
+
         return $this;
     }
 
     /**
      * Get code
      *
-     * @return string 
+     * @return string
      */
     public function getCode()
     {
@@ -61,20 +58,20 @@ class Locale
     /**
      * Set language
      *
-     * @param Heartsentwined\Geoname\Entity\Language $language
+     * @param  Heartsentwined\Geoname\Entity\Language $language
      * @return Locale
      */
     public function setLanguage(\Heartsentwined\Geoname\Entity\Language $language = null)
     {
         $this->language = $language;
-    
+
         return $this;
     }
 
     /**
      * Get language
      *
-     * @return Heartsentwined\Geoname\Entity\Language 
+     * @return Heartsentwined\Geoname\Entity\Language
      */
     public function getLanguage()
     {

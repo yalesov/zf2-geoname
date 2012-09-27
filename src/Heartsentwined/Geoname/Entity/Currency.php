@@ -2,8 +2,6 @@
 
 namespace Heartsentwined\Geoname\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * Heartsentwined\Geoname\Entity\Currency
  */
@@ -36,11 +34,11 @@ class Currency
     {
         $this->countries = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -50,20 +48,20 @@ class Currency
     /**
      * Set code
      *
-     * @param string $code
+     * @param  string   $code
      * @return Currency
      */
     public function setCode($code)
     {
         $this->code = $code;
-    
+
         return $this;
     }
 
     /**
      * Get code
      *
-     * @return string 
+     * @return string
      */
     public function getCode()
     {
@@ -73,20 +71,20 @@ class Currency
     /**
      * Set name
      *
-     * @param string $name
+     * @param  string   $name
      * @return Currency
      */
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -96,13 +94,13 @@ class Currency
     /**
      * Add countries
      *
-     * @param Heartsentwined\Geoname\Entity\Country $countries
+     * @param  Heartsentwined\Geoname\Entity\Country $countries
      * @return Currency
      */
     public function addCountrie(\Heartsentwined\Geoname\Entity\Country $countries)
     {
         $this->countries[] = $countries;
-    
+
         return $this;
     }
 
@@ -119,7 +117,7 @@ class Currency
     /**
      * Get countries
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getCountries()
     {

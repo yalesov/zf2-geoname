@@ -46,6 +46,7 @@ class GeonameTest extends DoctrineTestcase
                     'color'     => 'GREEN',
                 ),
             ));
+
         return $cli;
     }
 
@@ -184,7 +185,7 @@ class GeonameTest extends DoctrineTestcase
             $geoname
                 ->expects($this->once())
                 ->method('downloadUpdate');
-            foreach ((array)$data['method'] as $method) {
+            foreach ((array) $data['method'] as $method) {
                 $geoname
                     ->expects($this->once())
                     ->method($method)
@@ -1487,8 +1488,8 @@ return;
 
         $this->assertCount(2, $placeRepo->findAll());
 
-        $this->assertTrue((bool)$foo->getIsDeprecated());
-        $this->assertFalse((bool)$bar->getIsDeprecated());
+        $this->assertTrue((bool) $foo->getIsDeprecated());
+        $this->assertFalse((bool) $bar->getIsDeprecated());
     }
 
     public function testUpdateAltNameModify()
@@ -1576,8 +1577,8 @@ return;
 
         $this->assertCount(2, $altNameRepo->findAll());
 
-        $this->assertTrue((bool)$fooAltName->getIsDeprecated());
-        $this->assertFalse((bool)$barAltName->getIsDeprecated());
+        $this->assertTrue((bool) $fooAltName->getIsDeprecated());
+        $this->assertFalse((bool) $barAltName->getIsDeprecated());
     }
 
     public function testUpdateCleanup()

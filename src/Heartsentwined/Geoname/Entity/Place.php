@@ -2,8 +2,6 @@
 
 namespace Heartsentwined\Geoname\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * Heartsentwined\Geoname\Entity\Place
  */
@@ -118,24 +116,24 @@ class Place
         $this->altNames = new \Doctrine\Common\Collections\ArrayCollection();
         $this->countries = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Set id
      *
-     * @param integer $id
+     * @param  integer $id
      * @return Place
      */
     public function setId($id)
     {
         $this->id = $id;
-    
+
         return $this;
     }
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -145,20 +143,20 @@ class Place
     /**
      * Set name
      *
-     * @param string $name
+     * @param  string $name
      * @return Place
      */
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -168,20 +166,20 @@ class Place
     /**
      * Set latitude
      *
-     * @param float $latitude
+     * @param  float $latitude
      * @return Place
      */
     public function setLatitude($latitude)
     {
         $this->latitude = $latitude;
-    
+
         return $this;
     }
 
     /**
      * Get latitude
      *
-     * @return float 
+     * @return float
      */
     public function getLatitude()
     {
@@ -191,20 +189,20 @@ class Place
     /**
      * Set longitude
      *
-     * @param float $longitude
+     * @param  float $longitude
      * @return Place
      */
     public function setLongitude($longitude)
     {
         $this->longitude = $longitude;
-    
+
         return $this;
     }
 
     /**
      * Get longitude
      *
-     * @return float 
+     * @return float
      */
     public function getLongitude()
     {
@@ -214,20 +212,20 @@ class Place
     /**
      * Set elevation
      *
-     * @param integer $elevation
+     * @param  integer $elevation
      * @return Place
      */
     public function setElevation($elevation)
     {
         $this->elevation = $elevation;
-    
+
         return $this;
     }
 
     /**
      * Get elevation
      *
-     * @return integer 
+     * @return integer
      */
     public function getElevation()
     {
@@ -237,20 +235,20 @@ class Place
     /**
      * Set digiEleModel
      *
-     * @param integer $digiEleModel
+     * @param  integer $digiEleModel
      * @return Place
      */
     public function setDigiEleModel($digiEleModel)
     {
         $this->digiEleModel = $digiEleModel;
-    
+
         return $this;
     }
 
     /**
      * Get digiEleModel
      *
-     * @return integer 
+     * @return integer
      */
     public function getDigiEleModel()
     {
@@ -260,20 +258,20 @@ class Place
     /**
      * Set population
      *
-     * @param integer $population
+     * @param  integer $population
      * @return Place
      */
     public function setPopulation($population)
     {
         $this->population = $population;
-    
+
         return $this;
     }
 
     /**
      * Get population
      *
-     * @return integer 
+     * @return integer
      */
     public function getPopulation()
     {
@@ -283,20 +281,20 @@ class Place
     /**
      * Set countryCode
      *
-     * @param string $countryCode
+     * @param  string $countryCode
      * @return Place
      */
     public function setCountryCode($countryCode)
     {
         $this->countryCode = $countryCode;
-    
+
         return $this;
     }
 
     /**
      * Get countryCode
      *
-     * @return string 
+     * @return string
      */
     public function getCountryCode()
     {
@@ -306,20 +304,20 @@ class Place
     /**
      * Set admin1Code
      *
-     * @param string $admin1Code
+     * @param  string $admin1Code
      * @return Place
      */
     public function setAdmin1Code($admin1Code)
     {
         $this->admin1Code = $admin1Code;
-    
+
         return $this;
     }
 
     /**
      * Get admin1Code
      *
-     * @return string 
+     * @return string
      */
     public function getAdmin1Code()
     {
@@ -329,20 +327,20 @@ class Place
     /**
      * Set admin2Code
      *
-     * @param string $admin2Code
+     * @param  string $admin2Code
      * @return Place
      */
     public function setAdmin2Code($admin2Code)
     {
         $this->admin2Code = $admin2Code;
-    
+
         return $this;
     }
 
     /**
      * Get admin2Code
      *
-     * @return string 
+     * @return string
      */
     public function getAdmin2Code()
     {
@@ -352,20 +350,20 @@ class Place
     /**
      * Set admin3Code
      *
-     * @param string $admin3Code
+     * @param  string $admin3Code
      * @return Place
      */
     public function setAdmin3Code($admin3Code)
     {
         $this->admin3Code = $admin3Code;
-    
+
         return $this;
     }
 
     /**
      * Get admin3Code
      *
-     * @return string 
+     * @return string
      */
     public function getAdmin3Code()
     {
@@ -375,20 +373,20 @@ class Place
     /**
      * Set admin4Code
      *
-     * @param string $admin4Code
+     * @param  string $admin4Code
      * @return Place
      */
     public function setAdmin4Code($admin4Code)
     {
         $this->admin4Code = $admin4Code;
-    
+
         return $this;
     }
 
     /**
      * Get admin4Code
      *
-     * @return string 
+     * @return string
      */
     public function getAdmin4Code()
     {
@@ -398,20 +396,20 @@ class Place
     /**
      * Set isDeprecated
      *
-     * @param boolean $isDeprecated
+     * @param  boolean $isDeprecated
      * @return Place
      */
     public function setIsDeprecated($isDeprecated)
     {
         $this->isDeprecated = $isDeprecated;
-    
+
         return $this;
     }
 
     /**
      * Get isDeprecated
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsDeprecated()
     {
@@ -421,20 +419,20 @@ class Place
     /**
      * Set country
      *
-     * @param Heartsentwined\Geoname\Entity\Country $country
+     * @param  Heartsentwined\Geoname\Entity\Country $country
      * @return Place
      */
     public function setCountry(\Heartsentwined\Geoname\Entity\Country $country = null)
     {
         $this->country = $country;
-    
+
         return $this;
     }
 
     /**
      * Get country
      *
-     * @return Heartsentwined\Geoname\Entity\Country 
+     * @return Heartsentwined\Geoname\Entity\Country
      */
     public function getCountry()
     {
@@ -444,13 +442,13 @@ class Place
     /**
      * Add children
      *
-     * @param Heartsentwined\Geoname\Entity\Place $children
+     * @param  Heartsentwined\Geoname\Entity\Place $children
      * @return Place
      */
     public function addChildren(\Heartsentwined\Geoname\Entity\Place $children)
     {
         $this->children[] = $children;
-    
+
         return $this;
     }
 
@@ -467,7 +465,7 @@ class Place
     /**
      * Get children
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getChildren()
     {
@@ -477,13 +475,13 @@ class Place
     /**
      * Add altNames
      *
-     * @param Heartsentwined\Geoname\Entity\AltName $altNames
+     * @param  Heartsentwined\Geoname\Entity\AltName $altNames
      * @return Place
      */
     public function addAltName(\Heartsentwined\Geoname\Entity\AltName $altNames)
     {
         $this->altNames[] = $altNames;
-    
+
         return $this;
     }
 
@@ -500,7 +498,7 @@ class Place
     /**
      * Get altNames
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getAltNames()
     {
@@ -510,13 +508,13 @@ class Place
     /**
      * Add countries
      *
-     * @param Heartsentwined\Geoname\Entity\Country $countries
+     * @param  Heartsentwined\Geoname\Entity\Country $countries
      * @return Place
      */
     public function addCountrie(\Heartsentwined\Geoname\Entity\Country $countries)
     {
         $this->countries[] = $countries;
-    
+
         return $this;
     }
 
@@ -533,7 +531,7 @@ class Place
     /**
      * Get countries
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getCountries()
     {
@@ -543,20 +541,20 @@ class Place
     /**
      * Set parent
      *
-     * @param Heartsentwined\Geoname\Entity\Place $parent
+     * @param  Heartsentwined\Geoname\Entity\Place $parent
      * @return Place
      */
     public function setParent(\Heartsentwined\Geoname\Entity\Place $parent = null)
     {
         $this->parent = $parent;
-    
+
         return $this;
     }
 
     /**
      * Get parent
      *
-     * @return Heartsentwined\Geoname\Entity\Place 
+     * @return Heartsentwined\Geoname\Entity\Place
      */
     public function getParent()
     {
@@ -566,20 +564,20 @@ class Place
     /**
      * Set feature
      *
-     * @param Heartsentwined\Geoname\Entity\Feature $feature
+     * @param  Heartsentwined\Geoname\Entity\Feature $feature
      * @return Place
      */
     public function setFeature(\Heartsentwined\Geoname\Entity\Feature $feature = null)
     {
         $this->feature = $feature;
-    
+
         return $this;
     }
 
     /**
      * Get feature
      *
-     * @return Heartsentwined\Geoname\Entity\Feature 
+     * @return Heartsentwined\Geoname\Entity\Feature
      */
     public function getFeature()
     {
@@ -589,20 +587,20 @@ class Place
     /**
      * Set timezone
      *
-     * @param Heartsentwined\Geoname\Entity\Timezone $timezone
+     * @param  Heartsentwined\Geoname\Entity\Timezone $timezone
      * @return Place
      */
     public function setTimezone(\Heartsentwined\Geoname\Entity\Timezone $timezone = null)
     {
         $this->timezone = $timezone;
-    
+
         return $this;
     }
 
     /**
      * Get timezone
      *
-     * @return Heartsentwined\Geoname\Entity\Timezone 
+     * @return Heartsentwined\Geoname\Entity\Timezone
      */
     public function getTimezone()
     {

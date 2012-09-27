@@ -31,6 +31,7 @@ class Geoname
     public function setCli(Cli $cli)
     {
         $this->cli = $cli;
+
         return $this;
     }
     public function getCli()
@@ -47,6 +48,7 @@ class Geoname
     public function setEm(EntityManager $em)
     {
         $this->em = $em;
+
         return $this;
     }
     public function getEm()
@@ -64,6 +66,7 @@ class Geoname
     {
         ArgValidator::assert($tmpDir, array('string', 'min' => 1));
         $this->tmpDir = $tmpDir;
+
         return $this;
     }
     public function getTmpDir()
@@ -81,6 +84,7 @@ class Geoname
     public function setCron($cron)
     {
         $this->cron = $cron;
+
         return $this;
     }
     public function getCron()
@@ -185,6 +189,7 @@ class Geoname
             $meta->setStatus(Repository\Meta::STATUS_INSTALL_DOWNLOAD);
             $em->flush();
         }
+
         return $meta;
     }
 
@@ -194,8 +199,8 @@ class Geoname
      * will implement a simple lock mechanism to prevent parallel downloading
      * will also ignore a file if it is marked as *.done
      *
-     * @param string $src   source URL
-     * @param string $dest  destination save path
+     * @param  string $src  source URL
+     * @param  string $dest destination save path
      * @return bool
      */
     public function downloadFile($src, $dest)
@@ -218,6 +223,7 @@ class Geoname
         fwrite($fh, file_get_contents($src));
         fclose($fh);
         rename($dest, substr($dest, 0, -5));
+
         return true;
     }
 
@@ -269,6 +275,7 @@ class Geoname
             $file = "$tmpDir/update/$dir/" . basename($url);
             $this->downloadFile($url, $file);
         }
+
         return $this;
     }
 
@@ -277,7 +284,7 @@ class Geoname
      *
      * will append .lock to a target file, if it is not already .done / .lock
      *
-     * @param string $file target file
+     * @param  string $file target file
      * @return bool
      */
     public function getLock($file)
@@ -286,8 +293,10 @@ class Geoname
         if (!file_exists($file)) return false;
         if (!strpos($file, '.done') && !strpos($file, '.lock')) {
             rename($file, "$file.lock");
+
             return true;
         }
+
         return false;
     }
 
@@ -296,7 +305,7 @@ class Geoname
      *
      * will append .done to a target file, but only if it is currently .lock
      *
-     * @param string $file target file
+     * @param  string $file target file
      * @return bool
      */
     public function markDone($file)
@@ -306,15 +315,17 @@ class Geoname
         if (!file_exists($lockFile)) return false;
         if (strpos($lockFile, '.lock')) {
             rename($lockFile, $file . '.done');
+
             return true;
         }
+
         return false;
     }
 
     /**
      * remove .lock and .done markers
      *
-     * @param string $dir target dir, will scan it and its children for files
+     * @param  string $dir target dir, will scan it and its children for files
      * @return self
      */
     public function resetFiles($dir)
@@ -325,6 +336,7 @@ class Geoname
                 rename($file, substr($file, 0, strlen($file)-5));
             }
         }
+
         return $this;
     }
 
@@ -354,6 +366,7 @@ class Geoname
             $file = $tmpDir . '/' . basename($url);
             $this->downloadFile($url, $file);
         }
+
         return $this;
     }
 
@@ -541,12 +554,14 @@ class Geoname
                 fclose($fh);
                 $em->flush();
                 $this->markDone($source);
+
                 return $this;
             }
         }
         $this->resetFiles($sourceDir);
         $this->getMeta()->setStatus(
             Repository\Meta::STATUS_INSTALL_COUNTRY_CURRENCY_LOCALE);
+
         return $this;
     }
 
@@ -602,12 +617,12 @@ class Geoname
                     ->setPostalCode($postalCode)
                     ->setPostalCodeRegex($postalCodeRegex);
 
-                if ($place = $placeRepo->find((int)$placeId)) {
+                if ($place = $placeRepo->find((int) $placeId)) {
                     $country->setPlace($place);
                 }
                 if (isset($continentMap[$continentCode])) {
                     if ($continent = $placeRepo
-                            ->find((int)$continentMap[$continentCode])) {
+                            ->find((int) $continentMap[$continentCode])) {
                         $country->setContinent($continent);
                     }
                 }
@@ -795,7 +810,7 @@ class Geoname
                         /*$population*/, /*$elevation*/, /*$digiEleModel*/,
                         $timezoneCode, /*modification date*/) =
                         $data;
-                    if (!$place = $placeRepo->find((int)$id)) continue;
+                    if (!$place = $placeRepo->find((int) $id)) continue;
                     if (empty($timezoneCode)) continue;
 
                     if (!$timezone = $timezoneRepo->findOneBy(
@@ -815,12 +830,14 @@ class Geoname
                 fclose($fh);
                 $em->flush();
                 $this->markDone($source);
+
                 return $this;
             }
         }
         $this->resetFiles($sourceDir);
         $this->getMeta()->setStatus(
             Repository\Meta::STATUS_INSTALL_HIERARCHY);
+
         return $this;
     }
 
@@ -842,20 +859,22 @@ class Geoname
                 while ($data = fgetcsv($fh, 0, "\t", "\0")) {
                     list($parentId, $childId, /*$type*/) = $data;
 
-                    if (($parent = $placeRepo->find((int)$parentId))
-                        && ($child = $placeRepo->find((int)$childId))) {
+                    if (($parent = $placeRepo->find((int) $parentId))
+                        && ($child = $placeRepo->find((int) $childId))) {
                         $child->setParent($parent);
                     }
                 }
                 fclose($fh);
                 $em->flush();
                 $this->markDone($source);
+
                 return $this;
             }
         }
         $this->resetFiles($sourceDir);
         $this->getMeta()->setStatus(
             Repository\Meta::STATUS_INSTALL_ALT_NAME);
+
         return $this;
     }
 
@@ -886,13 +905,13 @@ class Geoname
                     $altName
                         ->setId($id)
                         ->setName($name)
-                        ->setIsPreferred((bool)trim($isPreferred))
-                        ->setIsShort((bool)trim($isShort))
-                        ->setIsColloquial((bool)trim($isColloquial))
-                        ->setIsHistoric((bool)trim($isHistoric));
+                        ->setIsPreferred((bool) trim($isPreferred))
+                        ->setIsShort((bool) trim($isShort))
+                        ->setIsColloquial((bool) trim($isColloquial))
+                        ->setIsHistoric((bool) trim($isHistoric));
                     $em->persist($altName);
 
-                    if ($place = $placeRepo->find((int)$placeId)) {
+                    if ($place = $placeRepo->find((int) $placeId)) {
                         $altName->setPlace($place);
                     }
 
@@ -909,12 +928,14 @@ class Geoname
                 fclose($fh);
                 $em->flush();
                 $this->markDone($source);
+
                 return $this;
             }
         }
         $this->resetFiles($sourceDir);
         $this->getMeta()->setStatus(
             Repository\Meta::STATUS_INSTALL_CLEANUP);
+
         return $this;
     }
 
@@ -936,6 +957,7 @@ class Geoname
                 }
             }
         }
+
         return $this;
     }
 
@@ -972,7 +994,7 @@ class Geoname
                         $timezoneCode, /*modification date*/) =
                         $data;
 
-                    if (!$place = $placeRepo->find((int)$id)) {
+                    if (!$place = $placeRepo->find((int) $id)) {
                         $place = new Entity\Place;
                         $place->setId($id);
                         $placeMap[$id] = $place;
@@ -1040,7 +1062,7 @@ class Geoname
 
                     // determine parent feature
                     $parentFeatureCode = '';
-                    $adminLevel = (int)substr($featureCode, -1);
+                    $adminLevel = (int) substr($featureCode, -1);
                     while ($adminLevel > 1) {
                         $parentLevel = $adminLevel - 1;
                         $parentVar = "admin{$parentLevel}Code";
@@ -1083,6 +1105,7 @@ class Geoname
             }
         }
         $em->flush();
+
         return $this;
     }
 
@@ -1104,7 +1127,7 @@ class Geoname
                 $this->getCli()->write($source, 'module');
                 while ($data = fgetcsv($fh, 0, "\t", "\0")) {
                     list($id, /*name*/, /*comment*/) = $data;
-                    if ($place = $placeRepo->find((int)$id)) {
+                    if ($place = $placeRepo->find((int) $id)) {
                         $place->setIsDeprecated(true);
                     }
                 }
@@ -1113,6 +1136,7 @@ class Geoname
             }
         }
         $em->flush();
+
         return $this;
     }
 
@@ -1142,21 +1166,21 @@ class Geoname
                         $isPreferred, $isShort, $isColloquial, $isHistoric) =
                         $data;
 
-                    if (!$altName = $altNameRepo->find((int)$id)) {
+                    if (!$altName = $altNameRepo->find((int) $id)) {
                         $altName = new Entity\AltName;
                         $altName->setId($id);
                         $em->persist($altName);
                     }
                     $altName
                         ->setName($name)
-                        ->setIsPreferred((bool)trim($isPreferred))
-                        ->setIsShort((bool)trim($isShort))
-                        ->setIsColloquial((bool)trim($isColloquial))
-                        ->setIsHistoric((bool)trim($isHistoric));
+                        ->setIsPreferred((bool) trim($isPreferred))
+                        ->setIsShort((bool) trim($isShort))
+                        ->setIsColloquial((bool) trim($isColloquial))
+                        ->setIsHistoric((bool) trim($isHistoric));
 
                     if (isset($placeMap[$placeId])) {
                         $altName->setPlace($placeMap[$placeId]);
-                    } elseif ($place = $placeRepo->find((int)$placeId)) {
+                    } elseif ($place = $placeRepo->find((int) $placeId)) {
                         $altName->setPlace($place);
                         $placeMap[$placeId] = $place;
                     }
@@ -1176,6 +1200,7 @@ class Geoname
             }
         }
         $em->flush();
+
         return $this;
     }
 
@@ -1197,7 +1222,7 @@ class Geoname
                 $this->getCli()->write($source, 'module');
                 while ($data = fgetcsv($fh, 0, "\t", "\0")) {
                     list($id, /*name*/, /*comment*/) = $data;
-                    if ($altName = $altNameRepo->find((int)$id)) {
+                    if ($altName = $altNameRepo->find((int) $id)) {
                         $altName->setIsDeprecated(true);
                     }
                 }
@@ -1206,6 +1231,7 @@ class Geoname
             }
         }
         $em->flush();
+
         return $this;
     }
 

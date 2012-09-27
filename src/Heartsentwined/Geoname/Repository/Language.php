@@ -15,7 +15,7 @@ class Language extends EntityRepository
     /**
      * findLanguage
      *
-     * @param string $code iso 639 1- (?), 2- or 3- letter code
+     * @param  string        $code iso 639 1- (?), 2- or 3- letter code
      * @return Language|null
      */
     public function findLanguage($code)

@@ -2,8 +2,6 @@
 
 namespace Heartsentwined\Geoname\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * Heartsentwined\Geoname\Entity\AltName
  */
@@ -59,24 +57,23 @@ class AltName
      */
     private $language;
 
-
     /**
      * Set id
      *
-     * @param integer $id
+     * @param  integer $id
      * @return AltName
      */
     public function setId($id)
     {
         $this->id = $id;
-    
+
         return $this;
     }
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -86,20 +83,20 @@ class AltName
     /**
      * Set name
      *
-     * @param string $name
+     * @param  string  $name
      * @return AltName
      */
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -109,20 +106,20 @@ class AltName
     /**
      * Set isPreferred
      *
-     * @param boolean $isPreferred
+     * @param  boolean $isPreferred
      * @return AltName
      */
     public function setIsPreferred($isPreferred)
     {
         $this->isPreferred = $isPreferred;
-    
+
         return $this;
     }
 
     /**
      * Get isPreferred
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsPreferred()
     {
@@ -132,20 +129,20 @@ class AltName
     /**
      * Set isShort
      *
-     * @param boolean $isShort
+     * @param  boolean $isShort
      * @return AltName
      */
     public function setIsShort($isShort)
     {
         $this->isShort = $isShort;
-    
+
         return $this;
     }
 
     /**
      * Get isShort
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsShort()
     {
@@ -155,20 +152,20 @@ class AltName
     /**
      * Set isColloquial
      *
-     * @param boolean $isColloquial
+     * @param  boolean $isColloquial
      * @return AltName
      */
     public function setIsColloquial($isColloquial)
     {
         $this->isColloquial = $isColloquial;
-    
+
         return $this;
     }
 
     /**
      * Get isColloquial
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsColloquial()
     {
@@ -178,20 +175,20 @@ class AltName
     /**
      * Set isHistoric
      *
-     * @param boolean $isHistoric
+     * @param  boolean $isHistoric
      * @return AltName
      */
     public function setIsHistoric($isHistoric)
     {
         $this->isHistoric = $isHistoric;
-    
+
         return $this;
     }
 
     /**
      * Get isHistoric
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsHistoric()
     {
@@ -201,20 +198,20 @@ class AltName
     /**
      * Set languageOther
      *
-     * @param string $languageOther
+     * @param  string  $languageOther
      * @return AltName
      */
     public function setLanguageOther($languageOther)
     {
         $this->languageOther = $languageOther;
-    
+
         return $this;
     }
 
     /**
      * Get languageOther
      *
-     * @return string 
+     * @return string
      */
     public function getLanguageOther()
     {
@@ -224,20 +221,20 @@ class AltName
     /**
      * Set isDeprecated
      *
-     * @param boolean $isDeprecated
+     * @param  boolean $isDeprecated
      * @return AltName
      */
     public function setIsDeprecated($isDeprecated)
     {
         $this->isDeprecated = $isDeprecated;
-    
+
         return $this;
     }
 
     /**
      * Get isDeprecated
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsDeprecated()
     {
@@ -247,20 +244,20 @@ class AltName
     /**
      * Set place
      *
-     * @param Heartsentwined\Geoname\Entity\Place $place
+     * @param  Heartsentwined\Geoname\Entity\Place $place
      * @return AltName
      */
     public function setPlace(\Heartsentwined\Geoname\Entity\Place $place = null)
     {
         $this->place = $place;
-    
+
         return $this;
     }
 
     /**
      * Get place
      *
-     * @return Heartsentwined\Geoname\Entity\Place 
+     * @return Heartsentwined\Geoname\Entity\Place
      */
     public function getPlace()
     {
@@ -270,20 +267,20 @@ class AltName
     /**
      * Set language
      *
-     * @param Heartsentwined\Geoname\Entity\Language $language
+     * @param  Heartsentwined\Geoname\Entity\Language $language
      * @return AltName
      */
     public function setLanguage(\Heartsentwined\Geoname\Entity\Language $language = null)
     {
         $this->language = $language;
-    
+
         return $this;
     }
 
     /**
      * Get language
      *
-     * @return Heartsentwined\Geoname\Entity\Language 
+     * @return Heartsentwined\Geoname\Entity\Language
      */
     public function getLanguage()
     {

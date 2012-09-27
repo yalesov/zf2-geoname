@@ -2,8 +2,6 @@
 
 namespace Heartsentwined\Geoname\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * Heartsentwined\Geoname\Entity\Country
  */
@@ -108,11 +106,11 @@ class Country
         $this->locales = new \Doctrine\Common\Collections\ArrayCollection();
         $this->neighbours = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -122,20 +120,20 @@ class Country
     /**
      * Set iso3
      *
-     * @param string $iso3
+     * @param  string  $iso3
      * @return Country
      */
     public function setIso3($iso3)
     {
         $this->iso3 = $iso3;
-    
+
         return $this;
     }
 
     /**
      * Get iso3
      *
-     * @return string 
+     * @return string
      */
     public function getIso3()
     {
@@ -145,20 +143,20 @@ class Country
     /**
      * Set iso2
      *
-     * @param string $iso2
+     * @param  string  $iso2
      * @return Country
      */
     public function setIso2($iso2)
     {
         $this->iso2 = $iso2;
-    
+
         return $this;
     }
 
     /**
      * Get iso2
      *
-     * @return string 
+     * @return string
      */
     public function getIso2()
     {
@@ -168,20 +166,20 @@ class Country
     /**
      * Set isoNum
      *
-     * @param string $isoNum
+     * @param  string  $isoNum
      * @return Country
      */
     public function setIsoNum($isoNum)
     {
         $this->isoNum = $isoNum;
-    
+
         return $this;
     }
 
     /**
      * Get isoNum
      *
-     * @return string 
+     * @return string
      */
     public function getIsoNum()
     {
@@ -191,20 +189,20 @@ class Country
     /**
      * Set capital
      *
-     * @param string $capital
+     * @param  string  $capital
      * @return Country
      */
     public function setCapital($capital)
     {
         $this->capital = $capital;
-    
+
         return $this;
     }
 
     /**
      * Get capital
      *
-     * @return string 
+     * @return string
      */
     public function getCapital()
     {
@@ -214,20 +212,20 @@ class Country
     /**
      * Set area
      *
-     * @param integer $area
+     * @param  integer $area
      * @return Country
      */
     public function setArea($area)
     {
         $this->area = $area;
-    
+
         return $this;
     }
 
     /**
      * Get area
      *
-     * @return integer 
+     * @return integer
      */
     public function getArea()
     {
@@ -237,20 +235,20 @@ class Country
     /**
      * Set population
      *
-     * @param integer $population
+     * @param  integer $population
      * @return Country
      */
     public function setPopulation($population)
     {
         $this->population = $population;
-    
+
         return $this;
     }
 
     /**
      * Get population
      *
-     * @return integer 
+     * @return integer
      */
     public function getPopulation()
     {
@@ -260,20 +258,20 @@ class Country
     /**
      * Set tld
      *
-     * @param string $tld
+     * @param  string  $tld
      * @return Country
      */
     public function setTld($tld)
     {
         $this->tld = $tld;
-    
+
         return $this;
     }
 
     /**
      * Get tld
      *
-     * @return string 
+     * @return string
      */
     public function getTld()
     {
@@ -283,20 +281,20 @@ class Country
     /**
      * Set phone
      *
-     * @param string $phone
+     * @param  string  $phone
      * @return Country
      */
     public function setPhone($phone)
     {
         $this->phone = $phone;
-    
+
         return $this;
     }
 
     /**
      * Get phone
      *
-     * @return string 
+     * @return string
      */
     public function getPhone()
     {
@@ -306,20 +304,20 @@ class Country
     /**
      * Set postalCode
      *
-     * @param string $postalCode
+     * @param  string  $postalCode
      * @return Country
      */
     public function setPostalCode($postalCode)
     {
         $this->postalCode = $postalCode;
-    
+
         return $this;
     }
 
     /**
      * Get postalCode
      *
-     * @return string 
+     * @return string
      */
     public function getPostalCode()
     {
@@ -329,20 +327,20 @@ class Country
     /**
      * Set postalCodeRegex
      *
-     * @param string $postalCodeRegex
+     * @param  string  $postalCodeRegex
      * @return Country
      */
     public function setPostalCodeRegex($postalCodeRegex)
     {
         $this->postalCodeRegex = $postalCodeRegex;
-    
+
         return $this;
     }
 
     /**
      * Get postalCodeRegex
      *
-     * @return string 
+     * @return string
      */
     public function getPostalCodeRegex()
     {
@@ -352,20 +350,20 @@ class Country
     /**
      * Set place
      *
-     * @param Heartsentwined\Geoname\Entity\Place $place
+     * @param  Heartsentwined\Geoname\Entity\Place $place
      * @return Country
      */
     public function setPlace(\Heartsentwined\Geoname\Entity\Place $place = null)
     {
         $this->place = $place;
-    
+
         return $this;
     }
 
     /**
      * Get place
      *
-     * @return Heartsentwined\Geoname\Entity\Place 
+     * @return Heartsentwined\Geoname\Entity\Place
      */
     public function getPlace()
     {
@@ -375,13 +373,13 @@ class Country
     /**
      * Add timezones
      *
-     * @param Heartsentwined\Geoname\Entity\Timezone $timezones
+     * @param  Heartsentwined\Geoname\Entity\Timezone $timezones
      * @return Country
      */
     public function addTimezone(\Heartsentwined\Geoname\Entity\Timezone $timezones)
     {
         $this->timezones[] = $timezones;
-    
+
         return $this;
     }
 
@@ -398,7 +396,7 @@ class Country
     /**
      * Get timezones
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getTimezones()
     {
@@ -408,20 +406,20 @@ class Country
     /**
      * Set currency
      *
-     * @param Heartsentwined\Geoname\Entity\Currency $currency
+     * @param  Heartsentwined\Geoname\Entity\Currency $currency
      * @return Country
      */
     public function setCurrency(\Heartsentwined\Geoname\Entity\Currency $currency = null)
     {
         $this->currency = $currency;
-    
+
         return $this;
     }
 
     /**
      * Get currency
      *
-     * @return Heartsentwined\Geoname\Entity\Currency 
+     * @return Heartsentwined\Geoname\Entity\Currency
      */
     public function getCurrency()
     {
@@ -431,20 +429,20 @@ class Country
     /**
      * Set continent
      *
-     * @param Heartsentwined\Geoname\Entity\Place $continent
+     * @param  Heartsentwined\Geoname\Entity\Place $continent
      * @return Country
      */
     public function setContinent(\Heartsentwined\Geoname\Entity\Place $continent = null)
     {
         $this->continent = $continent;
-    
+
         return $this;
     }
 
     /**
      * Get continent
      *
-     * @return Heartsentwined\Geoname\Entity\Place 
+     * @return Heartsentwined\Geoname\Entity\Place
      */
     public function getContinent()
     {
@@ -454,20 +452,20 @@ class Country
     /**
      * Set mainLocale
      *
-     * @param Heartsentwined\Geoname\Entity\Locale $mainLocale
+     * @param  Heartsentwined\Geoname\Entity\Locale $mainLocale
      * @return Country
      */
     public function setMainLocale(\Heartsentwined\Geoname\Entity\Locale $mainLocale = null)
     {
         $this->mainLocale = $mainLocale;
-    
+
         return $this;
     }
 
     /**
      * Get mainLocale
      *
-     * @return Heartsentwined\Geoname\Entity\Locale 
+     * @return Heartsentwined\Geoname\Entity\Locale
      */
     public function getMainLocale()
     {
@@ -477,13 +475,13 @@ class Country
     /**
      * Add locales
      *
-     * @param Heartsentwined\Geoname\Entity\Locale $locales
+     * @param  Heartsentwined\Geoname\Entity\Locale $locales
      * @return Country
      */
     public function addLocale(\Heartsentwined\Geoname\Entity\Locale $locales)
     {
         $this->locales[] = $locales;
-    
+
         return $this;
     }
 
@@ -500,7 +498,7 @@ class Country
     /**
      * Get locales
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getLocales()
     {
@@ -510,13 +508,13 @@ class Country
     /**
      * Add neighbours
      *
-     * @param Heartsentwined\Geoname\Entity\Country $neighbours
+     * @param  Heartsentwined\Geoname\Entity\Country $neighbours
      * @return Country
      */
     public function addNeighbour(\Heartsentwined\Geoname\Entity\Country $neighbours)
     {
         $this->neighbours[] = $neighbours;
-    
+
         return $this;
     }
 
@@ -533,7 +531,7 @@ class Country
     /**
      * Get neighbours
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getNeighbours()
     {

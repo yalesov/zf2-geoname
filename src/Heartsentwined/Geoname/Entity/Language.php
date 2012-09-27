@@ -2,8 +2,6 @@
 
 namespace Heartsentwined\Geoname\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * Heartsentwined\Geoname\Entity\Language
  */
@@ -46,11 +44,11 @@ class Language
     {
         $this->locales = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -60,20 +58,20 @@ class Language
     /**
      * Set name
      *
-     * @param string $name
+     * @param  string   $name
      * @return Language
      */
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -83,20 +81,20 @@ class Language
     /**
      * Set iso3
      *
-     * @param string $iso3
+     * @param  string   $iso3
      * @return Language
      */
     public function setIso3($iso3)
     {
         $this->iso3 = $iso3;
-    
+
         return $this;
     }
 
     /**
      * Get iso3
      *
-     * @return string 
+     * @return string
      */
     public function getIso3()
     {
@@ -106,20 +104,20 @@ class Language
     /**
      * Set iso2
      *
-     * @param string $iso2
+     * @param  string   $iso2
      * @return Language
      */
     public function setIso2($iso2)
     {
         $this->iso2 = $iso2;
-    
+
         return $this;
     }
 
     /**
      * Get iso2
      *
-     * @return string 
+     * @return string
      */
     public function getIso2()
     {
@@ -129,20 +127,20 @@ class Language
     /**
      * Set iso1
      *
-     * @param string $iso1
+     * @param  string   $iso1
      * @return Language
      */
     public function setIso1($iso1)
     {
         $this->iso1 = $iso1;
-    
+
         return $this;
     }
 
     /**
      * Get iso1
      *
-     * @return string 
+     * @return string
      */
     public function getIso1()
     {
@@ -152,13 +150,13 @@ class Language
     /**
      * Add locales
      *
-     * @param Heartsentwined\Geoname\Entity\Locale $locales
+     * @param  Heartsentwined\Geoname\Entity\Locale $locales
      * @return Language
      */
     public function addLocale(\Heartsentwined\Geoname\Entity\Locale $locales)
     {
         $this->locales[] = $locales;
-    
+
         return $this;
     }
 
@@ -175,7 +173,7 @@ class Language
     /**
      * Get locales
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getLocales()
     {

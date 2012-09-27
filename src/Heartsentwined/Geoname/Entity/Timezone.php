@@ -2,8 +2,6 @@
 
 namespace Heartsentwined\Geoname\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * Heartsentwined\Geoname\Entity\Timezone
  */
@@ -51,11 +49,11 @@ class Timezone
     {
         $this->places = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -65,20 +63,20 @@ class Timezone
     /**
      * Set code
      *
-     * @param string $code
+     * @param  string   $code
      * @return Timezone
      */
     public function setCode($code)
     {
         $this->code = $code;
-    
+
         return $this;
     }
 
     /**
      * Get code
      *
-     * @return string 
+     * @return string
      */
     public function getCode()
     {
@@ -88,20 +86,20 @@ class Timezone
     /**
      * Set offset
      *
-     * @param float $offset
+     * @param  float    $offset
      * @return Timezone
      */
     public function setOffset($offset)
     {
         $this->offset = $offset;
-    
+
         return $this;
     }
 
     /**
      * Get offset
      *
-     * @return float 
+     * @return float
      */
     public function getOffset()
     {
@@ -111,20 +109,20 @@ class Timezone
     /**
      * Set offsetJan
      *
-     * @param float $offsetJan
+     * @param  float    $offsetJan
      * @return Timezone
      */
     public function setOffsetJan($offsetJan)
     {
         $this->offsetJan = $offsetJan;
-    
+
         return $this;
     }
 
     /**
      * Get offsetJan
      *
-     * @return float 
+     * @return float
      */
     public function getOffsetJan()
     {
@@ -134,20 +132,20 @@ class Timezone
     /**
      * Set offsetJul
      *
-     * @param float $offsetJul
+     * @param  float    $offsetJul
      * @return Timezone
      */
     public function setOffsetJul($offsetJul)
     {
         $this->offsetJul = $offsetJul;
-    
+
         return $this;
     }
 
     /**
      * Get offsetJul
      *
-     * @return float 
+     * @return float
      */
     public function getOffsetJul()
     {
@@ -157,13 +155,13 @@ class Timezone
     /**
      * Add places
      *
-     * @param Heartsentwined\Geoname\Entity\Place $places
+     * @param  Heartsentwined\Geoname\Entity\Place $places
      * @return Timezone
      */
     public function addPlace(\Heartsentwined\Geoname\Entity\Place $places)
     {
         $this->places[] = $places;
-    
+
         return $this;
     }
 
@@ -180,7 +178,7 @@ class Timezone
     /**
      * Get places
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getPlaces()
     {
@@ -190,20 +188,20 @@ class Timezone
     /**
      * Set country
      *
-     * @param Heartsentwined\Geoname\Entity\Country $country
+     * @param  Heartsentwined\Geoname\Entity\Country $country
      * @return Timezone
      */
     public function setCountry(\Heartsentwined\Geoname\Entity\Country $country = null)
     {
         $this->country = $country;
-    
+
         return $this;
     }
 
     /**
      * Get country
      *
-     * @return Heartsentwined\Geoname\Entity\Country 
+     * @return Heartsentwined\Geoname\Entity\Country
      */
     public function getCountry()
     {

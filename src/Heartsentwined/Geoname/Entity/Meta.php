@@ -2,8 +2,6 @@
 
 namespace Heartsentwined\Geoname\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * Heartsentwined\Geoname\Entity\Meta
  */
@@ -24,11 +22,10 @@ class Meta
      */
     private $isLocked;
 
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -38,20 +35,20 @@ class Meta
     /**
      * Set status
      *
-     * @param integer $status
+     * @param  integer $status
      * @return Meta
      */
     public function setStatus($status)
     {
         $this->status = $status;
-    
+
         return $this;
     }
 
     /**
      * Get status
      *
-     * @return integer 
+     * @return integer
      */
     public function getStatus()
     {
@@ -61,20 +58,20 @@ class Meta
     /**
      * Set isLocked
      *
-     * @param boolean $isLocked
+     * @param  boolean $isLocked
      * @return Meta
      */
     public function setIsLocked($isLocked)
     {
         $this->isLocked = $isLocked;
-    
+
         return $this;
     }
 
     /**
      * Get isLocked
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsLocked()
     {
