@@ -27,6 +27,7 @@
         "heartsentwined/zf2-cli": "1.*",
         "heartsentwined/file-system-manager": "1.*",
 
+        "heartsentwined/zf2-phpunit-testcase": "1.*",
         "heartsentwined/zf2-phing-task": "1.*"
     }
 }
