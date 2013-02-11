@@ -11,9 +11,13 @@ Heartsentwined\Geoname\Entity\Place:
             nullable: true
         latitude:
             type: decimal
+            precision: 12
+            scale: 4
             nullable: true
         longitude:
             type: decimal
+            precision: 12
+            scale: 4
             nullable: true
         elevation:
             type: integer

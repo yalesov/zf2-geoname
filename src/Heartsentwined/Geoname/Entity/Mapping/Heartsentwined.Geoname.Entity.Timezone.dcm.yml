@@ -12,12 +12,18 @@ Heartsentwined\Geoname\Entity\Timezone:
             type: string
         offset:
             type: decimal
+            precision: 4
+            scale: 2
             nullable: true
         offsetJan: # actually, offset as at 1 Jan 2012
             type: decimal
+            precision: 4
+            scale: 2
             nullable: true
         offsetJul: # actually, offset as at 1 Jul 2012
             type: decimal
+            precision: 4
+            scale: 2
             nullable: true
 
     oneToMany:
