@@ -1,0 +1,30 @@
+Yalesov\Geoname\Entity\Feature:
+    type: entity
+    table: he_geoname_feature
+    repositoryClass: Yalesov\Geoname\Repository\Feature
+    fields:
+        id:
+            id: true
+            type: integer
+            generator:
+                strategy: AUTO
+        code:
+            type: string
+        description:
+            type: string
+            nullable: true
+        comment:
+            type: string
+            nullable: true
+
+    oneToMany:
+        children:
+            targetEntity: Yalesov\Geoname\Entity\Feature
+            mappedBy: parent
+        places:
+            targetEntity: Yalesov\Geoname\Entity\Place
+            mappedBy: feature
+    manyToOne:
+        parent:
+            targetEntity: Yalesov\Geoname\Entity\Feature
+            inversedBy: children

@@ -1,9 +1,9 @@
 di:
     instance:
         alias:
-            geoname: Heartsentwined\Geoname\Service\Geoname
-            geoname-cli: Heartsentwined\Cli\Cli
-            browser: Heartsentwined\Browser\Factory
+            geoname: Yalesov\Geoname\Service\Geoname
+            geoname-cli: Yalesov\Cli\Cli
+            browser: Yalesov\Browser\Factory
         geoname:
             parameters:
                 #em: doctrine.entitymanager.orm_default
@@ -28,7 +28,7 @@ doctrine:
             class: Doctrine\ORM\Mapping\Driver\YamlDriver
             cache: array
             paths:
-                - __DIR__/../src/Heartsentwined/Geoname/Entity/Mapping
+                - __DIR__/../src/Yalesov/Geoname/Entity/Mapping
         orm_default:
             drivers:
-                Heartsentwined\Geoname\Entity: geoname_driver
+                Yalesov\Geoname\Entity: geoname_driver

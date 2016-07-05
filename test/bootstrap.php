@@ -2,4 +2,4 @@
 error_reporting(-1);
 chdir(__DIR__.'/..');
 $loader = require 'vendor/autoload.php';
-$loader->add('Heartsentwined\Geoname\Test', __DIR__);
+$loader->add('Yalesov\Geoname\Test', __DIR__);

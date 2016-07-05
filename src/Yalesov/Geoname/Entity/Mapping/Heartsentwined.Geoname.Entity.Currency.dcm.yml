@@ -1,0 +1,21 @@
+Yalesov\Geoname\Entity\Currency:
+    type: entity
+    table: he_geoname_currency
+    repositoryClass: Yalesov\Geoname\Repository\Currency
+    fields:
+        id:
+            id: true
+            type: integer
+            generator:
+                strategy: AUTO
+        code:
+            type: string
+            nullable: true
+        name:
+            type: string
+            nullable: true
+
+    oneToMany:
+        countries:
+            targetEntity: Yalesov\Geoname\Entity\Country
+            mappedBy: currency

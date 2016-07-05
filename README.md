@@ -1,6 +1,6 @@
 # zf2-geoname
 
-[![Build Status](https://secure.travis-ci.org/heartsentwined/zf2-geoname.png)](http://travis-ci.org/heartsentwined/zf2-geoname)
+[![Build Status](https://secure.travis-ci.org/yalesov/zf2-geoname.png)](http://travis-ci.org/yalesov/zf2-geoname)
 
 Maintain a local copy of the [Geonames](http://geonames.org) (places) database.
 
@@ -15,16 +15,16 @@ This module will install a self-updating local copy of the Geonames (places) dat
 ```json
 {
     "require": {
-        "heartsentwined/zf2-geoname": "3.*"
+        "yalesov/zf2-geoname": "3.*"
     }
 }
 ```
 
-Then add `Heartsentwined\Geoname` to the `modules` key in `(app root)/config/application.config.*`
+Then add `Yalesov\Geoname` to the `modules` key in `(app root)/config/application.config.*`
 
 Geoname module will also hook onto your application's database, through [`DoctrineORMModule`](https://github.com/doctrine/DoctrineORMModule). It will create a number of tables with the prefix `he_geoname_*`, and will use the default EntityManager `doctrine.entitymanager.orm_default`. If your settings are different, please modify the `doctrine` section of `config/module.config.yml` as needed.
 
-Geoname module makes use of the [Cron module](https://github.com/heartsentwined/zf2-cron), so make sure you follow its settings, and have set up your cron job properly.
+Geoname module makes use of the [Cron module](https://github.com/yalesov/zf2-cron), so make sure you follow its settings, and have set up your cron job properly.
 
 Finally, you need to update your database schema. The recommended way is through Doctrine's CLI:
 
@@ -43,7 +43,7 @@ How frequent should `cron` be? The recommended setup is every 15 minutes, which 
 
 At present (18 Sep 2012), it will take 820 cron jobs to install the database. At 15-minute intervals, that would take ~8.5 days to install the database. As for the updates, only 1 cron job per day is needed. However, setting more than one per day is highly recommended to provide redundancy - just in case the geonames server is temporarily unreachable, for example.
 
-You can also adjust to a less frequent cron after install. The `status` field of the `Meta` entity, or the `he_geoname_meta` table, will be `Heartsentwined\Geoname\Repository\Meta::STATUS_INSTALL_*` during installation, and `Heartsentwined\Geoname\Repository\Meta::STATUS_UPDATE` afterwards.
+You can also adjust to a less frequent cron after install. The `status` field of the `Meta` entity, or the `he_geoname_meta` table, will be `Yalesov\Geoname\Repository\Meta::STATUS_INSTALL_*` during installation, and `Yalesov\Geoname\Repository\Meta::STATUS_UPDATE` afterwards.
 
 # Usage
 
@@ -55,6 +55,6 @@ Note: when the sources indicate a "delete", Geoname module will not actually del
 
 ## Querying the database
 
-You can use the Doctrine 2 ORM API directly. Mapping files are located at `(zf2-geoname)/src/Heartsentwined/Geoname/Entity/Mapping`. All places' hierarchy, from `continent`, `country`, to the various administration levels, have been properly captured in the `parent` and `children` fields of the `Place` entity.
+You can use the Doctrine 2 ORM API directly. Mapping files are located at `(zf2-geoname)/src/Yalesov/Geoname/Entity/Mapping`. All places' hierarchy, from `continent`, `country`, to the various administration levels, have been properly captured in the `parent` and `children` fields of the `Place` entity.
 
 **TODO**: add a set of API for common tasks, e.g. finding a place by name, listing all places in a country, etc.

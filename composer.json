@@ -1,34 +1,42 @@
 {
-    "name": "heartsentwined/zf2-geoname",
+    "name": "yalesov/zf2-geoname",
     "description": "maintain a local copy of the Geonames database",
-    "license": "GPL-3.0",
     "keywords": ["geoname", "zf2", "zendframework"],
-    "homepage": "https://github.com/heartsentwined/zf2-geoname",
     "authors": [
         {
-            "name": "heartsentwined",
-            "email": "heartsentwined@cogito-lab.com",
-            "role": "Developer"
+            "name": "Yulij Andreevich Lesov",
+            "email": "yalesov@gmail.com"
         }
     ],
-    "autoload": {
-        "psr-0": {
-            "Heartsentwined\\Geoname": "src/"
-        }
-    },
     "minimum-stability": "dev",
     "require": {
         "php": ">=5.3.3",
-        "heartsentwined/yaml": "1.*",
+        "yalesov/yaml": "1.*",
         "zendframework/zendframework": "2.*",
-        "heartsentwined/arg-validator": "1.*",
-        "heartsentwined/zf2-doctrine": "1.*",
-        "heartsentwined/zf2-cron": "2.*",
-        "heartsentwined/zf2-cli": "1.*",
-        "heartsentwined/file-system-manager": "1.*"
+        "yalesov/arg-validator": "1.*",
+        "yalesov/zf2-doctrine": "1.*",
+        "yalesov/zf2-cron": "2.*",
+        "yalesov/zf2-cli": "1.*",
+        "yalesov/file-system-manager": "1.*"
     },
     "require-dev": {
-        "heartsentwined/zf2-phpunit-testcase": "1.*",
-        "heartsentwined/zf2-phing-task": "1.*"
+        "yalesov/zf2-phpunit-testcase": "1.*",
+        "yalesov/zf2-phing-task": "1.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "Yalesov\\Geoname": "src/"
+        }
+    },
+    "license": "ISC",
+    "homepage": "https://github.com/yalesov/zf2-geoname",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/yalesov/zf2-geoname"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/yalesov/zf2-geoname/issues"
     }
 }
