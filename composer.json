@@ -11,17 +11,17 @@
     "minimum-stability": "dev",
     "require": {
         "php": ">=5.3.3",
-        "yalesov/yaml": "1.*",
+        "yalesov/yaml": "2.*",
         "zendframework/zendframework": "2.*",
-        "yalesov/arg-validator": "1.*",
-        "yalesov/zf2-doctrine": "1.*",
-        "yalesov/zf2-cron": "2.*",
-        "yalesov/zf2-cli": "1.*",
-        "yalesov/file-system-manager": "1.*"
+        "yalesov/arg-validator": "2.*",
+        "yalesov/zf2-doctrine": "2.*",
+        "yalesov/zf2-cron": "3.*",
+        "yalesov/zf2-cli": "2.*",
+        "yalesov/file-system-manager": "2.*"
     },
     "require-dev": {
-        "yalesov/zf2-phpunit-testcase": "1.*",
-        "yalesov/zf2-phing-task": "1.*"
+        "yalesov/zf2-phpunit-testcase": "2.*",
+        "yalesov/zf2-phing-task": "2.*"
     },
     "autoload": {
         "psr-0": {
