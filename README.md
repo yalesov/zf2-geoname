@@ -1,6 +1,6 @@
 # zf2-geoname
 
-[![Build Status](https://secure.travis-ci.org/yalesov/zf2-geoname.png)](http://travis-ci.org/yalesov/zf2-geoname)
+[![Build Status](https://travis-ci.org/yalesov/zf2-geoname.svg)](https://travis-ci.org/yalesov/zf2-geoname)
 
 Maintain a local copy of the [Geonames](http://geonames.org) (places) database.
 
