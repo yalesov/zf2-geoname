@@ -14,9 +14,9 @@ This module will install a self-updating local copy of the Geonames (places) dat
 
 ```json
 {
-    "require": {
-        "yalesov/zf2-geoname": "4.*"
-    }
+  "require": {
+    "yalesov/zf2-geoname": "4.*"
+  }
 }
 ```
 
