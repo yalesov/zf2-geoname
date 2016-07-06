@@ -7,120 +7,120 @@ namespace Yalesov\Geoname\Entity;
  */
 class Currency
 {
-    /**
-     * @var integer $id
-     */
-    private $id;
+  /**
+   * @var integer $id
+   */
+  private $id;
 
-    /**
-     * @var string $code
-     */
-    private $code;
+  /**
+   * @var string $code
+   */
+  private $code;
 
-    /**
-     * @var string $name
-     */
-    private $name;
+  /**
+   * @var string $name
+   */
+  private $name;
 
-    /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     */
-    private $countries;
+  /**
+   * @var \Doctrine\Common\Collections\ArrayCollection
+   */
+  private $countries;
 
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->countries = new \Doctrine\Common\Collections\ArrayCollection();
-    }
+  /**
+   * Constructor
+   */
+  public function __construct()
+  {
+    $this->countries = new \Doctrine\Common\Collections\ArrayCollection();
+  }
 
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
+  /**
+   * Get id
+   *
+   * @return integer
+   */
+  public function getId()
+  {
+    return $this->id;
+  }
 
-    /**
-     * Set code
-     *
-     * @param  string   $code
-     * @return Currency
-     */
-    public function setCode($code)
-    {
-        $this->code = $code;
+  /**
+   * Set code
+   *
+   * @param  string   $code
+   * @return Currency
+   */
+  public function setCode($code)
+  {
+    $this->code = $code;
 
-        return $this;
-    }
+    return $this;
+  }
 
-    /**
-     * Get code
-     *
-     * @return string
-     */
-    public function getCode()
-    {
-        return $this->code;
-    }
+  /**
+   * Get code
+   *
+   * @return string
+   */
+  public function getCode()
+  {
+    return $this->code;
+  }
 
-    /**
-     * Set name
-     *
-     * @param  string   $name
-     * @return Currency
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
+  /**
+   * Set name
+   *
+   * @param  string   $name
+   * @return Currency
+   */
+  public function setName($name)
+  {
+    $this->name = $name;
 
-        return $this;
-    }
+    return $this;
+  }
 
-    /**
-     * Get name
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
+  /**
+   * Get name
+   *
+   * @return string
+   */
+  public function getName()
+  {
+    return $this->name;
+  }
 
-    /**
-     * Add countries
-     *
-     * @param  Yalesov\Geoname\Entity\Country $countries
-     * @return Currency
-     */
-    public function addCountrie(\Yalesov\Geoname\Entity\Country $countries)
-    {
-        $this->countries[] = $countries;
+  /**
+   * Add countries
+   *
+   * @param  Yalesov\Geoname\Entity\Country $countries
+   * @return Currency
+   */
+  public function addCountrie(\Yalesov\Geoname\Entity\Country $countries)
+  {
+    $this->countries[] = $countries;
 
-        return $this;
-    }
+    return $this;
+  }
 
-    /**
-     * Remove countries
-     *
-     * @param Yalesov\Geoname\Entity\Country $countries
-     */
-    public function removeCountrie(\Yalesov\Geoname\Entity\Country $countries)
-    {
-        $this->countries->removeElement($countries);
-    }
+  /**
+   * Remove countries
+   *
+   * @param Yalesov\Geoname\Entity\Country $countries
+   */
+  public function removeCountrie(\Yalesov\Geoname\Entity\Country $countries)
+  {
+    $this->countries->removeElement($countries);
+  }
 
-    /**
-     * Get countries
-     *
-     * @return Doctrine\Common\Collections\Collection
-     */
-    public function getCountries()
-    {
-        return $this->countries;
-    }
+  /**
+   * Get countries
+   *
+   * @return Doctrine\Common\Collections\Collection
+   */
+  public function getCountries()
+  {
+    return $this->countries;
+  }
 }

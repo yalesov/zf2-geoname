@@ -1,73 +1,73 @@
 Yalesov\Geoname\Entity\Place:
-    type: entity
-    table: he_geoname_place
-    repositoryClass: Yalesov\Geoname\Repository\Place
-    fields:
-        id:
-            id: true
-            type: integer
-        name:
-            type: string
-            nullable: true
-        latitude:
-            type: decimal
-            precision: 12
-            scale: 4
-            nullable: true
-        longitude:
-            type: decimal
-            precision: 12
-            scale: 4
-            nullable: true
-        elevation:
-            type: integer
-            nullable: true
-        digiEleModel:
-            type: integer
-            nullable: true
-        population:
-            type: bigint
-            nullable: true
-        countryCode:
-            type: string
-            nullable: true
-        admin1Code:
-            type: string
-            nullable: true
-        admin2Code:
-            type: string
-            nullable: true
-        admin3Code:
-            type: string
-            nullable: true
-        admin4Code:
-            type: string
-            nullable: true
-        isDeprecated:
-            type: boolean
-            nullable: true
+  type: entity
+  table: he_geoname_place
+  repositoryClass: Yalesov\Geoname\Repository\Place
+  fields:
+    id:
+      id: true
+      type: integer
+    name:
+      type: string
+      nullable: true
+    latitude:
+      type: decimal
+      precision: 12
+      scale: 4
+      nullable: true
+    longitude:
+      type: decimal
+      precision: 12
+      scale: 4
+      nullable: true
+    elevation:
+      type: integer
+      nullable: true
+    digiEleModel:
+      type: integer
+      nullable: true
+    population:
+      type: bigint
+      nullable: true
+    countryCode:
+      type: string
+      nullable: true
+    admin1Code:
+      type: string
+      nullable: true
+    admin2Code:
+      type: string
+      nullable: true
+    admin3Code:
+      type: string
+      nullable: true
+    admin4Code:
+      type: string
+      nullable: true
+    isDeprecated:
+      type: boolean
+      nullable: true
 
-    oneToOne:
-        country:
-            targetEntity: Yalesov\Geoname\Entity\Country
-            mappedBy: place
-    oneToMany:
-        children:
-            targetEntity: Yalesov\Geoname\Entity\Place
-            mappedBy: parent
-        altNames:
-            targetEntity: Yalesov\Geoname\Entity\AltName
-            mappedBy: place
-        countries:
-            targetEntity: Yalesov\Geoname\Entity\Country
-            mappedBy: continent
-    manyToOne:
-        parent:
-            targetEntity: Yalesov\Geoname\Entity\Place
-            inversedBy: children
-        feature:
-            targetEntity: Yalesov\Geoname\Entity\Feature
-            inversedBy: places
-        timezone:
-            targetEntity: Yalesov\Geoname\Entity\Timezone
-            inversedBy: places
+  oneToOne:
+    country:
+      targetEntity: Yalesov\Geoname\Entity\Country
+      mappedBy: place
+  oneToMany:
+    children:
+      targetEntity: Yalesov\Geoname\Entity\Place
+      mappedBy: parent
+    altNames:
+      targetEntity: Yalesov\Geoname\Entity\AltName
+      mappedBy: place
+    countries:
+      targetEntity: Yalesov\Geoname\Entity\Country
+      mappedBy: continent
+  manyToOne:
+    parent:
+      targetEntity: Yalesov\Geoname\Entity\Place
+      inversedBy: children
+    feature:
+      targetEntity: Yalesov\Geoname\Entity\Feature
+      inversedBy: places
+    timezone:
+      targetEntity: Yalesov\Geoname\Entity\Timezone
+      inversedBy: places

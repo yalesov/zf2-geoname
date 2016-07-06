@@ -10,7 +10,7 @@ use Yalesov\Geoname\ExceptionInterface;
  * @license GPL http://opensource.org/licenses/gpl-license.php
  */
 class InvalidArgumentException
-    extends \InvalidArgumentException
-    implements ExceptionInterface
+  extends \InvalidArgumentException
+  implements ExceptionInterface
 {
 }

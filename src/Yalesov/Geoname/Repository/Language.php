@@ -12,35 +12,35 @@ use Yalesov\ArgValidator\ArgValidator;
  */
 class Language extends EntityRepository
 {
-    /**
-     * findLanguage
-     *
-     * @param  string        $code iso 639 1- (?), 2- or 3- letter code
-     * @return Language|null
-     */
-    public function findLanguage($code)
-    {
-        ArgValidator::assert($code, 'string');
+  /**
+   * findLanguage
+   *
+   * @param  string    $code iso 639 1- (?), 2- or 3- letter code
+   * @return Language|null
+   */
+  public function findLanguage($code)
+  {
+    ArgValidator::assert($code, 'string');
 
-        $dqb = $this->_em->createQueryBuilder();
-        $dqb->select('l')
-            ->from('Yalesov\Geoname\Entity\Language', 'l')
-            ->where($dqb->expr()->orX(
-                $dqb->expr()->eq('l.iso3', ':iso3'),
-                $dqb->expr()->eq('l.iso2', ':iso2'),
-                $dqb->expr()->eq('l.iso1', ':iso1')
-            ))
-            ->setParameters(array(
-                'iso3' => $code,
-                'iso2' => $code,
-                'iso1' => $code,
-            ))
-            ->setMaxResults(1);
+    $dqb = $this->_em->createQueryBuilder();
+    $dqb->select('l')
+      ->from('Yalesov\Geoname\Entity\Language', 'l')
+      ->where($dqb->expr()->orX(
+        $dqb->expr()->eq('l.iso3', ':iso3'),
+        $dqb->expr()->eq('l.iso2', ':iso2'),
+        $dqb->expr()->eq('l.iso1', ':iso1')
+      ))
+      ->setParameters(array(
+        'iso3' => $code,
+        'iso2' => $code,
+        'iso1' => $code,
+      ))
+      ->setMaxResults(1);
 
-        if ($languages = $dqb->getQuery()->getResult()) {
-            return current($languages);
-        } else {
-            return null;
-        }
+    if ($languages = $dqb->getQuery()->getResult()) {
+      return current($languages);
+    } else {
+      return null;
     }
+  }
 }

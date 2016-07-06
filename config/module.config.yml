@@ -1,34 +1,34 @@
 di:
-    instance:
-        alias:
-            geoname: Yalesov\Geoname\Service\Geoname
-            geoname-cli: Yalesov\Cli\Cli
-            browser: Yalesov\Browser\Factory
-        geoname:
-            parameters:
-                #em: doctrine.entitymanager.orm_default
-                cli: geoname-cli
-                tmpDir: data/geoname
-                cron: '*/15 * * * *'
-        geoname-cli:
-            parameters:
-                templates:
-                    section:
-                        template: '## %s ##'
-                        color: YELLOW
-                    task:
-                        template: '- %s -'
-                        color: BLUE
-                    module:
-                        template: '[ %s ]'
-                        color: GREEN
+  instance:
+    alias:
+      geoname: Yalesov\Geoname\Service\Geoname
+      geoname-cli: Yalesov\Cli\Cli
+      browser: Yalesov\Browser\Factory
+    geoname:
+      parameters:
+        #em: doctrine.entitymanager.orm_default
+        cli: geoname-cli
+        tmpDir: data/geoname
+        cron: '*/15 * * * *'
+    geoname-cli:
+      parameters:
+        templates:
+          section:
+            template: '## %s ##'
+            color: YELLOW
+          task:
+            template: '- %s -'
+            color: BLUE
+          module:
+            template: '[ %s ]'
+            color: GREEN
 doctrine:
-    driver:
-        geoname_driver:
-            class: Doctrine\ORM\Mapping\Driver\YamlDriver
-            cache: array
-            paths:
-                - __DIR__/../src/Yalesov/Geoname/Entity/Mapping
-        orm_default:
-            drivers:
-                Yalesov\Geoname\Entity: geoname_driver
+  driver:
+    geoname_driver:
+      class: Doctrine\ORM\Mapping\Driver\YamlDriver
+      cache: array
+      paths:
+        - __DIR__/../src/Yalesov/Geoname/Entity/Mapping
+    orm_default:
+      drivers:
+        Yalesov\Geoname\Entity: geoname_driver

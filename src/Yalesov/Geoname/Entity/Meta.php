@@ -7,74 +7,74 @@ namespace Yalesov\Geoname\Entity;
  */
 class Meta
 {
-    /**
-     * @var integer $id
-     */
-    private $id;
+  /**
+   * @var integer $id
+   */
+  private $id;
 
-    /**
-     * @var integer $status
-     */
-    private $status;
+  /**
+   * @var integer $status
+   */
+  private $status;
 
-    /**
-     * @var boolean $isLocked
-     */
-    private $isLocked;
+  /**
+   * @var boolean $isLocked
+   */
+  private $isLocked;
 
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
+  /**
+   * Get id
+   *
+   * @return integer
+   */
+  public function getId()
+  {
+    return $this->id;
+  }
 
-    /**
-     * Set status
-     *
-     * @param  integer $status
-     * @return Meta
-     */
-    public function setStatus($status)
-    {
-        $this->status = $status;
+  /**
+   * Set status
+   *
+   * @param  integer $status
+   * @return Meta
+   */
+  public function setStatus($status)
+  {
+    $this->status = $status;
 
-        return $this;
-    }
+    return $this;
+  }
 
-    /**
-     * Get status
-     *
-     * @return integer
-     */
-    public function getStatus()
-    {
-        return $this->status;
-    }
+  /**
+   * Get status
+   *
+   * @return integer
+   */
+  public function getStatus()
+  {
+    return $this->status;
+  }
 
-    /**
-     * Set isLocked
-     *
-     * @param  boolean $isLocked
-     * @return Meta
-     */
-    public function setIsLocked($isLocked)
-    {
-        $this->isLocked = $isLocked;
+  /**
+   * Set isLocked
+   *
+   * @param  boolean $isLocked
+   * @return Meta
+   */
+  public function setIsLocked($isLocked)
+  {
+    $this->isLocked = $isLocked;
 
-        return $this;
-    }
+    return $this;
+  }
 
-    /**
-     * Get isLocked
-     *
-     * @return boolean
-     */
-    public function getIsLocked()
-    {
-        return $this->isLocked;
-    }
+  /**
+   * Get isLocked
+   *
+   * @return boolean
+   */
+  public function getIsLocked()
+  {
+    return $this->isLocked;
+  }
 }

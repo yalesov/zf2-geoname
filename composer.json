@@ -1,43 +1,43 @@
 {
-    "name": "yalesov/zf2-geoname",
-    "description": "maintain a local copy of the Geonames database",
-    "keywords": ["geoname", "zf2", "zendframework"],
-    "authors": [
-        {
-            "name": "Yulij Andreevich Lesov",
-            "email": "yalesov@gmail.com"
-        }
-    ],
-    "minimum-stability": "dev",
-    "require": {
-        "php": ">=5.3.3",
-        "yalesov/yaml": "2.*",
-        "zendframework/zendframework": "2.*",
-        "yalesov/arg-validator": "2.*",
-        "yalesov/zf2-doctrine": "2.*",
-        "yalesov/zf2-cron": "3.*",
-        "yalesov/zf2-cli": "2.*",
-        "yalesov/file-system-manager": "2.*"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "*",
-        "yalesov/zf2-phpunit-testcase": "2.*",
-        "yalesov/zf2-phing-task": "2.*"
-    },
-    "autoload": {
-        "psr-0": {
-            "Yalesov\\Geoname": "src/"
-        }
-    },
-    "license": "ISC",
-    "homepage": "https://github.com/yalesov/zf2-geoname",
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/yalesov/zf2-geoname"
-        }
-    ],
-    "support": {
-        "issues": "https://github.com/yalesov/zf2-geoname/issues"
+  "name": "yalesov/zf2-geoname",
+  "description": "maintain a local copy of the Geonames database",
+  "keywords": ["geoname", "zf2", "zendframework"],
+  "authors": [
+    {
+      "name": "Yulij Andreevich Lesov",
+      "email": "yalesov@gmail.com"
     }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "php": ">=5.3.3",
+    "yalesov/yaml": "2.*",
+    "zendframework/zendframework": "2.*",
+    "yalesov/arg-validator": "2.*",
+    "yalesov/zf2-doctrine": "2.*",
+    "yalesov/zf2-cron": "3.*",
+    "yalesov/zf2-cli": "2.*",
+    "yalesov/file-system-manager": "2.*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "*",
+    "yalesov/zf2-phpunit-testcase": "2.*",
+    "yalesov/zf2-phing-task": "2.*"
+  },
+  "autoload": {
+    "psr-0": {
+      "Yalesov\\Geoname": "src/"
+    }
+  },
+  "license": "ISC",
+  "homepage": "https://github.com/yalesov/zf2-geoname",
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/yalesov/zf2-geoname"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/yalesov/zf2-geoname/issues"
+  }
 }
